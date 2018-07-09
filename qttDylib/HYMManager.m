@@ -170,7 +170,11 @@ static HYMManager *instance = nil;
     Class cls = objc_getClass("ChannelsViewController");
     Ivar ivar = class_getInstanceVariable(cls, "_titlePageScrollView");
     id titlePageScrollView = object_getIvar(vc, ivar);
-    [titlePageScrollView performSelector:@selector(switchToPageIndex:) withObject:@(index)];
+    
+    Class cls1 = objc_getClass("QKMainNavView");
+    Ivar ivar1 = class_getInstanceVariable(cls1, "_btnArray");
+    id button = object_getIvar(titlePageScrollView, ivar1);
+    [titlePageScrollView performSelector:@selector(tabButtonClicked:) withObject:button[index]];
 }
 
 @end
