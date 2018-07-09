@@ -10,10 +10,13 @@
 #import <objc/objc-runtime.h>
 
 static HYMManager *instance = nil;
+static NSString *kChannelIndexKey = @"hym_channel_index";
+static NSString *kArticleIndexKey = @"hym_article_index";
 @interface HYMManager()
 @property (nonatomic, assign) NSInteger channelIndex;
 @property (nonatomic, assign) NSInteger articleIndexOfCurrentChannelIndex;
 @property (nonatomic, strong) NSMutableArray<NSMutableArray<NSNumber *> *> *readedModels;
+@property (nonatomic, strong) UIButton *btnSetting;
 @end
 @implementation HYMManager
 + (instancetype)shared {
@@ -32,8 +35,31 @@ static HYMManager *instance = nil;
         _readedModels = [NSMutableArray new];
         _channelIndex = 0;
         _articleIndexOfCurrentChannelIndex = 0;
+        [self recoverToLastStoreIndex];
+        [self addSettingButtonToWindow];
     }
     return self;
+}
+
+- (void)addSettingButtonToWindow {
+    _btnSetting = [UIButton new];
+    CGSize size = CGSizeMake(130.f, 25.f);
+    _btnSetting.frame = CGRectMake((UIScreen.mainScreen.bounds.size.width - size.width) / 2.f, [UIApplication sharedApplication].statusBarFrame.size.height + ((isIphoneX() ? 64.f : 44.f) - size.height) / 2.f, size.width, size.height);
+    _btnSetting.backgroundColor = [UIColor purpleColor];
+    [UIApplication.sharedApplication.keyWindow addSubview:_btnSetting];
+    [_btnSetting setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_btnSetting.titleLabel setFont:[UIFont systemFontOfSize:10.f]];
+    [_btnSetting.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [_btnSetting addTarget:self action:@selector(btnSettingClicked:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)btnSettingClicked:(UIButton *)sender {
+    NSLog(@"click setting");
+}
+
+- (void)updateButtonTitle {
+    [_btnSetting setTitle:[NSString stringWithFormat:@"channel:%ld, article:%ld", (long)_channelIndex, (long)_articleIndexOfCurrentChannelIndex] forState:UIControlStateNormal];
+    [_btnSetting.superview bringSubviewToFront:_btnSetting];
 }
 
 - (ChannelsViewController *)channelsViewController {
@@ -96,7 +122,15 @@ static HYMManager *instance = nil;
         if (isNotAd && isNotVideoContent) {
             // 表明不是广告和视频，模拟用户点击
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_articleIndexOfCurrentChannelIndex inSection:0];
-            [tableViewManager performSelector:@selector(tableView:didSelectRowAtIndexPath:) withObject:tableView withObject:indexPath];
+            // 滚到对应位置
+            [CATransaction begin];
+            [CATransaction setAnimationDuration:0.5];
+            [CATransaction setAnimationTimingFunction:kCAMediaTimingFunctionEaseOut];
+            [CATransaction setCompletionBlock:^{
+                [tableViewManager performSelector:@selector(tableView:didSelectRowAtIndexPath:) withObject:tableView withObject:indexPath];
+            }];
+            [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+            [CATransaction commit];
         }else {
             // 跳过广告
             ++_articleIndexOfCurrentChannelIndex;
@@ -124,7 +158,9 @@ static HYMManager *instance = nil;
             }
         });
     }
-
+    [self saveCurrentChannelIndexAndArticleIndexToDefaults];
+    [self clearFloatingView];
+    [self updateButtonTitle];
 }
 
 /**模拟用户在当前文章中滑动阅读*/
@@ -182,10 +218,9 @@ static HYMManager *instance = nil;
     [[UIApplication sharedApplication].keyWindow.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([NSStringFromClass([obj class]) isEqualToString:@"UILayoutContainerView"]) {
             [[obj subviews] enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj1, NSUInteger idx1, BOOL * _Nonnull stop1) {
-                if ([NSStringFromClass([obj1 class]) isEqualToString:@"QKPreSignHintView"]) {
+                if ([NSStringFromClass([obj1 class]) isEqualToString:@"QKPreSignHintView"] || [NSStringFromClass([obj1 class]) isEqualToString:@"QKInvitationCodeAlertView"]) {
                     [obj1 removeFromSuperview];
                     obj1 = nil;
-                    *stop1 = YES;
                 }
             }];
             *stop = YES;
@@ -193,4 +228,25 @@ static HYMManager *instance = nil;
     }];
 }
 
+- (void)saveCurrentChannelIndexAndArticleIndexToDefaults {
+    [[NSUserDefaults standardUserDefaults] setObject:@(_channelIndex) forKey:kChannelIndexKey];
+    [[NSUserDefaults standardUserDefaults] setObject:@(_articleIndexOfCurrentChannelIndex) forKey:kArticleIndexKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)recoverToLastStoreIndex {
+    id channelIdxObj = [[NSUserDefaults standardUserDefaults] objectForKey:kChannelIndexKey];
+    if (channelIdxObj) {
+        _channelIndex = [channelIdxObj integerValue];
+    }
+    
+    id articleIdxObj = [[NSUserDefaults standardUserDefaults] objectForKey:kArticleIndexKey];
+    if (articleIdxObj) {
+        _articleIndexOfCurrentChannelIndex = [articleIdxObj integerValue];
+    }
+}
+
+BOOL isIphoneX() {
+    return UIScreen.mainScreen.bounds.size.height == 812.f;
+}
 @end

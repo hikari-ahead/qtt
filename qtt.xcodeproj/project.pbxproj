@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0000E9F620F3BC9A00EA1920 /* libcycript.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0000E9F420F3BA0E00EA1920 /* libcycript.dylib */; };
 		0083078620F35D9100AB4B7E /* MDConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0083078520F35D9100AB4B7E /* MDConfig.plist */; };
 		0083079020F35D9100AB4B7E /* libqttDylib.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0083078F20F35D9100AB4B7E /* libqttDylib.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		0083079520F35D9100AB4B7E /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0083079420F35D9100AB4B7E /* JavaScriptCore.framework */; };
@@ -56,6 +57,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0000E9EF20F3B6B200EA1920 /* Cycript.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cycript.framework; path = ../../../../../opt/MonkeyDev/Frameworks/Cycript.ios/Cycript.framework; sourceTree = "<group>"; };
+		0000E9F120F3B93F00EA1920 /* Cycript.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cycript.framework; path = ../../../../../opt/theos/vendor/lib/Cycript.framework; sourceTree = "<group>"; };
+		0000E9F420F3BA0E00EA1920 /* libcycript.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcycript.dylib; path = ../../../../../opt/MonkeyDev/Frameworks/Cycript.lib/libcycript.dylib; sourceTree = "<group>"; };
 		0083077D20F35D9100AB4B7E /* qtt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = qtt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0083078020F35D9100AB4B7E /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		0083078120F35D9100AB4B7E /* Target.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Target.plist; sourceTree = "<group>"; };
@@ -67,7 +71,7 @@
 		0083079420F35D9100AB4B7E /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		0083079620F35D9100AB4B7E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0083079820F35D9100AB4B7E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		0083079C20F35D9100AB4B7E /* qttDylib.xm */ = {isa = PBXFileReference; lastKnownFileType = text; name = qttDylib.xm; path = Logos/qttDylib.xm; sourceTree = "<group>"; };
+		0083079C20F35D9100AB4B7E /* qttDylib.xm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = qttDylib.xm; path = Logos/qttDylib.xm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		0083079D20F35D9100AB4B7E /* qttDylib.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = qttDylib.mm; path = Logos/qttDylib.mm; sourceTree = "<group>"; };
 		008307A020F35D9100AB4B7E /* MDConfigManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MDConfigManager.h; path = Config/MDConfigManager.h; sourceTree = "<group>"; };
 		008307A220F35D9100AB4B7E /* MDConfigManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MDConfigManager.m; path = Config/MDConfigManager.m; sourceTree = "<group>"; };
@@ -101,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0000E9F620F3BC9A00EA1920 /* libcycript.dylib in Frameworks */,
 				0083079520F35D9100AB4B7E /* JavaScriptCore.framework in Frameworks */,
 				0083079920F35D9100AB4B7E /* UIKit.framework in Frameworks */,
 				0083079720F35D9100AB4B7E /* Foundation.framework in Frameworks */,
@@ -169,6 +174,9 @@
 		0083079320F35D9100AB4B7E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0000E9F420F3BA0E00EA1920 /* libcycript.dylib */,
+				0000E9EF20F3B6B200EA1920 /* Cycript.framework */,
+				0000E9F120F3B93F00EA1920 /* Cycript.framework */,
 				0083079420F35D9100AB4B7E /* JavaScriptCore.framework */,
 				0083079620F35D9100AB4B7E /* Foundation.framework */,
 				0083079820F35D9100AB4B7E /* UIKit.framework */,
@@ -568,6 +576,7 @@
 					"$(MonkeyDevPath)/Frameworks/**",
 					"$(MonkeyDevPath)/Librarys/**",
 					"$(MonkeyDevTheosPath)/vendor/lib",
+					/opt/theos/vendor/lib,
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -589,9 +598,12 @@
 					"$(inherited)",
 					"$(MonkeyDevPath)/Frameworks",
 					"$(MonkeyDevTheosPath)/vendor/lib/**",
+					"$(MonkeyDevPath)/Frameworks/Cycript.lib/",
+					/opt/MonkeyDev/Frameworks/Cycript.lib,
 				);
 				MonkeyDevPath = /opt/MonkeyDev;
 				MonkeyDevTheosPath = /opt/theos;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-DTHEOS_INSTANCE_NAME=\"\\\"qttDylib\\\"\"",
@@ -604,13 +616,14 @@
 					"/usr/lib/libstdc++.dylib",
 					"-weak_library",
 					"$(MonkeyDevPath)/Frameworks/libsubstrate.dylib",
-					"-lcycript",
 					"-framework",
 					RevealServer,
+					"-lcycript",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
 		};
@@ -630,6 +643,7 @@
 					"$(MonkeyDevPath)/Frameworks/**",
 					"$(MonkeyDevPath)/Librarys/**",
 					"$(MonkeyDevTheosPath)/vendor/lib",
+					/opt/theos/vendor/lib,
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -650,9 +664,12 @@
 					"$(inherited)",
 					"$(MonkeyDevPath)/Frameworks",
 					"$(MonkeyDevTheosPath)/vendor/lib/**",
+					"$(MonkeyDevPath)/Frameworks/Cycript.lib/",
+					/opt/MonkeyDev/Frameworks/Cycript.lib,
 				);
 				MonkeyDevPath = /opt/MonkeyDev;
 				MonkeyDevTheosPath = /opt/theos;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-DTHEOS_INSTANCE_NAME=\"\\\"qttDylib\\\"\"",
@@ -668,6 +685,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;
 		};
@@ -677,17 +695,23 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9SGZE8KEKC;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/MonkeyDev/Frameworks/Cycript.ios,
+				);
 				INFOPLIST_FILE = qtt/Info.plist;
 				MONKEYDEV_ADD_SUBSTRATE = YES;
 				MONKEYDEV_CLASS_DUMP = NO;
 				MONKEYDEV_INSERT_DYLIB = YES;
 				MONKEYDEV_RESTORE_SYMBOL = NO;
 				MONKEYDEV_TARGET_APP = Optional;
+				ONLY_ACTIVE_ARCH = NO;
 				PODS_CONFIGURATION_BUILD_DIR = "$BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				PODS_ROOT = "${SRCROOT}/Pods";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jifen.qukan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
 		};
@@ -697,17 +721,23 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9SGZE8KEKC;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/MonkeyDev/Frameworks/Cycript.ios,
+				);
 				INFOPLIST_FILE = qtt/Info.plist;
 				MONKEYDEV_ADD_SUBSTRATE = YES;
 				MONKEYDEV_CLASS_DUMP = NO;
 				MONKEYDEV_INSERT_DYLIB = YES;
 				MONKEYDEV_RESTORE_SYMBOL = NO;
 				MONKEYDEV_TARGET_APP = Optional;
+				ONLY_ACTIVE_ARCH = NO;
 				PODS_CONFIGURATION_BUILD_DIR = "$BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				PODS_ROOT = "${SRCROOT}/Pods";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jifen.qukan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;
 		};

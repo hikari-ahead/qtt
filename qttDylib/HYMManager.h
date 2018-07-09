@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+
 @class ChannelsViewController;
 @class ChannelViewController;
 @interface HYMManager : NSObject
