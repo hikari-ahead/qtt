@@ -177,4 +177,20 @@ static HYMManager *instance = nil;
     [titlePageScrollView performSelector:@selector(tabButtonClicked:) withObject:button[index]];
 }
 
+/**清除弹窗*/
+- (void)clearFloatingView {
+    [[UIApplication sharedApplication].keyWindow.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([NSStringFromClass([obj class]) isEqualToString:@"UILayoutContainerView"]) {
+            [[obj subviews] enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj1, NSUInteger idx1, BOOL * _Nonnull stop1) {
+                if ([NSStringFromClass([obj1 class]) isEqualToString:@"QKPreSignHintView"]) {
+                    [obj1 removeFromSuperview];
+                    obj1 = nil;
+                    *stop1 = YES;
+                }
+            }];
+            *stop = YES;
+        }
+    }];
+}
+
 @end
