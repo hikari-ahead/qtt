@@ -85,7 +85,7 @@ static NSString *kArticleIndexKey = @"hym_article_index";
     ChannelViewController *vc = [self channelViewControllerOfIndex:_channelIndex];
     if (!vc) {
         // TODO refresh and retry
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self simUserReadOneArticle];
         });
         return;
@@ -96,7 +96,7 @@ static NSString *kArticleIndexKey = @"hym_article_index";
     Ivar ivar = class_getInstanceVariable(cls, "_sourceData");
     NSArray *sourceData = object_getIvar(vc, ivar);
     if (!sourceData || sourceData.count == 0) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self simUserReadOneArticle];
         });
         return;
@@ -140,7 +140,7 @@ static NSString *kArticleIndexKey = @"hym_article_index";
         // 数据不够读了，请求额外的数据
         [((NSObject *)vc) performSelector:@selector(loadMore)];
         NSInteger currentMaxCount = [sourceData count];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             if (sourceData.count > currentMaxCount) {
                 // 说明加载了新的数据
                 [self simUserReadOneArticle];
@@ -151,7 +151,7 @@ static NSString *kArticleIndexKey = @"hym_article_index";
                 if (self->_channelIndex < [self channelCount]) {
                     // 还有没阅读的频道，切换到对应频道
                     [self switchToChannel:self->_channelIndex];
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [self simUserReadOneArticle];
                     });
                 }
@@ -177,23 +177,30 @@ static NSString *kArticleIndexKey = @"hym_article_index";
     UIWebView *realWebView = object_getIvar(webView, ivar);
     
     UIView *lcFloatView = [contentVC performSelector:@selector(lcFloatView)];
-    UIView *pieChartView = [[lcFloatView subviews] firstObject];
+    UIView *articlePieCharView = [lcFloatView subviews].firstObject;
+    CALayer *trackLayer = [articlePieCharView performSelector:@selector(trackLayer)];
     // 三秒滑动一次，超过35秒返回上一个页面
     __block NSUInteger totalCount = 0;
     CGFloat cHeight = [realWebView scrollView].contentSize.height;
-
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5 repeats:YES block:^(NSTimer * _Nonnull timer) {
-        [[realWebView scrollView] setContentOffset:CGPointMake(0, [realWebView scrollView].contentOffset.y + 100.f) animated:YES];
-        [contentVC performSelector:@selector(startTimerAnimation)];
+    __block BOOL shouldUpdate = YES;
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.1 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        [[realWebView scrollView] setContentOffset:CGPointMake(0, [realWebView scrollView].contentOffset.y + 8) animated:YES];
+        if ([trackLayer animationKeys].count == 0 && shouldUpdate) {
+            shouldUpdate = NO;
+            [contentVC performSelector:@selector(startTimerAnimation)];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.9 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                shouldUpdate = YES;
+            });
+        }
         ++totalCount;
-        if (totalCount >= 8) {
+        if (totalCount >= 300) {
             [timer invalidate];
             // 当前文章读够了时间
             ++_articleIndexOfCurrentChannelIndex;
-            [contentVC.navigationController popViewControllerAnimated:YES];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self simUserReadOneArticle];
             });
+            [contentVC.navigationController popViewControllerAnimated:YES];
         }
     }];
     [timer fire];
