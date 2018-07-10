@@ -32,6 +32,8 @@
 		00D3D68F20F3661700EE8FB2 /* HYMManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D3D68D20F3661700EE8FB2 /* HYMManager.h */; };
 		00D3D69020F3661700EE8FB2 /* HYMManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D3D68E20F3661700EE8FB2 /* HYMManager.m */; };
 		00E97C1020F500E100D2C7FA /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E97C0F20F500E100D2C7FA /* CoreLocation.framework */; };
+		00FBD46420F517CB0018326C /* Interface+Hook.h in Headers */ = {isa = PBXBuildFile; fileRef = 00FBD46220F517CB0018326C /* Interface+Hook.h */; };
+		00FBD46520F517CB0018326C /* Interface+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FBD46320F517CB0018326C /* Interface+Hook.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +95,8 @@
 		00D3D68D20F3661700EE8FB2 /* HYMManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYMManager.h; sourceTree = "<group>"; };
 		00D3D68E20F3661700EE8FB2 /* HYMManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYMManager.m; sourceTree = "<group>"; };
 		00E97C0F20F500E100D2C7FA /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		00FBD46220F517CB0018326C /* Interface+Hook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Interface+Hook.h"; sourceTree = "<group>"; };
+		00FBD46320F517CB0018326C /* Interface+Hook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Interface+Hook.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -267,6 +271,8 @@
 			children = (
 				00D3D68D20F3661700EE8FB2 /* HYMManager.h */,
 				00D3D68E20F3661700EE8FB2 /* HYMManager.m */,
+				00FBD46220F517CB0018326C /* Interface+Hook.h */,
+				00FBD46320F517CB0018326C /* Interface+Hook.m */,
 			);
 			name = Manager;
 			sourceTree = "<group>";
@@ -279,6 +285,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				008307A520F35D9100AB4B7E /* MDCycriptManager.h in Headers */,
+				00FBD46420F517CB0018326C /* Interface+Hook.h in Headers */,
 				008307A920F35D9100AB4B7E /* MDMethodTrace.h in Headers */,
 				008307B220F35D9100AB4B7E /* LLDBTools.h in Headers */,
 				00D3D68F20F3661700EE8FB2 /* HYMManager.h in Headers */,
@@ -436,6 +443,7 @@
 				008307A320F35D9100AB4B7E /* MDConfigManager.m in Sources */,
 				008307B420F35D9100AB4B7E /* LLDBTools.mm in Sources */,
 				0083079E20F35D9100AB4B7E /* qttDylib.mm in Sources */,
+				00FBD46520F517CB0018326C /* Interface+Hook.m in Sources */,
 				008307AB20F35D9100AB4B7E /* MDMethodTrace.m in Sources */,
 				00D3D69020F3661700EE8FB2 /* HYMManager.m in Sources */,
 				008307BC20F35D9100AB4B7E /* fishhook.c in Sources */,

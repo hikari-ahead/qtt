@@ -131,6 +131,11 @@ CHMethod2(void, Interface, report_view, id, arg1, handler, id, arg2) {
     CHSuper2(Interface, report_view, arg1, handler, arg2);
 }
 
+CHClassMethod2(void, Interface, nextReadtimer, id, arg1, handler, id, arg2) {
+    NSLog(@"1");
+    CHSuper2(Interface, nextReadtimer, arg1, handler, arg2);
+}
+
 //CHMethod2(void, AppDelegate, application, id, arg1, didFinishLaunchingWithOptions, id, arg2) {
 //    CHSuper2(AppDelegate, application, arg1, didFinishLaunchingWithOptions, arg2);
 //}
@@ -169,7 +174,7 @@ CHConstructor{
     CHClassHook2(Interface, report_share, handler);
     CHClassHook2(Interface, report_read, handler);
     CHClassHook2(Interface, report_view, handler);
-    
+    CHClassHook2(Interface, nextReadtimer, handler);
     //AppDelegate
 //    CHLoadLateClass(AppDelegate);
 //    CHClassHook2(AppDelegate, application, didFinishLaunchingWithOptions);
