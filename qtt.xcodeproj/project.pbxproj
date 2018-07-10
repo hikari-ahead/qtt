@@ -31,6 +31,7 @@
 		008307C220F35D9100AB4B7E /* qttDylib.m in Sources */ = {isa = PBXBuildFile; fileRef = 008307C120F35D9100AB4B7E /* qttDylib.m */; };
 		00D3D68F20F3661700EE8FB2 /* HYMManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D3D68D20F3661700EE8FB2 /* HYMManager.h */; };
 		00D3D69020F3661700EE8FB2 /* HYMManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D3D68E20F3661700EE8FB2 /* HYMManager.m */; };
+		00E97C1020F500E100D2C7FA /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E97C0F20F500E100D2C7FA /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,7 @@
 		008307C120F35D9100AB4B7E /* qttDylib.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = qttDylib.m; sourceTree = "<group>"; };
 		00D3D68D20F3661700EE8FB2 /* HYMManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYMManager.h; sourceTree = "<group>"; };
 		00D3D68E20F3661700EE8FB2 /* HYMManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYMManager.m; sourceTree = "<group>"; };
+		00E97C0F20F500E100D2C7FA /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00E97C1020F500E100D2C7FA /* CoreLocation.framework in Frameworks */,
 				0000E9F620F3BC9A00EA1920 /* libcycript.dylib in Frameworks */,
 				0083079520F35D9100AB4B7E /* JavaScriptCore.framework in Frameworks */,
 				0083079920F35D9100AB4B7E /* UIKit.framework in Frameworks */,
@@ -174,6 +177,7 @@
 		0083079320F35D9100AB4B7E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00E97C0F20F500E100D2C7FA /* CoreLocation.framework */,
 				0000E9F420F3BA0E00EA1920 /* libcycript.dylib */,
 				0000E9EF20F3B6B200EA1920 /* Cycript.framework */,
 				0000E9F120F3B93F00EA1920 /* Cycript.framework */,

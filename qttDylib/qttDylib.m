@@ -45,6 +45,7 @@ CHDeclareClass(Native_ContentViewController);
 CHDeclareClass(QKIncomeAlertView);//> 金币弹窗
 CHDeclareClass(articlePieChartView);
 CHDeclareClass(Interface);//> 上报
+//CHDeclareClass(AppDelegate); //> AppDelegate
 
 CHMethod0(void, ChannelsViewController, viewDidLoad) {
     CHSuper0(ChannelsViewController, viewDidLoad);
@@ -130,6 +131,10 @@ CHMethod2(void, Interface, report_view, id, arg1, handler, id, arg2) {
     CHSuper2(Interface, report_view, arg1, handler, arg2);
 }
 
+//CHMethod2(void, AppDelegate, application, id, arg1, didFinishLaunchingWithOptions, id, arg2) {
+//    CHSuper2(AppDelegate, application, arg1, didFinishLaunchingWithOptions, arg2);
+//}
+
 CHConstructor{
     CHLoadLateClass(ChannelsViewController);
     CHClassHook0(ChannelsViewController, viewDidLoad);
@@ -164,5 +169,9 @@ CHConstructor{
     CHClassHook2(Interface, report_share, handler);
     CHClassHook2(Interface, report_read, handler);
     CHClassHook2(Interface, report_view, handler);
+    
+    //AppDelegate
+//    CHLoadLateClass(AppDelegate);
+//    CHClassHook2(AppDelegate, application, didFinishLaunchingWithOptions);
 }
 

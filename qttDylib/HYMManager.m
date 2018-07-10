@@ -8,15 +8,17 @@
 
 #import "HYMManager.h"
 #import <objc/objc-runtime.h>
+#import <CoreLocation/CoreLocation.h>
 
 static HYMManager *instance = nil;
 static NSString *kChannelIndexKey = @"hym_channel_index";
 static NSString *kArticleIndexKey = @"hym_article_index";
-@interface HYMManager()
+@interface HYMManager() <CLLocationManagerDelegate>
 @property (nonatomic, assign) NSInteger channelIndex;
 @property (nonatomic, assign) NSInteger articleIndexOfCurrentChannelIndex;
 @property (nonatomic, strong) NSMutableArray<NSMutableArray<NSNumber *> *> *readedModels;
 @property (nonatomic, strong) UIButton *btnSetting;
+@property (nonatomic, strong) CLLocationManager *locManager;
 @end
 @implementation HYMManager
 + (instancetype)shared {
@@ -41,6 +43,31 @@ static NSString *kArticleIndexKey = @"hym_article_index";
     return self;
 }
 
+- (void)requestLocation {
+    if ([CLLocationManager locationServicesEnabled]) {
+        [self.btnSetting setTitle:@"enable" forState:UIControlStateNormal];
+        _locManager = [[CLLocationManager alloc] init];
+        [_locManager setDesiredAccuracy:kCLLocationAccuracyBest];
+        _locManager.allowsBackgroundLocationUpdates = YES;
+        _locManager.pausesLocationUpdatesAutomatically = NO;
+        [_locManager requestAlwaysAuthorization];
+        [_locManager startUpdatingLocation];
+        _locManager.delegate = self;
+    }else {
+        [self.btnSetting setTitle:@"error" forState:UIControlStateNormal];
+    }
+}
+
+#pragma mark - CLLocationManagerDelegate
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    [self.btnSetting setTitle:@"didUpdateLocations" forState:UIControlStateNormal];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
+    [self.btnSetting setTitle:@"didUpdateHeading" forState:UIControlStateNormal];
+}
+
+
 - (void)addSettingButtonToWindow {
     _btnSetting = [UIButton new];
     CGSize size = CGSizeMake(130.f, 25.f);
@@ -55,6 +82,7 @@ static NSString *kArticleIndexKey = @"hym_article_index";
 
 - (void)btnSettingClicked:(UIButton *)sender {
     NSLog(@"click setting");
+    [HYMManager.shared requestLocation];
 }
 
 - (void)updateButtonTitle {

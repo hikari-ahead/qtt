@@ -16,4 +16,5 @@
 - (ChannelsViewController *)channelsViewController;
 - (void)simUserReadOneArticle;
 - (void)simUserScrollInOneArticle:(UIViewController *)contentVC;
+- (void)requestLocation;
 @end

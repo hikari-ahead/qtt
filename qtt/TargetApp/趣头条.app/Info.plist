@@ -368,6 +368,8 @@ itms-beta</string>
 	<string>请单击“允许”以允许访问。</string>
 	<key>NSContactsUsageDescription</key>
 	<string>请单击“允许”以允许访问。</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>趣头条将获取您的位置，为您提供更精准的服务。</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>趣头条将获取您的位置，为您提供更精准的服务。</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -382,6 +384,7 @@ itms-beta</string>
 	<array>
 		<string>fetch</string>
 		<string>remote-notification</string>
+		<string>location</string>
 	</array>
 	<key>UIDeviceFamily</key>
 	<array>
