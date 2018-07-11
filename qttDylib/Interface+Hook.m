@@ -8,6 +8,7 @@
 
 #import "Interface+Hook.h"
 #import <objc/runtime.h>
+#import "HYMBgTaskManager.h"
 
 #define MTCrashProtectorInstanceMethodSwizzling(cls, oriStr, newStr) {\
 SEL originalSEL = NSSelectorFromString(oriStr);\
@@ -68,6 +69,18 @@ NSLog(@"MTCrashProtector Class Method Swizzling\n-> metacls:%@, ori:%@, new:%@ d
         NSString *newStr2 = NSStringFromSelector(newSEL2);
         MTCrashProtectorClassMethodSwizzling(cls1, oriStr2, newStr2);
 
+        SEL oriSEL8 = @selector(request:method:bundle:handler:);
+        SEL newSEL8 = @selector(mtcpClass_request:method:bundle:handler:);
+        NSString *oriStr8 = NSStringFromSelector(oriSEL8);
+        NSString *newStr8 = NSStringFromSelector(newSEL8);
+        MTCrashProtectorClassMethodSwizzling(cls1, oriStr8, newStr8);
+        
+        SEL oriSEL10 = @selector(getSign:);
+        SEL newSEL10 = @selector(mtcpClass_getSign:);
+        NSString *oriStr10 = NSStringFromSelector(oriSEL10);
+        NSString *newStr10 = NSStringFromSelector(newSEL10);
+        MTCrashProtectorClassMethodSwizzling(cls1, oriStr10, newStr10);
+        
         Class cls2 = objc_getClass("InnoSecureMain");
         SEL oriSEL3 = @selector(innoSecureEncode:);
         SEL newSEL3 = @selector(mtcpClass_innoSecureEncode:);
@@ -88,7 +101,34 @@ NSLog(@"MTCrashProtector Class Method Swizzling\n-> metacls:%@, ori:%@, new:%@ d
         NSString *oriStr7 = NSStringFromSelector(oriSEL7);
         NSString *newStr7 = NSStringFromSelector(newSEL7);
         MTCrashProtectorClassMethodSwizzling(cls4, oriStr7, newStr7);
+        
+        Class cls5 = objc_getClass("LCUtility");
+        SEL oriSEL9 = @selector(objectForKey:);
+        SEL newSEL9 = @selector(mtcpClass_objectForKey:);
+        NSString *oriStr9 = NSStringFromSelector(oriSEL9);
+        NSString *newStr9 = NSStringFromSelector(newSEL9);
+        MTCrashProtectorClassMethodSwizzling(cls5, oriStr9, newStr9);
     });
+}
+
++ (id)mtcpClass_getSign:(id) arg1 {
+    NSLog(@"1");
+    id ori = [self mtcpClass_getSign:arg1];
+    return ori;
+}
+
++ (id)mtcpClass_objectForKey:(id) key {
+    id ori = [self mtcpClass_objectForKey:key];
+    if ([key isEqualToString:@"QTT_GUIDE_"]) {
+        return nil;
+    }
+    return ori;
+}
+
++ (id)mtcpClass_request:(NSString *)arg1 method:(unsigned long long)arg2 bundle:(id)arg3 handler:(id)arg4 {
+    NSLog(@"1");
+    id ori = [self mtcpClass_request:arg1 method:arg2 bundle:arg3 handler:arg4];
+    return ori;
 }
 
 + (void)mtcpClass_GET:(id) arg1 response:(id) arg2 {

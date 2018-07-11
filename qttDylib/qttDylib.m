@@ -14,6 +14,7 @@
 #import <Cycript/Cycript.h>
 #import <MDCycriptManager.h>
 #import "HYMManager.h"
+#import "HYMBgTaskManager.h"
 
 
 CHConstructor{
@@ -48,10 +49,12 @@ CHDeclareClass(articlePieChartView);
 CHDeclareClass(Interface);//> 上报
 CHDeclareClass(NSString);
 CHDeclareClass(Schemes);
+CHDeclareClass(AFHTTPSessionManager);
 //CHDeclareClass(AppDelegate); //> AppDelegate
 
 CHMethod0(void, ChannelsViewController, viewDidLoad) {
     CHSuper0(ChannelsViewController, viewDidLoad);
+    [HYMBgTaskManager.shared start];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [HYMManager.shared simUserReadOneArticle];
     });
@@ -154,6 +157,21 @@ CHMethod1(id, Schemes, initWithLink, id, arg1) {
     NSLog(@"1");
     return ori;
 }
+//AFHTTPSessionManager GET:parameters:progress:success:failure:
+CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progress, id, arg3, success, id, arg4, failure, id, arg5) {
+    NSLog(@"1");
+    id parms = arg2;
+    if ([arg1 isEqualToString:@"https://api.1sapp.com/app/getGuide"] && HYMBgTaskManager.shared.isProcessing) {
+        // 获取GUID，替换params
+        NSMutableDictionary *newParams = [HYMBgTaskManager.shared paramsForGetGuide];
+        Class cls = objc_getClass("LCHttpEngine");
+        id sign = [cls performSelector:@selector(getSign:) withObject:newParams];
+        newParams[@"sign"] = sign;
+        parms = newParams;
+    }
+    id ori = CHSuper5(AFHTTPSessionManager, GET, arg1, parameters, arg2, progress, arg3, success, arg4, failure, arg5);
+    return ori;
+}
 
 CHConstructor{
     CHLoadLateClass(ChannelsViewController);
@@ -199,5 +217,9 @@ CHConstructor{
     
     CHLoadLateClass(Schemes);
     CHClassHook1(Schemes, initWithLink);
+    
+    //AFHTTPSessionManager GET:parameters:progress:success:failure:
+    CHLoadLateClass(AFHTTPSessionManager);
+    CHClassHook5(AFHTTPSessionManager, GET, parameters, progress, success, failure);
 }
 

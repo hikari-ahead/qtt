@@ -9,5 +9,8 @@
 #import <Foundation/Foundation.h>
 
 @interface HYMBgTaskManager : NSObject
+@property (nonatomic, assign) BOOL isProcessing;
 + (instancetype)shared;
+- (void)start;
+- (NSMutableDictionary *)paramsForGetGuide;
 @end

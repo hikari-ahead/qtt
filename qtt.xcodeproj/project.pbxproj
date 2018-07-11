@@ -38,6 +38,7 @@
 		00E97C1020F500E100D2C7FA /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E97C0F20F500E100D2C7FA /* CoreLocation.framework */; };
 		00FBD46420F517CB0018326C /* Interface+Hook.h in Headers */ = {isa = PBXBuildFile; fileRef = 00FBD46220F517CB0018326C /* Interface+Hook.h */; };
 		00FBD46520F517CB0018326C /* Interface+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FBD46320F517CB0018326C /* Interface+Hook.m */; };
+		00FBD46820F63E350018326C /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 00FBD46620F63DD50018326C /* user.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +106,7 @@
 		00E97C0F20F500E100D2C7FA /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		00FBD46220F517CB0018326C /* Interface+Hook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Interface+Hook.h"; sourceTree = "<group>"; };
 		00FBD46320F517CB0018326C /* Interface+Hook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Interface+Hook.m"; sourceTree = "<group>"; };
+		00FBD46620F63DD50018326C /* user.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = user.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +205,7 @@
 		0083079A20F35D9100AB4B7E /* qttDylib */ = {
 			isa = PBXGroup;
 			children = (
+				00FBD46720F63DE10018326C /* Resource */,
 				0092783220F61F6B00FA1AAA /* Model */,
 				00D3D68C20F3660100EE8FB2 /* Manager */,
 				008307BF20F35D9100AB4B7E /* qttDylib.h */,
@@ -295,6 +298,14 @@
 				0092783820F6217400FA1AAA /* HYMBgTaskManager.m */,
 			);
 			name = Manager;
+			sourceTree = "<group>";
+		};
+		00FBD46720F63DE10018326C /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				00FBD46620F63DD50018326C /* user.json */,
+			);
+			name = Resource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -400,6 +411,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00FBD46820F63E350018326C /* user.json in Resources */,
 				0083078620F35D9100AB4B7E /* MDConfig.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
