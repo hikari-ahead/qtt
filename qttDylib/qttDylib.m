@@ -169,7 +169,7 @@ CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progres
         newParams[@"sign"] = sign;
         parms = newParams;
     }
-    id ori = CHSuper5(AFHTTPSessionManager, GET, arg1, parameters, arg2, progress, arg3, success, arg4, failure, arg5);
+    id ori = CHSuper5(AFHTTPSessionManager, GET, arg1, parameters, parms, progress, arg3, success, arg4, failure, arg5);
     return ori;
 }
 
