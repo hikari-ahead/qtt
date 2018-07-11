@@ -290,7 +290,6 @@ BOOL isIphoneX() {
      
 }
 
-
 - (void)generateGetGoldQData {
     NSUUID *uuid = [NSUUID UUID];
     NSString *uuidStr = [uuid UUIDString];

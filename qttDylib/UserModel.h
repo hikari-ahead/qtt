@@ -18,4 +18,8 @@
 @property (nonatomic, strong) NSString *netWork;
 
 @property (nonatomic, strong) NSString *guid; // GUID=xxx
+@property (nonatomic, strong) NSString *token;
+@property (nonatomic, strong) NSString *aliyungf_tc;
+@property (nonatomic, strong) NSString *qkV2;
+
 @end

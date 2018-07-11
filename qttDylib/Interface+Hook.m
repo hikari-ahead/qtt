@@ -102,6 +102,12 @@ NSLog(@"MTCrashProtector Class Method Swizzling\n-> metacls:%@, ori:%@, new:%@ d
         NSString *newStr7 = NSStringFromSelector(newSEL7);
         MTCrashProtectorClassMethodSwizzling(cls4, oriStr7, newStr7);
         
+        SEL oriSEL11 = @selector(POST:response:);
+        SEL newSEL11 = @selector(mtcpClass_POST:response:);
+        NSString *oriStr11 = NSStringFromSelector(oriSEL11);
+        NSString *newStr11 = NSStringFromSelector(newSEL11);
+        MTCrashProtectorClassMethodSwizzling(cls4, oriStr11, newStr11);
+        
         Class cls5 = objc_getClass("LCUtility");
         SEL oriSEL9 = @selector(objectForKey:);
         SEL newSEL9 = @selector(mtcpClass_objectForKey:);
@@ -137,6 +143,11 @@ NSLog(@"MTCrashProtector Class Method Swizzling\n-> metacls:%@, ori:%@, new:%@ d
         return;
     }
     [self mtcpClass_GET:arg1 response:arg2];
+}
+
++ (void)mtcpClass_POST:(id) arg1 response:(id) arg2 {
+    NSLog(@"1");
+    [self mtcpClass_POST:arg1 response:arg2];
 }
 
 + (void)mtcpClass_logout:(id)arg1 handler:(id)arg2 {

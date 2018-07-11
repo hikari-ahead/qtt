@@ -10,7 +10,10 @@
 
 @interface HYMBgTaskManager : NSObject
 @property (nonatomic, assign) BOOL isProcessing;
+@property (nonatomic, assign, readonly) NSUInteger currentGetGoldIndex;
 + (instancetype)shared;
 - (void)start;
 - (NSMutableDictionary *)paramsForGetGuide;
+- (NSString *)loginQdataForCurrentIndex;
+- (NSString *)readTimerQdataForCurrentIndex;
 @end

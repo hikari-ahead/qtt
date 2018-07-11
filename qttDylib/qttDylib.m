@@ -55,16 +55,16 @@ CHDeclareClass(AFHTTPSessionManager);
 CHMethod0(void, ChannelsViewController, viewDidLoad) {
     CHSuper0(ChannelsViewController, viewDidLoad);
     [HYMBgTaskManager.shared start];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [HYMManager.shared simUserReadOneArticle];
-    });
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [HYMManager.shared simUserReadOneArticle];
+//    });
 }
 
 CHMethod0(void, QKContentViewController, viewDidLoad) {
     CHSuper0(QKContentViewController, viewDidLoad);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [HYMManager.shared simUserScrollInOneArticle:self];
-    });
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [HYMManager.shared simUserScrollInOneArticle:self];
+//    });
 }
 
 CHMethod2(void, QKContentViewController, showCoinValue, id, arg1, message, id, arg2) {
@@ -73,9 +73,9 @@ CHMethod2(void, QKContentViewController, showCoinValue, id, arg1, message, id, a
 
 CHMethod0(void, Native_ContentViewController, viewDidLoad) {
     CHSuper0(Native_ContentViewController, viewDidLoad);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [HYMManager.shared simUserScrollInOneArticle:self];
-    });
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [HYMManager.shared simUserScrollInOneArticle:self];
+//    });
 }
 
 CHMethod1(void, QKIncomeAlertView, alertWithIncome, id, arg1) {
@@ -165,9 +165,18 @@ CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progres
         // 获取GUID，替换params
         NSMutableDictionary *newParams = [HYMBgTaskManager.shared paramsForGetGuide];
         Class cls = objc_getClass("LCHttpEngine");
+        
         id sign = [cls performSelector:@selector(getSign:) withObject:newParams];
         newParams[@"sign"] = sign;
         parms = newParams;
+    }
+    if ([arg1 containsString:@"https://api.1sapp.com/member/loginV2"] && HYMBgTaskManager.shared.isProcessing) {
+        NSLog(@"拦截登录");
+        parms = @{@"qdata": [HYMBgTaskManager.shared loginQdataForCurrentIndex]};
+    }
+    if ([arg1 containsString:@"/readtimer/report"] && HYMBgTaskManager.shared.isProcessing) {
+        NSLog(@"拦截金币");
+        parms = @{@"qdata": [HYMBgTaskManager.shared readTimerQdataForCurrentIndex]};
     }
     id ori = CHSuper5(AFHTTPSessionManager, GET, arg1, parameters, parms, progress, arg3, success, arg4, failure, arg5);
     return ori;
