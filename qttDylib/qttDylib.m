@@ -15,9 +15,10 @@
 #import <MDCycriptManager.h>
 #import "HYMManager.h"
 
+
 CHConstructor{
     NSLog(INSERT_SUCCESS_WELCOME);
-    
+
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         
 #ifndef __OPTIMIZE__
@@ -45,6 +46,8 @@ CHDeclareClass(Native_ContentViewController);
 CHDeclareClass(QKIncomeAlertView);//> 金币弹窗
 CHDeclareClass(articlePieChartView);
 CHDeclareClass(Interface);//> 上报
+CHDeclareClass(NSString);
+CHDeclareClass(Schemes);
 //CHDeclareClass(AppDelegate); //> AppDelegate
 
 CHMethod0(void, ChannelsViewController, viewDidLoad) {
@@ -140,6 +143,18 @@ CHClassMethod2(void, Interface, nextReadtimer, id, arg1, handler, id, arg2) {
 //    CHSuper2(AppDelegate, application, arg1, didFinishLaunchingWithOptions, arg2);
 //}
 
+CHMethod1(id, NSString, stringByAppendingPathComponent, id, arg1) {
+    id ori = CHSuper1(NSString, stringByAppendingPathComponent, arg1);
+    NSLog(@"1");
+    return ori;
+}
+
+CHMethod1(id, Schemes, initWithLink, id, arg1) {
+    id ori = CHSuper1(Schemes, initWithLink, arg1);
+    NSLog(@"1");
+    return ori;
+}
+
 CHConstructor{
     CHLoadLateClass(ChannelsViewController);
     CHClassHook0(ChannelsViewController, viewDidLoad);
@@ -178,5 +193,11 @@ CHConstructor{
     //AppDelegate
 //    CHLoadLateClass(AppDelegate);
 //    CHClassHook2(AppDelegate, application, didFinishLaunchingWithOptions);
+    
+    CHLoadLateClass(NSString);
+    CHClassHook1(NSString, stringByAppendingPathComponent);
+    
+    CHLoadLateClass(Schemes);
+    CHClassHook1(Schemes, initWithLink);
 }
 

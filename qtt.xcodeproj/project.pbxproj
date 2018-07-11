@@ -29,6 +29,10 @@
 		008307BE20F35D9100AB4B7E /* fishhook.h in Headers */ = {isa = PBXBuildFile; fileRef = 008307BD20F35D9100AB4B7E /* fishhook.h */; };
 		008307C020F35D9100AB4B7E /* qttDylib.h in Headers */ = {isa = PBXBuildFile; fileRef = 008307BF20F35D9100AB4B7E /* qttDylib.h */; };
 		008307C220F35D9100AB4B7E /* qttDylib.m in Sources */ = {isa = PBXBuildFile; fileRef = 008307C120F35D9100AB4B7E /* qttDylib.m */; };
+		0092783520F61F8000FA1AAA /* UserModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 0092783320F61F8000FA1AAA /* UserModel.h */; };
+		0092783620F61F8000FA1AAA /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0092783420F61F8000FA1AAA /* UserModel.m */; };
+		0092783920F6217400FA1AAA /* HYMBgTaskManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 0092783720F6217400FA1AAA /* HYMBgTaskManager.h */; };
+		0092783A20F6217400FA1AAA /* HYMBgTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0092783820F6217400FA1AAA /* HYMBgTaskManager.m */; };
 		00D3D68F20F3661700EE8FB2 /* HYMManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 00D3D68D20F3661700EE8FB2 /* HYMManager.h */; };
 		00D3D69020F3661700EE8FB2 /* HYMManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D3D68E20F3661700EE8FB2 /* HYMManager.m */; };
 		00E97C1020F500E100D2C7FA /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E97C0F20F500E100D2C7FA /* CoreLocation.framework */; };
@@ -92,6 +96,10 @@
 		008307BD20F35D9100AB4B7E /* fishhook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = fishhook.h; path = fishhook/fishhook.h; sourceTree = "<group>"; };
 		008307BF20F35D9100AB4B7E /* qttDylib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = qttDylib.h; sourceTree = "<group>"; };
 		008307C120F35D9100AB4B7E /* qttDylib.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = qttDylib.m; sourceTree = "<group>"; };
+		0092783320F61F8000FA1AAA /* UserModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserModel.h; sourceTree = "<group>"; };
+		0092783420F61F8000FA1AAA /* UserModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserModel.m; sourceTree = "<group>"; };
+		0092783720F6217400FA1AAA /* HYMBgTaskManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYMBgTaskManager.h; sourceTree = "<group>"; };
+		0092783820F6217400FA1AAA /* HYMBgTaskManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYMBgTaskManager.m; sourceTree = "<group>"; };
 		00D3D68D20F3661700EE8FB2 /* HYMManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYMManager.h; sourceTree = "<group>"; };
 		00D3D68E20F3661700EE8FB2 /* HYMManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYMManager.m; sourceTree = "<group>"; };
 		00E97C0F20F500E100D2C7FA /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -195,6 +203,7 @@
 		0083079A20F35D9100AB4B7E /* qttDylib */ = {
 			isa = PBXGroup;
 			children = (
+				0092783220F61F6B00FA1AAA /* Model */,
 				00D3D68C20F3660100EE8FB2 /* Manager */,
 				008307BF20F35D9100AB4B7E /* qttDylib.h */,
 				008307C120F35D9100AB4B7E /* qttDylib.m */,
@@ -266,6 +275,15 @@
 			name = fishhook;
 			sourceTree = "<group>";
 		};
+		0092783220F61F6B00FA1AAA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0092783320F61F8000FA1AAA /* UserModel.h */,
+				0092783420F61F8000FA1AAA /* UserModel.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		00D3D68C20F3660100EE8FB2 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
@@ -273,6 +291,8 @@
 				00D3D68E20F3661700EE8FB2 /* HYMManager.m */,
 				00FBD46220F517CB0018326C /* Interface+Hook.h */,
 				00FBD46320F517CB0018326C /* Interface+Hook.m */,
+				0092783720F6217400FA1AAA /* HYMBgTaskManager.h */,
+				0092783820F6217400FA1AAA /* HYMBgTaskManager.m */,
 			);
 			name = Manager;
 			sourceTree = "<group>";
@@ -285,7 +305,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				008307A520F35D9100AB4B7E /* MDCycriptManager.h in Headers */,
+				0092783520F61F8000FA1AAA /* UserModel.h in Headers */,
 				00FBD46420F517CB0018326C /* Interface+Hook.h in Headers */,
+				0092783920F6217400FA1AAA /* HYMBgTaskManager.h in Headers */,
 				008307A920F35D9100AB4B7E /* MDMethodTrace.h in Headers */,
 				008307B220F35D9100AB4B7E /* LLDBTools.h in Headers */,
 				00D3D68F20F3661700EE8FB2 /* HYMManager.h in Headers */,
@@ -440,10 +462,12 @@
 			files = (
 				008307A720F35D9100AB4B7E /* MDCycriptManager.m in Sources */,
 				008307AF20F35D9100AB4B7E /* ANYMethodLog.m in Sources */,
+				0092783620F61F8000FA1AAA /* UserModel.m in Sources */,
 				008307A320F35D9100AB4B7E /* MDConfigManager.m in Sources */,
 				008307B420F35D9100AB4B7E /* LLDBTools.mm in Sources */,
 				0083079E20F35D9100AB4B7E /* qttDylib.mm in Sources */,
 				00FBD46520F517CB0018326C /* Interface+Hook.m in Sources */,
+				0092783A20F6217400FA1AAA /* HYMBgTaskManager.m in Sources */,
 				008307AB20F35D9100AB4B7E /* MDMethodTrace.m in Sources */,
 				00D3D69020F3661700EE8FB2 /* HYMManager.m in Sources */,
 				008307BC20F35D9100AB4B7E /* fishhook.c in Sources */,

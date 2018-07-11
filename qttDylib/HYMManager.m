@@ -39,6 +39,7 @@ static NSString *kArticleIndexKey = @"hym_article_index";
         _articleIndexOfCurrentChannelIndex = 0;
         [self recoverToLastStoreIndex];
         [self addSettingButtonToWindow];
+        [self generateGetGoldQData];
     }
     return self;
 }
@@ -283,5 +284,21 @@ static NSString *kArticleIndexKey = @"hym_article_index";
 
 BOOL isIphoneX() {
     return UIScreen.mainScreen.bounds.size.height == 812.f;
+}
+
+- (void)getCookies {
+     
+}
+
+
+- (void)generateGetGoldQData {
+    NSUUID *uuid = [NSUUID UUID];
+    NSString *uuidStr = [uuid UUIDString];
+    // time或称当前时间戳 OSVersion多样化 lat和lon虚拟位置 netWork随机 deviceCode替换
+    NSString *str = [NSString stringWithFormat:@"{\"active_method\":\"icon\",\"uuid\":\"%@\",\"tk\":\"ACI_HWWgX6FNG7HxlIs85RhU_eqX4KmcXpg0NzUxNDk1MDg5NTIyNQ\",\"version\":\"30013000\",\"lon\":116.33255397108825,\"GUID\":\"f54697ba76705b44228045d573.40838181\",\"time\":1531301845,\"versionName\":\"3.0.13.000.622.1512\",\"key\":\"\",\"dtu\":\"100\",\"tasktype\":\"article\",\"OSVersion\":\"11.3.1\",\"sys\":\"2\",\"token\":\"4a50zQEL8Rer7Y7396b9jn8aNl7T2htHCYaGv4Q35rx_v0FsDna1jguMxsp6j-FSfVgIaAfydxZctYt5wg\",\"network\":\"WIFI\",\"lat\":39.990415921444622,\"deviceCode\":\"3F1D65A0-5FA1-4D1B-B1F1-948B3CE51854\"}", uuidStr];
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:[str dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONWritingSortedKeys error:nil];
+    Class cls = objc_getClass("LCHttpEngine");
+    NSString *qdata = [cls performSelector:@selector(apiSecure:) withObject:dic][@"qdata"];
+    NSLog(@"当前生成qdata:%@", qdata);
 }
 @end
