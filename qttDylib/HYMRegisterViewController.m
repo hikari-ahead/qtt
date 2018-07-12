@@ -38,7 +38,8 @@
             data = [data substringToIndex:data.length - 1];
         }
         NSString *json = [NSString stringWithFormat:@"{\"data\":[%@]}", data];
-        NSString *prettyJsonData = [NSJSONSerialization dataWithJSONObject:[json dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONWritingPrettyPrinted error:nil];
+        id jobj = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
+        NSData *prettyJsonData = [NSJSONSerialization dataWithJSONObject:jobj options:NSJSONWritingPrettyPrinted error:nil];
         self.tvRecord.text = [[NSString alloc] initWithData:prettyJsonData encoding:NSUTF8StringEncoding];
     }
 }

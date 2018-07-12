@@ -219,7 +219,7 @@ CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progres
         u.device_code = parms[@"deviceCode"];
         __block BOOL exist = NO;
         [HYMBgTaskManager.shared.registerdUserModels enumerateObjectsUsingBlock:^(UserModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([obj.phone isEqualToString:u.phone] && [obj.device_code isEqualToString:u.device_code]) {
+            if ([obj.device_code isEqualToString:u.device_code]) {
                 exist = YES;
             }
         }];
