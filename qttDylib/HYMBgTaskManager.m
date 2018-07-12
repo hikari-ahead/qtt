@@ -19,11 +19,10 @@ typedef void(^HYMBgTaskLoginCompletion)(void);
 static NSString *kRemoteUserDataURL = @"http://ocm1152jt.bkt.clouddn.com/users.json";
 static HYMBgTaskManager *instance = nil;
 @interface HYMBgTaskManager()
-@property(nonatomic, strong) NSMutableArray<UserModel *> *userModelsl;
-@property(nonatomic, assign) NSInteger currentGetGuidIndex;
-@property(nonatomic, assign) NSInteger currentLoginIndex;
-@property (nonatomic, assign) NSUInteger currentGetGoldIndex;
+@property(nonatomic, strong) NSMutableArray<UserModel *> *userModels;
+@property(nonatomic, assign) NSInteger currentIndex;
 @property(nonatomic, strong) NSMutableArray<NSTimer *> *timers;
+@property(nonatomic, strong) UIButton *btnSetting;
 @end
 @implementation HYMBgTaskManager
 + (instancetype)shared {
@@ -39,19 +38,45 @@ static HYMBgTaskManager *instance = nil;
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _userModelsl = [NSMutableArray new];
+        _userModels = [NSMutableArray new];
     }
     return self;
 }
 
+- (void)addSettingButtonToWindow {
+    _btnSetting = [UIButton new];
+    CGSize size = CGSizeMake(130.f, 25.f);
+    _btnSetting.frame = CGRectMake((UIScreen.mainScreen.bounds.size.width - size.width) / 2.f, [UIApplication sharedApplication].statusBarFrame.size.height + ((bgTaskIsIphoneX() ? 64.f : 44.f) - size.height) / 2.f, size.width, size.height);
+    _btnSetting.backgroundColor = [UIColor purpleColor];
+    [self.targetVC.view addSubview:_btnSetting];
+    [_btnSetting setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_btnSetting.titleLabel setFont:[UIFont systemFontOfSize:10.f]];
+    [_btnSetting.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    [_btnSetting addTarget:self action:@selector(btnSettingClicked:) forControlEvents:UIControlEventTouchUpInside];
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        [self->_btnSetting.superview bringSubviewToFront:self->_btnSetting];
+    }];
+    [timer fire];
+}
+
+- (void)btnSettingClicked:(id)sender {
+    [self start];
+}
+
 - (void)start {
-    [self downloadAndParseModel:^(NSError *error) {
+    [self downloadAndParserModel:^(NSError *error) {
         if (!error) {
             NSLog(@"=========== 已成功解析用户数据模型 ============");
             self.isProcessing = YES;
-            self->_currentGetGuidIndex = 0;
+            self->_currentIndex = 0;
             [self getGuid:^{
+                self->_currentIndex = 0;
                 [self login:^{
+                    self->_currentIndex = 0;
+//                    [self getList:^{
+//                        self->_currentIndex = 0;
+//
+//                    }];
                     [self startReceiveGoldFreely];
                 }];
             }];
@@ -61,37 +86,38 @@ static HYMBgTaskManager *instance = nil;
     }];
 }
 
-- (void)login:(HYMBgTaskLoginCompletion)completion {
-    [self perfomLogin:^{
-        ++self->_currentLoginIndex;
-        if (self->_currentLoginIndex < self.userModelsl.count) {
-            [self login:completion];
-        }else {
-            NSLog(@"=========== 已成功登录完毕 ============");
-            if (completion) {
-                completion();
-            }
-        }
-    }];
-}
 
 - (void)startReceiveGoldFreely {
     _timers = [NSMutableArray new];
-    [self.userModelsl enumerateObjectsUsingBlock:^(UserModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.userModels enumerateObjectsUsingBlock:^(UserModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:35 repeats:YES block:^(NSTimer * _Nonnull timer) {
             Class cls = objc_getClass("Interface");
             Class cls1 = objc_getClass("BundleModel");
             id model = [cls1 performSelector:NSSelectorFromString(@"new")];
-            void(^block)(id data, id error) = ^(id data, id error) {
+            void(^goldBlock)(id data, id error) = ^(id data, id error) {
                 NSLog(@"data:%@",data, error);
                 if (error) {
                     NSLog(@"error: %@", error);
                 }else {
-                    
+                    NSString *msg = [data performSelector:@selector(message)];
+                    NSDictionary *response = [data performSelector:@selector(data)];
+                    NSLog(@"%@", response);
                 }
             };
-            self.currentGetGoldIndex = idx;
-            [cls performSelector:@selector(nextReadtimer:handler:) withObject:model withObject:block];
+            void(^reportReadBlock)(id data, id error) = ^(id data, id error) {
+                NSLog(@"data:%@",data, error);
+                if (error) {
+                    NSLog(@"error: %@", error);
+                }else {
+                    NSString *msg = [data performSelector:@selector(message)];
+                    NSDictionary *response = [data performSelector:@selector(data)];
+                    NSLog(@"%@", response);
+                }
+            };
+            self->_currentIndex = idx;
+            [cls performSelector:@selector(nextReadtimer:handler:) withObject:model withObject:goldBlock];
+            // 上报阅读时间
+            [cls performSelector:@selector(report_read:handler:) withObject:model withObject:reportReadBlock];
         }];
         [self->_timers addObject:timer];
     }];
@@ -103,6 +129,54 @@ static HYMBgTaskManager *instance = nil;
     }];
 }
 
+#pragma mark - GetList
+- (void)getList:(HYMBgTaskLoginCompletion)completion {
+    [self perfomGetList:^{
+        ++self->_currentIndex;
+        if (self->_currentIndex < self.userModels.count) {
+            [self getList:completion];
+        }else {
+            NSLog(@"=========== 已成功登录完毕 ============");
+            if (completion) {
+                completion();
+            }
+        }
+    }];
+}
+
+- (void)perfomGetList:(HYMBgTaskLoginCompletion)completion {
+    // Interface getGuid:handler:
+    Class cls = objc_getClass("Interface");
+    Class cls1 = objc_getClass("BundleModel");
+    id model = [cls1 performSelector:NSSelectorFromString(@"new")];
+    void(^block)(id data, id error) = ^(id data, id error) {
+        NSLog(@"data:%@",data, error);
+        if (error) {
+            NSLog(@"error: %@", error);
+        }else {
+ 
+        }
+        if (completion) {
+            completion();
+        }
+    };
+    [cls performSelector:@selector(getList:handler:) withObject:model withObject:block];
+}
+
+#pragma mark - Login
+- (void)login:(HYMBgTaskLoginCompletion)completion {
+    [self perfomLogin:^{
+        ++self->_currentIndex;
+        if (self->_currentIndex < self.userModels.count) {
+            [self login:completion];
+        }else {
+            NSLog(@"=========== 已成功登录完毕 ============");
+            if (completion) {
+                completion();
+            }
+        }
+    }];
+}
 
 - (void)perfomLogin:(HYMBgTaskLoginCompletion)completion {
     // Interface getGuid:handler:
@@ -115,7 +189,10 @@ static HYMBgTaskManager *instance = nil;
             NSLog(@"error: %@", error);
         }else {
             NSString *token = [[[data performSelector:@selector(responseObject)] valueForKey:@"data"] valueForKey:@"token"];
-            self->_userModelsl[self->_currentLoginIndex].token = token;
+            NSString *memId = [[[data performSelector:@selector(responseObject)] valueForKey:@"data"] valueForKey:@"member_id"];
+
+            self->_userModels[self->_currentIndex].token = token;
+            self->_userModels[self->_currentIndex].memId = memId;
         }
         if (completion) {
             completion();
@@ -124,10 +201,11 @@ static HYMBgTaskManager *instance = nil;
     [cls performSelector:@selector(login:handler:) withObject:model withObject:block];
 }
 
+#pragma mark - GetGuid
 - (void)getGuid:(HYMBgTaskGetGuidCompletion) completion {
     [self requestGuidForCurrentIndex:^{
-        ++self->_currentGetGuidIndex;
-        if (self->_currentGetGuidIndex < self.userModelsl.count) {
+        ++self->_currentIndex;
+        if (self->_currentIndex < self.userModels.count) {
             [self getGuid:completion];
         }else {
             NSLog(@"=========== 已成功获取全部GUID ============");
@@ -149,9 +227,9 @@ static HYMBgTaskManager *instance = nil;
             NSLog(@"error: %@", error);
         }else {
             NSString *guid = [[data performSelector:@selector(data)] valueForKey:@"guide"];
-            self->_userModelsl[self->_currentGetGuidIndex].guid = guid;
+            self->_userModels[self->_currentIndex].guid = guid;
             [self saveStartCookiesForCurrentModel];
-            if (self.currentGetGuidIndex + 1 < self.userModelsl.count) {
+            if (_currentIndex + 1 < self.userModels.count) {
                 [self removeStartCookiesIfNeed];
             }
         }
@@ -164,6 +242,7 @@ static HYMBgTaskManager *instance = nil;
 
 }
 
+#pragma mark - Cookies
 - (void)removeStartCookiesIfNeed {
     NSMutableArray *toDelete = [NSMutableArray new];
     NSArray<NSHTTPCookie *> *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
@@ -184,16 +263,17 @@ static HYMBgTaskManager *instance = nil;
     NSLog(@"cookies: %@", cookies);
     [cookies enumerateObjectsUsingBlock:^(NSHTTPCookie * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([obj.name isEqualToString:@"qkV2"] && [obj.domain isEqualToString:@"api.1sapp.com"]) {
-            _userModelsl[_currentGetGuidIndex].qkV2 = obj.value;
+            _userModels[_currentIndex].qkV2 = obj.value;
         }
         if ([obj.name isEqualToString:@"aliyungf_tc"] && [obj.domain isEqualToString:@"api.1sapp.com"]) {
-            _userModelsl[_currentGetGuidIndex].aliyungf_tc = obj.value;
+            _userModels[_currentIndex].aliyungf_tc = obj.value;
         }
     }];
     NSLog(@"======== 储存aliyungf_tc & qkV2成功 ========");
 }
 
-- (void)downloadAndParseModel:(HYMBgTaskParserCompletion) block {
+#pragma mark - Model
+- (void)downloadAndParserModel:(HYMBgTaskParserCompletion) block {
     NSLog(@"开始获取远程登录数据");
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         // 开始
@@ -206,7 +286,7 @@ static HYMBgTaskManager *instance = nil;
             NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jerror];
             if (json) {
                 NSLog(@"josn: %@", json);
-                [self->_userModelsl removeAllObjects];
+                [self->_userModels removeAllObjects];
                 NSArray *data = [json valueForKey:@"data"];
                 [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     if ([obj isKindOfClass:[NSDictionary class]]) {
@@ -218,9 +298,10 @@ static HYMBgTaskManager *instance = nil;
                         um.pass = [[dic valueForKey:@"pass"] stringValue];
                         um.device_code = [[dic valueForKey:@"device_code"] stringValue];
                         um.os_version = [[dic valueForKey:@"os_version"] stringValue];
+                        um.ua_os_version = [[dic valueForKey:@"ua_os_version"] stringValue];
                         // 默认先写死WIFI
                         um.netWork = @"WIFI";
-                        [self->_userModelsl addObject:um];
+                        [self->_userModels addObject:um];
                     }
                 }];
             }else {
@@ -237,18 +318,19 @@ static HYMBgTaskManager *instance = nil;
 
 
 - (NSMutableDictionary *)paramsForGetGuide {
-    UserModel *model = self.userModelsl[_currentGetGuidIndex];
+    UserModel *model = self.userModels[_currentIndex];
     NSString *json = [NSString stringWithFormat:@"{\"OSVersion\":\"%@\",\"active_method\":\"icon\",\"deviceCode\":\"%@\",\"dtu\":\"100\",\"lat\":%f,\"lon\":%f,\"network\":\"%@\",\"sys\":\"2\",\"time\":\"1531318213\",\"uuid\":\"%@\",\"version\":\"30013000\",\"versionName\":\"3.0.13.000.622.1512\"}", model.os_version, model.device_code, model.lat, model.lon, model.netWork, [NSUUID UUID].UUIDString]; // 后续需要改版本号吗？待定
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
     NSMutableDictionary *mdic = [NSMutableDictionary dictionaryWithDictionary:dic];
     return mdic;
 }
 
+#pragma mark - Qdata
 - (NSString *)loginQdataForCurrentIndex {
     NSUUID *uuid = [NSUUID UUID];
     NSString *uuidStr = [uuid UUIDString];
     // time或称当前时间戳 OSVersion多样化 lat和lon虚拟位置 netWork随机 deviceCode替换
-    NSString *str = [NSString stringWithFormat:@"{\"telephone\":\"%@\",\"active_method\":\"icon\",\"uuid\":\"%@\",\"version\":\"30013000\",\"lon\":%f,\"time\":%f,\"versionName\":\"3.0.13.000.622.1512\",\"key\":\"\",\"dtu\":\"100\",\"OSVersion\":\"%@\",\"sys\":\"2\",\"network\":\"WIFI\",\"lat\":%f,\"deviceCode\":\"%@\",\"password\":\"%@\",\"push_channel\":{\"apple2_ios\":\"\",\"umeng_ios\":\"\"}}", self.userModelsl[_currentLoginIndex].phone, uuidStr, self.userModelsl[_currentLoginIndex].lon, [[NSDate new] timeIntervalSince1970],self.userModelsl[_currentLoginIndex].os_version,self.userModelsl[_currentLoginIndex].lat,self.userModelsl[_currentLoginIndex].device_code,self.userModelsl[_currentLoginIndex].pass];
+    NSString *str = [NSString stringWithFormat:@"{\"telephone\":\"%@\",\"active_method\":\"icon\",\"uuid\":\"%@\",\"version\":\"30013000\",\"lon\":%f,\"time\":%f,\"versionName\":\"3.0.13.000.622.1512\",\"key\":\"\",\"dtu\":\"100\",\"OSVersion\":\"%@\",\"sys\":\"2\",\"network\":\"WIFI\",\"lat\":%f,\"deviceCode\":\"%@\",\"password\":\"%@\",\"push_channel\":{\"apple2_ios\":\"\",\"umeng_ios\":\"\"}}", self.userModels[_currentIndex].phone, uuidStr, self.userModels[_currentIndex].lon, [[NSDate new] timeIntervalSince1970],self.userModels[_currentIndex].os_version,self.userModels[_currentIndex].lat,self.userModels[_currentIndex].device_code,self.userModels[_currentIndex].pass];
     NSError *error = nil;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:[str dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONWritingSortedKeys error:&error];
     Class cls = objc_getClass("LCHttpEngine");
@@ -260,14 +342,145 @@ static HYMBgTaskManager *instance = nil;
 - (NSString *)readTimerQdataForCurrentIndex {
     NSUUID *uuid = [NSUUID UUID];
     NSString *uuidStr = [uuid UUIDString];
-    // time或称当前时间戳 OSVersion多样化 lat和lon虚拟位置 netWork随机 deviceCode替换
-    NSString *str = [NSString stringWithFormat:@"{\"telephone\":\"%@\",\"active_method\":\"icon\",\"uuid\":\"%@\",\"version\":\"30013000\",\"lon\":%f,\"time\":%f,\"versionName\":\"3.0.13.000.622.1512\",\"key\":\"\",\"dtu\":\"100\",\"tasktype\":\"article\",\"OSVersion\":\"%@\",\"sys\":\"2\",\"network\":\"WIFI\",\"lat\":%f,\"deviceCode\":\"%@\",\"password\":\"%@\",\"token\":\"%@\"}", self.userModelsl[_currentGetGoldIndex].phone, uuidStr, self.userModelsl[_currentGetGoldIndex].lon, [[NSDate new] timeIntervalSince1970],self.userModelsl[_currentGetGoldIndex].os_version,self.userModelsl[_currentGetGoldIndex].lat,self.userModelsl[_currentGetGoldIndex].device_code,self.userModelsl[_currentGetGoldIndex].pass,self.userModelsl[_currentGetGoldIndex].token];
-    NSError *error = nil;
-    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:[str dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONWritingSortedKeys error:&error];
+    NSMutableDictionary *dic = [self baseDicForCurrentIndex];
+    [dic addEntriesFromDictionary:@{@"telephone": self.userModels[_currentIndex].phone,
+                                    @"tasktype": @"article",
+                                    @"password": self.userModels[_currentIndex].pass
+                                    }];
+    
     Class cls = objc_getClass("LCHttpEngine");
     NSString *qdata = [cls performSelector:@selector(apiSecure:) withObject:dic][@"qdata"];
     NSLog(@"当前生成qdata:%@", qdata);
     return qdata;
 }
 
+/**上报阅读时间*/
+/**d86caq_1sEhUdAmpVUo-TDRmzby0_I72rF3KPrDTMqRLrNU_kDhNvsqHcGuoqX7hrQVKNEH4vzhp8HDlnBwwVdrxzmY3W_Jk9hgKCsqblz5NiGqOk6NLe5VfUeKpIPnDaeUYHw对应某个文章*/
+- (NSDictionary *)readV2QdataForCurrentIndex {
+    NSMutableDictionary *dic = [self baseDicForCurrentIndex];
+    NSString *referer = [self randomRefererString:[dic valueForKey:@"uuid"]];
+    [dic addEntriesFromDictionary:@{@"xhi": @200,
+                                    @"referer": referer,
+                                    @"key": @"d86caq_1sEhUdAmpVUo-TDRmzby0_I72rF3KPrDTMqRLrNU_kDhNvsqHcGuoqX7hrQVKNEH4vzhp8HDlnBwwVdrxzmY3W_Jk9hgKCsqblz5NiGqOk6NLe5VfUeKpIPnDaeUYHw",
+                                    @"ua": [self userAgentForCurrnetIndex]
+                                    }];
+    Class cls = objc_getClass("LCHttpEngine");
+    NSString *qdata = [cls performSelector:@selector(apiSecure:) withObject:dic][@"qdata"];
+    NSLog(@"当前生成qdata:%@", qdata);
+    NSDictionary *d = @{@"dic":dic, @"qdata":qdata};
+    return d;
+}
+
+- (NSString *)randomRefererString:(NSString *)uuid {
+    NSCalendar *calender = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierISO8601];
+    NSInteger era = 0;
+    NSInteger year = 0;
+    NSInteger mon = 0;
+    NSInteger day = 0;
+    [calender getEra:&era year:&year month:&mon day:&day fromDate:[NSDate new]];
+    NSString *todayStr = [NSString stringWithFormat:@"%ld/%ld/%ld", year, mon, day];
+    NSTimeInterval i = [[NSDate new] timeIntervalSince1970];
+    NSString *referer = [[NSString stringWithFormat:@"http://html2.qktoutiao.com/detail/%@/%d.html?content_id=%d&key=d86caq_1sEhUdAmpVUo-TDRmzby0_I72rF3KPrDTMqRLrNU_kDhNvsqHcGuoqX7hrQVKNEH4vzhp8HDlnBwwVdrxzmY3W_Jk9hgKCsqblz5NiGqOk6NLe5VfUeKpIPnDaeUYHw&pv_id={77937E80-4E92-1785-705A-F127CD262FBA}&cid=255&cat=49&rss_source=&fr=11&hj=0&mod_id=&o=2&p=1&fqc_flag=0&skip_ad=0&_fp_=1&v=30013000&dc=3F1D65A0-5FA1-4D1B-B1F1-948B3CE51854&uuid=%@&network=WIFI&dtu=100&lat=%f&lon=%f&vn=3.0.13.000.622.1512&fontSize=normal&showCoinTips=1&like_num=3&like=0&hidech=1&zmtgz=0#3b52SbD63nlx3GDNuuurcXIwxN6_Tu_CI0beC1FQaChKxqcJuM051AX7Ilyhrz1-N74ZTBgnbHgA8gmZ0w",todayStr,i,i,uuid,self.userModels[_currentIndex].lat, self.userModels[_currentIndex].lon] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    return referer;
+}
+
+- (NSString *)userAgentForCurrnetIndex {
+    NSString *ua = [NSString stringWithFormat:@"mozilla/5.0 (iphone; cpu iphone os %@ like mac os x) applewebkit/605.1.15 (khtml, like gecko) mobile/15e302ua qukan_ios qukan_version_30013000", self.userModels[_currentIndex].ua_os_version];
+    return ua;
+}
+
+- (NSString *)getListQdataForCurrentIndex {
+    NSMutableDictionary *dic = [self baseDicForCurrentIndex];
+    [dic addEntriesFromDictionary:@{@"content_type": @"1,2,4,3",
+                                    @"op": @(2),
+                                    @"page": @(1),
+                                    @"max_time": @(0),
+                                    @"cid": @"255"
+                                    }];
+    // 没有添加tk 尝试一下
+    Class cls = objc_getClass("LCHttpEngine");
+    NSString *qdata = [cls performSelector:@selector(apiSecure:) withObject:dic][@"qdata"];
+    NSLog(@"当前生成qdata:%@", qdata);
+    return qdata;
+}
+
+- (NSMutableDictionary *)baseDicForCurrentIndex {
+    NSUUID *uuid = [NSUUID UUID];
+    NSString *uuidStr = [uuid UUIDString];
+    NSDictionary *dic = @{
+                          @"active_method": @"icon",
+                          @"uuid": uuidStr,
+                          @"tk":@"",
+                          @"version": @"30013000",
+                          @"lon": @(self.userModels[_currentIndex].lon),
+                          @"time": @([[NSDate new] timeIntervalSince1970]),
+                          @"versionName": @"3.0.13.000.622.1512",
+                          @"sys": @"2",
+                          @"dtu": @"100",
+                          @"token": self.userModels[_currentIndex].token,
+                          @"OSVersion": self.userModels[_currentIndex].os_version,
+                          @"lat": @(self.userModels[_currentIndex].lat),
+                          @"network": @"WIFI",
+                          @"deviceCode": self.userModels[_currentIndex].device_code
+                          };
+    return [[NSMutableDictionary alloc] initWithDictionary:dic];
+}
+
+BOOL bgTaskIsIphoneX() {
+    return UIScreen.mainScreen.bounds.size.height == 812.f;
+}
+
+- (NSString *)dicToJsonString:(NSDictionary *)dic {
+    NSError *parseError = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&parseError];
+    if (parseError) {
+        NSLog(@"%@", parseError);
+    }
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+}
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -16,10 +16,12 @@
 @property (nonatomic, assign) double lat;
 @property (nonatomic, assign) double lon;
 @property (nonatomic, strong) NSString *netWork;
+@property (nonatomic, strong) NSString *ua_os_version;
 
 @property (nonatomic, strong) NSString *guid; // GUID=xxx
 @property (nonatomic, strong) NSString *token;
 @property (nonatomic, strong) NSString *aliyungf_tc;
 @property (nonatomic, strong) NSString *qkV2;
-
+@property (nonatomic, strong) NSString *memId;
+@property (nonatomic, strong) NSString *list_key; // content/getListV2->返回
 @end

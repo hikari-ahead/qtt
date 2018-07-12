@@ -300,4 +300,5 @@ BOOL isIphoneX() {
     NSString *qdata = [cls performSelector:@selector(apiSecure:) withObject:dic][@"qdata"];
     NSLog(@"当前生成qdata:%@", qdata);
 }
+
 @end

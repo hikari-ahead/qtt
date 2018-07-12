@@ -62,6 +62,24 @@ NSLog(@"MTCrashProtector Class Method Swizzling\n-> metacls:%@, ori:%@, new:%@ d
         NSString *newStr6 = NSStringFromSelector(newSEL6);
         MTCrashProtectorClassMethodSwizzling(cls, oriStr6, newStr6);
         
+        SEL oriSEL12 = @selector(getMemberInfo:handler:);
+        SEL newSEL12 = @selector(mtcpClass_getMemberInfo:handler:);
+        NSString *oriStr12 = NSStringFromSelector(oriSEL12);
+        NSString *newStr12 = NSStringFromSelector(newSEL12);
+        MTCrashProtectorClassMethodSwizzling(cls, oriStr12, newStr12);
+
+        SEL oriSEL14 = @selector(getList:handler:);
+        SEL newSEL14 = @selector(mtcpClass_getList:handler:);
+        NSString *oriStr14 = NSStringFromSelector(oriSEL14);
+        NSString *newStr14 = NSStringFromSelector(newSEL14);
+        MTCrashProtectorClassMethodSwizzling(cls, oriStr14, newStr14);
+        
+        SEL oriSEL13 = @selector(report_read:handler:);
+        SEL newSEL13 = @selector(mtcpClass_report_read:handler:);
+        NSString *oriStr13 = NSStringFromSelector(oriSEL13);
+        NSString *newStr13 = NSStringFromSelector(newSEL13);
+        MTCrashProtectorClassMethodSwizzling(cls, oriStr13, newStr13);
+        
         Class cls1 = objc_getClass("LCHttpEngine");
         SEL oriSEL2 = @selector(apiSecure:);
         SEL newSEL2 = @selector(mtcpClass_apiSecure:);
@@ -115,6 +133,21 @@ NSLog(@"MTCrashProtector Class Method Swizzling\n-> metacls:%@, ori:%@, new:%@ d
         NSString *newStr9 = NSStringFromSelector(newSEL9);
         MTCrashProtectorClassMethodSwizzling(cls5, oriStr9, newStr9);
     });
+}
+
++ (void)mtcpClass_getList:(id)arg1 handler:(id)arg2 {
+    NSLog(@"1");
+    [self mtcpClass_getList:arg1 handler:arg2];
+}
+
++ (void)mtcpClass_report_read:(id)arg1 handler:(id)arg2 {
+    NSLog(@"1");
+    [self mtcpClass_report_read:arg1 handler:arg2];
+}
+
++ (void)mtcpClass_getMemberInfo:(id)arg1 handler:(id)arg2 {
+    NSLog(@"1");
+    [self mtcpClass_getMemberInfo:arg1 handler:arg2];
 }
 
 + (id)mtcpClass_getSign:(id) arg1 {

@@ -54,7 +54,8 @@ CHDeclareClass(AFHTTPSessionManager);
 
 CHMethod0(void, ChannelsViewController, viewDidLoad) {
     CHSuper0(ChannelsViewController, viewDidLoad);
-    [HYMBgTaskManager.shared start];
+    HYMBgTaskManager.shared.targetVC = self;
+    [HYMBgTaskManager.shared addSettingButtonToWindow];
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //        [HYMManager.shared simUserReadOneArticle];
 //    });
@@ -161,6 +162,11 @@ CHMethod1(id, Schemes, initWithLink, id, arg1) {
 CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progress, id, arg3, success, id, arg4, failure, id, arg5) {
     NSLog(@"1");
     id parms = arg2;
+    id rs = [((NSObject *)self) performSelector:@selector(requestSerializer)];
+    id headers = [rs performSelector:@selector(mutableHTTPRequestHeaders)];
+    if (HYMBgTaskManager.shared.isProcessing) {
+        headers[@"User-Agent"] = [HYMBgTaskManager.shared userAgentForCurrnetIndex];
+    }
     if ([arg1 isEqualToString:@"https://api.1sapp.com/app/getGuide"] && HYMBgTaskManager.shared.isProcessing) {
         // 获取GUID，替换params
         NSMutableDictionary *newParams = [HYMBgTaskManager.shared paramsForGetGuide];
@@ -177,6 +183,23 @@ CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progres
     if ([arg1 containsString:@"/readtimer/report"] && HYMBgTaskManager.shared.isProcessing) {
         NSLog(@"拦截金币");
         parms = @{@"qdata": [HYMBgTaskManager.shared readTimerQdataForCurrentIndex]};
+    }
+    
+    if ([arg1 containsString:@"/content/readV2"] && HYMBgTaskManager.shared.isProcessing) {
+        NSLog(@"拦截阅读时间"); // 以来getList返回的key
+        NSDictionary *dic = [HYMBgTaskManager.shared readV2QdataForCurrentIndex];
+        headers[@"Referer"] = [dic[@"dic"] valueForKey:@"referer"];
+        parms = @{@"qdata": dic[@"qdata"]};
+    }
+   
+    if ([arg1 containsString:@"/content/getListV2"] && HYMBgTaskManager.shared.isProcessing) {
+        NSLog(@"拦截获取列表"); // 以来getList返回的key
+        parms = @{@"qdata": [HYMBgTaskManager.shared getListQdataForCurrentIndex]};
+    }
+    
+    if ([arg1 containsString:@"/member/getMemberInfo"] && HYMBgTaskManager.shared.isProcessing) {
+        NSLog(@"拦截用户信息");
+        //        parms = @{@"qdata": [HYMBgTaskManager.shared readTimerQdataForCurrentIndex]};
     }
     id ori = CHSuper5(AFHTTPSessionManager, GET, arg1, parameters, parms, progress, arg3, success, arg4, failure, arg5);
     return ori;
