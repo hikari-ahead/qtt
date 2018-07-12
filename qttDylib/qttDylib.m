@@ -15,6 +15,7 @@
 #import <MDCycriptManager.h>
 #import "HYMManager.h"
 #import "HYMBgTaskManager.h"
+#import "UserModel.h"
 
 
 CHConstructor{
@@ -204,6 +205,27 @@ CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progres
         id sign = [cls performSelector:@selector(getSign:) withObject:newParams];
         newParams[@"sign"] = sign;
         parms = newParams;
+    }
+    
+    if ([arg1 isEqualToString:@"https://api.1sapp.com/captcha/getSmsCaptcha"] || [arg1 isEqualToString:@"https://api.1sapp.com/captcha/getImgCaptcha2"]) {
+        // 拦截用户注册验证码，图形请求码
+        [parms removeObjectForKey:@"sign"];
+        parms[@"deviceCode"] = HYMBgTaskManager.shared.currentRegisterDeviceUUID;
+        Class cls = objc_getClass("LCHttpEngine");
+        id sign = [cls performSelector:@selector(getSign:) withObject:parms];
+        parms[@"sign"] = sign;
+        UserModel *u = [UserModel new];
+        u.phone = parms[@"telephone"];
+        u.device_code = parms[@"deviceCode"];
+        __block BOOL exist = NO;
+        [HYMBgTaskManager.shared.registerdUserModels enumerateObjectsUsingBlock:^(UserModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj.phone isEqualToString:u.phone] && [obj.device_code isEqualToString:u.device_code]) {
+                exist = YES;
+            }
+        }];
+        if (!exist) {
+            [HYMBgTaskManager.shared.registerdUserModels addObject:u];
+        }
     }
     id ori = CHSuper5(AFHTTPSessionManager, GET, arg1, parameters, parms, progress, arg3, success, arg4, failure, arg5);
     return ori;

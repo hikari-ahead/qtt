@@ -15,6 +15,7 @@
 @property (nonatomic, strong) UIButton *btnStart;
 @property (nonatomic, strong) UIButton *btnStop;
 @property (nonatomic, strong) UIButton *btnBack;
+@property (nonatomic, strong) UIButton *btnSetting;
 @end
 
 @implementation HYMViewController
@@ -24,6 +25,7 @@
     self.view.backgroundColor = [UIColor blackColor];
     [self setupView];
 }
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (self.tableView) {
@@ -34,6 +36,7 @@
 - (BOOL)isIphoneX {
     return UIScreen.mainScreen.bounds.size.height == 812.f;
 }
+
 - (void)setupView {
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, [self isIphoneX] ? 88.f : 44, self.view.frame.size.width, self.view.frame.size.height - ([self isIphoneX] ? 88.f : 44) - ([self isIphoneX] ? 68.f : 40.f)) style:UITableViewStylePlain];
     _tableView.delegate = self;
@@ -56,11 +59,22 @@
     [self.view addSubview:_btnStop];
     
     _btnBack = [[UIButton alloc] init];
-    _btnBack.frame = CGRectMake(0, [self isIphoneX] ? 44.f : 20.f, self.view.frame.size.width, 20.f);
+    _btnBack.frame = CGRectMake(0, [self isIphoneX] ? 44.f : 20.f, 100.f, 20.f);
     _btnBack.backgroundColor = UIColor.blackColor;
     [_btnBack setTitle:@"Back" forState:UIControlStateNormal];
     [_btnBack addTarget:self action:@selector(btnBackClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_btnBack];
+    
+    _btnSetting = [[UIButton alloc] init];
+    _btnSetting.frame = CGRectMake(self.view.frame.size.width - 100.f, [self isIphoneX] ? 44.f : 20.f, 100.f, 20.f);
+    _btnSetting.backgroundColor = UIColor.blackColor;
+    [_btnSetting setTitle:@"Tool" forState:UIControlStateNormal];
+    [_btnSetting addTarget:self action:@selector(btnSettingClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_btnSetting];
+}
+
+- (void)btnSettingClicked:(id)sender {
+    [self presentViewController:HYMBgTaskManager.shared.hymRegisterVC animated:YES completion:NULL];
 }
 
 - (void)btnBackClicked:(id) sender {
@@ -69,6 +83,11 @@
 
 - (void)btnStopClicked:(id) sender {
     [HYMBgTaskManager.shared stop];
+//    NSMutableArray *idxs = [NSMutableArray new];
+//    for (int i = 0; i < [self.tableView numberOfRowsInSection:0]; i++) {
+//        [idxs addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+//    }
+////    [self.tableView deleteRowsAtIndexPaths:idxs withRowAnimation:UITableViewRowAnimationAutomatic];
     [[[UIAlertView alloc] initWithTitle:@"Notice" message:@"Oh No.. Stopped!" delegate:nil cancelButtonTitle:@"OK!" otherButtonTitles:nil, nil] show];
 }
 
@@ -97,9 +116,15 @@
     UserModel *u = HYMBgTaskManager.shared.userModels[indexPath.row];
     cell.textLabel.numberOfLines = 0;
     cell.textLabel.text = [NSString stringWithFormat:@"☎️Phone:%@ 💰Coin:%@\n💵Balance:%@ 🕵MemID:%@", u.phone, u.coin, u.balance, u.memId];
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textLabel.textColor = [UIColor blackColor];
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:0]];
+    [[UIPasteboard generalPasteboard] setString:cell.textLabel.text];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

@@ -9,10 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 @class UserModel;
+@class HYMRegisterViewController;
 @interface HYMBgTaskManager : NSObject
-@property (nonatomic, assign) BOOL isProcessing;
-@property (nonatomic, strong) UIViewController *targetVC;
-@property (nonatomic, strong, readonly) NSMutableArray<UserModel *> *userModels;
+@property(nonatomic, assign) BOOL isProcessing;
+@property(nonatomic, strong) UIViewController *targetVC;
+@property(nonatomic, strong, readonly) NSMutableArray<UserModel *> *userModels;
+@property(nonatomic, strong) NSMutableArray<UserModel *> *registerdUserModels;
+@property(nonatomic, strong, readonly) NSString *currentRegisterDeviceUUID;
+@property(nonatomic, strong, readonly) HYMRegisterViewController *hymRegisterVC;
 + (instancetype)shared;
 - (void)start;
 - (void)stop;
@@ -24,4 +28,5 @@
 - (NSString *)getListQdataForCurrentIndex;
 - (NSString *)userAgentForCurrnetIndex;
 - (NSMutableDictionary *)baseDicForCurrentIndex;
+- (void)generateNewRegisterDeviceUUID;
 @end

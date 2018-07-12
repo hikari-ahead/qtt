@@ -80,6 +80,18 @@ NSLog(@"MTCrashProtector Class Method Swizzling\n-> metacls:%@, ori:%@, new:%@ d
         NSString *newStr13 = NSStringFromSelector(newSEL13);
         MTCrashProtectorClassMethodSwizzling(cls, oriStr13, newStr13);
         
+        SEL oriSEL15 = @selector(getVerifyCode:handler:);
+        SEL newSEL15 = @selector(mtcpClass_getVerifyCode:handler:);
+        NSString *oriStr15 = NSStringFromSelector(oriSEL15);
+        NSString *newStr15 = NSStringFromSelector(newSEL15);
+        MTCrashProtectorClassMethodSwizzling(cls, oriStr15, newStr15);
+        
+        SEL oriSEL16 = @selector(getVerifyPicture:handler:);
+        SEL newSEL16 = @selector(mtcpClass_getVerifyPicture:handler:);
+        NSString *oriStr16 = NSStringFromSelector(oriSEL16);
+        NSString *newStr16 = NSStringFromSelector(newSEL16);
+        MTCrashProtectorClassMethodSwizzling(cls, oriStr16, newStr16);
+        
         Class cls1 = objc_getClass("LCHttpEngine");
         SEL oriSEL2 = @selector(apiSecure:);
         SEL newSEL2 = @selector(mtcpClass_apiSecure:);
@@ -133,6 +145,16 @@ NSLog(@"MTCrashProtector Class Method Swizzling\n-> metacls:%@, ori:%@, new:%@ d
         NSString *newStr9 = NSStringFromSelector(newSEL9);
         MTCrashProtectorClassMethodSwizzling(cls5, oriStr9, newStr9);
     });
+}
+
++ (void)mtcpClass_getVerifyCode:(id)arg1 handler:(id)arg2 {
+    NSLog(@"1");
+    [self mtcpClass_getVerifyCode:arg1 handler:arg2];
+}
+
++ (void)mtcpClass_getVerifyPicture:(id)arg1 handler:(id)arg2 {
+    NSLog(@"1");
+    [self mtcpClass_getVerifyPicture:arg1 handler:arg2];
 }
 
 + (void)mtcpClass_getList:(id)arg1 handler:(id)arg2 {

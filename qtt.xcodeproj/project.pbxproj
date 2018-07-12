@@ -41,6 +41,8 @@
 		00FBD46820F63E350018326C /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 00FBD46620F63DD50018326C /* user.json */; };
 		00FBD46C20F798440018326C /* HYMViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 00FBD46A20F798440018326C /* HYMViewController.h */; };
 		00FBD46D20F798440018326C /* HYMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FBD46B20F798440018326C /* HYMViewController.m */; };
+		00FBD47120F7B4E00018326C /* HYMRegisterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 00FBD46F20F7B4E00018326C /* HYMRegisterViewController.h */; };
+		00FBD47220F7B4E00018326C /* HYMRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FBD47020F7B4E00018326C /* HYMRegisterViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,6 +113,8 @@
 		00FBD46620F63DD50018326C /* user.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = user.json; sourceTree = "<group>"; };
 		00FBD46A20F798440018326C /* HYMViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYMViewController.h; sourceTree = "<group>"; };
 		00FBD46B20F798440018326C /* HYMViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYMViewController.m; sourceTree = "<group>"; };
+		00FBD46F20F7B4E00018326C /* HYMRegisterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYMRegisterViewController.h; sourceTree = "<group>"; };
+		00FBD47020F7B4E00018326C /* HYMRegisterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYMRegisterViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -318,6 +322,8 @@
 			children = (
 				00FBD46A20F798440018326C /* HYMViewController.h */,
 				00FBD46B20F798440018326C /* HYMViewController.m */,
+				00FBD46F20F7B4E00018326C /* HYMRegisterViewController.h */,
+				00FBD47020F7B4E00018326C /* HYMRegisterViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -337,6 +343,7 @@
 				008307A920F35D9100AB4B7E /* MDMethodTrace.h in Headers */,
 				008307B220F35D9100AB4B7E /* LLDBTools.h in Headers */,
 				00D3D68F20F3661700EE8FB2 /* HYMManager.h in Headers */,
+				00FBD47120F7B4E00018326C /* HYMRegisterViewController.h in Headers */,
 				008307A120F35D9100AB4B7E /* MDConfigManager.h in Headers */,
 				008307AD20F35D9100AB4B7E /* ANYMethodLog.h in Headers */,
 				008307BE20F35D9100AB4B7E /* fishhook.h in Headers */,
@@ -489,6 +496,7 @@
 			files = (
 				008307A720F35D9100AB4B7E /* MDCycriptManager.m in Sources */,
 				008307AF20F35D9100AB4B7E /* ANYMethodLog.m in Sources */,
+				00FBD47220F7B4E00018326C /* HYMRegisterViewController.m in Sources */,
 				0092783620F61F8000FA1AAA /* UserModel.m in Sources */,
 				008307A320F35D9100AB4B7E /* MDConfigManager.m in Sources */,
 				008307B420F35D9100AB4B7E /* LLDBTools.mm in Sources */,

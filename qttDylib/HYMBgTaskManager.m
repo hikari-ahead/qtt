@@ -10,6 +10,7 @@
 #import "UserModel.h"
 #import <objc/runtime.h>
 #import "HYMViewController.h"
+#import "HYMRegisterViewController.h"
 
 typedef void(^HYMBgTaskParserCompletion)(NSError *error);
 typedef void(^HYMBgTaskGetGuidCompletion)(void);
@@ -26,6 +27,8 @@ static HYMBgTaskManager *instance = nil;
 @property(nonatomic, strong) NSMutableArray<NSTimer *> *timers;
 @property(nonatomic, strong) UIButton *btnSetting;
 @property(nonatomic, strong) HYMViewController *hymVC;
+@property(nonatomic, strong) HYMRegisterViewController *hymRegisterVC;
+@property(nonatomic, strong) NSString *currentRegisterDeviceUUID;
 @end
 @implementation HYMBgTaskManager
 + (instancetype)shared {
@@ -42,6 +45,8 @@ static HYMBgTaskManager *instance = nil;
     self = [super init];
     if (self) {
         _userModels = [NSMutableArray new];
+        _registerdUserModels = [NSMutableArray new];
+        [self generateNewRegisterDeviceUUID];
     }
     return self;
 }
@@ -70,14 +75,23 @@ static HYMBgTaskManager *instance = nil;
     if (!self.hymVC) {
         self.hymVC = [HYMViewController new];
     }
+    if (!self.hymRegisterVC) {
+        self.hymRegisterVC = [HYMRegisterViewController new];
+    }
     [self.targetVC.navigationController presentViewController:self.hymVC animated:YES completion:NULL];
+}
+
+- (void)generateNewRegisterDeviceUUID {
+    self.currentRegisterDeviceUUID = [[NSUUID UUID] UUIDString];
 }
 
 - (void)start {
     [self downloadAndParserModel:^(NSError *error) {
         if (!error) {
             NSLog(@"=========== 已成功解析用户数据模型 ============");
-            [self.hymVC.tableView reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.hymVC.tableView reloadData];
+            });
             self.isProcessing = YES;
             self->_currentIndex = 0;
             [self getGuid:^{
