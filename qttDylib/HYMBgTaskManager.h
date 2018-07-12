@@ -8,13 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-
+@class UserModel;
 @interface HYMBgTaskManager : NSObject
 @property (nonatomic, assign) BOOL isProcessing;
-@property (nonatomic, assign, readonly) NSUInteger currentGetGoldIndex;
 @property (nonatomic, strong) UIViewController *targetVC;
+@property (nonatomic, strong, readonly) NSMutableArray<UserModel *> *userModels;
 + (instancetype)shared;
 - (void)start;
+- (void)stop;
 - (void)addSettingButtonToWindow;
 - (NSMutableDictionary *)paramsForGetGuide;
 - (NSString *)loginQdataForCurrentIndex;
@@ -22,4 +23,5 @@
 - (NSDictionary *)readV2QdataForCurrentIndex;
 - (NSString *)getListQdataForCurrentIndex;
 - (NSString *)userAgentForCurrnetIndex;
+- (NSMutableDictionary *)baseDicForCurrentIndex;
 @end

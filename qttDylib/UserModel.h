@@ -24,4 +24,8 @@
 @property (nonatomic, strong) NSString *qkV2;
 @property (nonatomic, strong) NSString *memId;
 @property (nonatomic, strong) NSString *list_key; // content/getListV2->返回
+
+@property (nonatomic, strong) NSString *coin;
+@property (nonatomic, strong) NSString *balance;
+
 @end

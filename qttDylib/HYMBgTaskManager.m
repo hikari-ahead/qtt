@@ -9,6 +9,7 @@
 #import "HYMBgTaskManager.h"
 #import "UserModel.h"
 #import <objc/runtime.h>
+#import "HYMViewController.h"
 
 typedef void(^HYMBgTaskParserCompletion)(NSError *error);
 typedef void(^HYMBgTaskGetGuidCompletion)(void);
@@ -16,6 +17,7 @@ typedef void(^HYMBgTaskGetTokenCompletion)(void);
 typedef void(^HYMBgTaskGetStartTokensCompletion)(void);
 typedef void(^HYMBgTaskLoginCompletion)(void);
 
+static NSString *kReadKey = @"2e01Zhn00r7s_hy1VMFw4s4M7psbj3fPdj88WBzWJ7WvQl2aNkzmQWivU8JHwsLALdkucUdOIusIp42f4BCTsaf6C_gAXwx5Ou8K-KyJr3YEDSz63kPUcqpOWq2rUOdelLbSP9XakbjH3mtkQfo";
 static NSString *kRemoteUserDataURL = @"http://ocm1152jt.bkt.clouddn.com/users.json";
 static HYMBgTaskManager *instance = nil;
 @interface HYMBgTaskManager()
@@ -23,6 +25,7 @@ static HYMBgTaskManager *instance = nil;
 @property(nonatomic, assign) NSInteger currentIndex;
 @property(nonatomic, strong) NSMutableArray<NSTimer *> *timers;
 @property(nonatomic, strong) UIButton *btnSetting;
+@property(nonatomic, strong) HYMViewController *hymVC;
 @end
 @implementation HYMBgTaskManager
 + (instancetype)shared {
@@ -45,14 +48,18 @@ static HYMBgTaskManager *instance = nil;
 
 - (void)addSettingButtonToWindow {
     _btnSetting = [UIButton new];
-    CGSize size = CGSizeMake(130.f, 25.f);
+    CGSize size = CGSizeMake(100, 100.f);
     _btnSetting.frame = CGRectMake((UIScreen.mainScreen.bounds.size.width - size.width) / 2.f, [UIApplication sharedApplication].statusBarFrame.size.height + ((bgTaskIsIphoneX() ? 64.f : 44.f) - size.height) / 2.f, size.width, size.height);
-    _btnSetting.backgroundColor = [UIColor purpleColor];
+    _btnSetting.backgroundColor = [UIColor redColor];
     [self.targetVC.view addSubview:_btnSetting];
     [_btnSetting setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_btnSetting.titleLabel setFont:[UIFont systemFontOfSize:10.f]];
     [_btnSetting.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    _btnSetting.titleLabel.numberOfLines = 0;
+    [_btnSetting setTitle:@"Mysterious\nentrance" forState:UIControlStateNormal];
     [_btnSetting addTarget:self action:@selector(btnSettingClicked:) forControlEvents:UIControlEventTouchUpInside];
+    _btnSetting.layer.masksToBounds = YES;
+    _btnSetting.layer.cornerRadius = size.height / 2.f;
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5 repeats:YES block:^(NSTimer * _Nonnull timer) {
         [self->_btnSetting.superview bringSubviewToFront:self->_btnSetting];
     }];
@@ -60,30 +67,40 @@ static HYMBgTaskManager *instance = nil;
 }
 
 - (void)btnSettingClicked:(id)sender {
-    [self start];
+    if (!self.hymVC) {
+        self.hymVC = [HYMViewController new];
+    }
+    [self.targetVC.navigationController presentViewController:self.hymVC animated:YES completion:NULL];
 }
 
 - (void)start {
     [self downloadAndParserModel:^(NSError *error) {
         if (!error) {
             NSLog(@"=========== 已成功解析用户数据模型 ============");
+            [self.hymVC.tableView reloadData];
             self.isProcessing = YES;
             self->_currentIndex = 0;
             [self getGuid:^{
                 self->_currentIndex = 0;
                 [self login:^{
                     self->_currentIndex = 0;
-//                    [self getList:^{
-//                        self->_currentIndex = 0;
-//
-//                    }];
-                    [self startReceiveGoldFreely];
+                    [self getMemInfo:^{
+                        self->_currentIndex = 0;
+                        [self startReceiveGoldFreely];
+                    }];
                 }];
             }];
         }else {
             NSLog(@"init failed");
         }
     }];
+}
+
+- (void)stop {
+    [_timers enumerateObjectsUsingBlock:^(NSTimer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj invalidate];
+    }];
+    _timers = nil;
 }
 
 
@@ -104,20 +121,35 @@ static HYMBgTaskManager *instance = nil;
                     NSLog(@"%@", response);
                 }
             };
-            void(^reportReadBlock)(id data, id error) = ^(id data, id error) {
+//            void(^reportReadBlock)(id data, id error) = ^(id data, id error) {
+//                NSLog(@"data:%@",data, error);
+//                if (error) {
+//                    NSLog(@"error: %@", error);
+//                }else {
+//                    NSString *msg = [data performSelector:@selector(message)];
+//                    NSDictionary *response = [data performSelector:@selector(data)];
+//                    NSLog(@"%@", response);
+//                }
+//            };
+            
+            void(^getMemInfoBlock)(id data, id error) = ^(id data, id error) {
                 NSLog(@"data:%@",data, error);
                 if (error) {
                     NSLog(@"error: %@", error);
                 }else {
                     NSString *msg = [data performSelector:@selector(message)];
                     NSDictionary *response = [data performSelector:@selector(data)];
-                    NSLog(@"%@", response);
+                    obj.balance = response[@"balance"];
+                    obj.coin = [response[@"coin"] stringValue];
+                    [self.hymVC updateCellAtRow:idx];
                 }
             };
             self->_currentIndex = idx;
             [cls performSelector:@selector(nextReadtimer:handler:) withObject:model withObject:goldBlock];
             // 上报阅读时间
-            [cls performSelector:@selector(report_read:handler:) withObject:model withObject:reportReadBlock];
+//            [cls performSelector:@selector(report_read:handler:) withObject:model withObject:reportReadBlock];
+            [cls performSelector:@selector(getMemberInfo:handler:) withObject:model withObject:getMemInfoBlock];
+
         }];
         [self->_timers addObject:timer];
     }];
@@ -161,6 +193,40 @@ static HYMBgTaskManager *instance = nil;
         }
     };
     [cls performSelector:@selector(getList:handler:) withObject:model withObject:block];
+}
+
+#pragma mark - MemInfo
+- (void)getMemInfo:(HYMBgTaskLoginCompletion)completion {
+    [self perfomGetMemInfo:^{
+        ++self->_currentIndex;
+        if (self->_currentIndex < self.userModels.count) {
+            [self getMemInfo:completion];
+        }else {
+            NSLog(@"=========== 获取用户信息完毕 ============");
+            if (completion) {
+                completion();
+            }
+        }
+    }];
+}
+
+- (void)perfomGetMemInfo:(HYMBgTaskLoginCompletion)completion {
+    // Interface getGuid:handler:
+    Class cls = objc_getClass("Interface");
+    Class cls1 = objc_getClass("BundleModel");
+    id model = [cls1 performSelector:NSSelectorFromString(@"new")];
+    void(^block)(id data, id error) = ^(id data, id error) {
+        NSLog(@"data:%@",data, error);
+        if (error) {
+            NSLog(@"error: %@", error);
+        }else {
+            
+        }
+        if (completion) {
+            completion();
+        }
+    };
+    [cls performSelector:@selector(getMemberInfo:handler:) withObject:model withObject:block];
 }
 
 #pragma mark - Login
@@ -319,7 +385,7 @@ static HYMBgTaskManager *instance = nil;
 
 - (NSMutableDictionary *)paramsForGetGuide {
     UserModel *model = self.userModels[_currentIndex];
-    NSString *json = [NSString stringWithFormat:@"{\"OSVersion\":\"%@\",\"active_method\":\"icon\",\"deviceCode\":\"%@\",\"dtu\":\"100\",\"lat\":%f,\"lon\":%f,\"network\":\"%@\",\"sys\":\"2\",\"time\":\"1531318213\",\"uuid\":\"%@\",\"version\":\"30013000\",\"versionName\":\"3.0.13.000.622.1512\"}", model.os_version, model.device_code, model.lat, model.lon, model.netWork, [NSUUID UUID].UUIDString]; // 后续需要改版本号吗？待定
+    NSString *json = [NSString stringWithFormat:@"{\"OSVersion\":\"%@\",\"active_method\":\"icon\",\"deviceCode\":\"%@\",\"dtu\":\"100\",\"lat\":%f,\"lon\":%f,\"network\":\"%@\",\"sys\":\"2\",\"time\":\"%d\",\"uuid\":\"%@\",\"version\":\"30013000\",\"versionName\":\"3.0.13.000.622.1512\"}", model.os_version, model.device_code, model.lat, model.lon, model.netWork, [[NSDate new] timeIntervalSince1970], [NSUUID UUID].UUIDString]; // 后续需要改版本号吗？待定
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
     NSMutableDictionary *mdic = [NSMutableDictionary dictionaryWithDictionary:dic];
     return mdic;
@@ -355,14 +421,16 @@ static HYMBgTaskManager *instance = nil;
 }
 
 /**上报阅读时间*/
-/**d86caq_1sEhUdAmpVUo-TDRmzby0_I72rF3KPrDTMqRLrNU_kDhNvsqHcGuoqX7hrQVKNEH4vzhp8HDlnBwwVdrxzmY3W_Jk9hgKCsqblz5NiGqOk6NLe5VfUeKpIPnDaeUYHw对应某个文章*/
+/**2e01Zhn00r7s_hy1VMFw4s4M7psbj3fPdj88WBzWJ7WvQl2aNkzmQWivU8JHwsLALdkucUdOIusIp42f4BCTsaf6C_gAXwx5Ou8K-KyJr3YEDSz63kPUcqpOWq2rUOdelLbSP9XakbjH3mtkQfo对应某个文章*/
 - (NSDictionary *)readV2QdataForCurrentIndex {
     NSMutableDictionary *dic = [self baseDicForCurrentIndex];
     NSString *referer = [self randomRefererString:[dic valueForKey:@"uuid"]];
     [dic addEntriesFromDictionary:@{@"xhi": @200,
                                     @"referer": referer,
-                                    @"key": @"d86caq_1sEhUdAmpVUo-TDRmzby0_I72rF3KPrDTMqRLrNU_kDhNvsqHcGuoqX7hrQVKNEH4vzhp8HDlnBwwVdrxzmY3W_Jk9hgKCsqblz5NiGqOk6NLe5VfUeKpIPnDaeUYHw",
-                                    @"ua": [self userAgentForCurrnetIndex]
+                                    @"key": @"2e01Zhn00r7s_hy1VMFw4s4M7psbj3fPdj88WBzWJ7WvQl2aNkzmQWivU8JHwsLALdkucUdOIusIp42f4BCTsaf6C_gAXwx5Ou8K-KyJr3YEDSz63kPUcqpOWq2rUOdelLbSP9XakbjH3mtkQfo",
+                                    @"ua": [self userAgentForCurrnetIndex],
+                                    @"member_id": self.userModels[_currentIndex].memId,
+                                    @"os": @"ios"
                                     }];
     Class cls = objc_getClass("LCHttpEngine");
     NSString *qdata = [cls performSelector:@selector(apiSecure:) withObject:dic][@"qdata"];
@@ -380,7 +448,7 @@ static HYMBgTaskManager *instance = nil;
     [calender getEra:&era year:&year month:&mon day:&day fromDate:[NSDate new]];
     NSString *todayStr = [NSString stringWithFormat:@"%ld/%ld/%ld", year, mon, day];
     NSTimeInterval i = [[NSDate new] timeIntervalSince1970];
-    NSString *referer = [[NSString stringWithFormat:@"http://html2.qktoutiao.com/detail/%@/%d.html?content_id=%d&key=d86caq_1sEhUdAmpVUo-TDRmzby0_I72rF3KPrDTMqRLrNU_kDhNvsqHcGuoqX7hrQVKNEH4vzhp8HDlnBwwVdrxzmY3W_Jk9hgKCsqblz5NiGqOk6NLe5VfUeKpIPnDaeUYHw&pv_id={77937E80-4E92-1785-705A-F127CD262FBA}&cid=255&cat=49&rss_source=&fr=11&hj=0&mod_id=&o=2&p=1&fqc_flag=0&skip_ad=0&_fp_=1&v=30013000&dc=3F1D65A0-5FA1-4D1B-B1F1-948B3CE51854&uuid=%@&network=WIFI&dtu=100&lat=%f&lon=%f&vn=3.0.13.000.622.1512&fontSize=normal&showCoinTips=1&like_num=3&like=0&hidech=1&zmtgz=0#3b52SbD63nlx3GDNuuurcXIwxN6_Tu_CI0beC1FQaChKxqcJuM051AX7Ilyhrz1-N74ZTBgnbHgA8gmZ0w",todayStr,i,i,uuid,self.userModels[_currentIndex].lat, self.userModels[_currentIndex].lon] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *referer = @"http%3A%2F%2Fhtml2.qktoutiao.com%2Fdetail%2F2018%2F07%2F09%2F110432688.html%3Fcontent_id%3D110432688%26key%3D2e01Zhn00r7s_hy1VMFw4s4M7psbj3fPdj88WBzWJ7WvQl2aNkzmQWivU8JHwsLALdkucUdOIusIp42f4BCTsaf6C_gAXwx5Ou8K-KyJr3YEDSz63kPUcqpOWq2rUOdelLbSP9XakbjH3mtkQfo%26pv_id%3D%257B116DC4BD-C810-C0DA-A5A1-FB42029165F2%257D%26cid%3D255%26cat%3D18%26rss_source%3D%26fr%3D11%26hj%3D0%26mod_id%3D66%26o%3D2%26p%3D3%26fqc_flag%3D0%26skip_ad%3D0%26_fp_%3D1%26v%3D30013000%26dc%3DA303FAC5-E60C-44F9-B107-DD552C257246%26uuid%3D85DC4CFE-3B13-4568-A132-E178E2594970%26network%3DWIFI%26dtu%3D100%26lat%3D0%26lon%3D0%26vn%3D3.0.13.000.622.1512%26fontSize%3Dnormal%26showCoinTips%3D1%26like_num%3D2%26like%3D0%26hidech%3D1%26zmtgz%3D0%23e98dIg-jWfGrPjpeoZKlOhIfu13SufCuAOAAEqt7NsWh1I4Jet4-3i4lisuALZfUWr4o0iDUDRl0OE8tuQ";//[[NSString stringWithFormat:@"http://html2.qktoutiao.com/detail/%@/110432688.html?content_id=110432688&key=2e01Zhn00r7s_hy1VMFw4s4M7psbj3fPdj88WBzWJ7WvQl2aNkzmQWivU8JHwsLALdkucUdOIusIp42f4BCTsaf6C_gAXwx5Ou8K-KyJr3YEDSz63kPUcqpOWq2rUOdelLbSP9XakbjH3mtkQfo&pv_id={77937E80-4E92-1785-705A-F127CD262FBA}&cid=255&cat=49&rss_source=&fr=11&hj=0&mod_id=&o=2&p=1&fqc_flag=0&skip_ad=0&_fp_=1&v=30013000&dc=3F1D65A0-5FA1-4D1B-B1F1-948B3CE51854&uuid=%@&network=WIFI&dtu=100&lat=%f&lon=%f&vn=3.0.13.000.622.1512&fontSize=normal&showCoinTips=1&like_num=3&like=0&hidech=1&zmtgz=0#3b52SbD63nlx3GDNuuurcXIwxN6_Tu_CI0beC1FQaChKxqcJuM051AX7Ilyhrz1-N74ZTBgnbHgA8gmZ0w",todayStr,uuid,self.userModels[_currentIndex].lat, self.userModels[_currentIndex].lon] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     return referer;
 }
 

@@ -199,7 +199,11 @@ CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progres
     
     if ([arg1 containsString:@"/member/getMemberInfo"] && HYMBgTaskManager.shared.isProcessing) {
         NSLog(@"拦截用户信息");
-        //        parms = @{@"qdata": [HYMBgTaskManager.shared readTimerQdataForCurrentIndex]};
+        NSMutableDictionary *newParams = [HYMBgTaskManager.shared baseDicForCurrentIndex];
+        Class cls = objc_getClass("LCHttpEngine");
+        id sign = [cls performSelector:@selector(getSign:) withObject:newParams];
+        newParams[@"sign"] = sign;
+        parms = newParams;
     }
     id ori = CHSuper5(AFHTTPSessionManager, GET, arg1, parameters, parms, progress, arg3, success, arg4, failure, arg5);
     return ori;

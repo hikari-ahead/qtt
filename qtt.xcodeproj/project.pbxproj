@@ -39,6 +39,8 @@
 		00FBD46420F517CB0018326C /* Interface+Hook.h in Headers */ = {isa = PBXBuildFile; fileRef = 00FBD46220F517CB0018326C /* Interface+Hook.h */; };
 		00FBD46520F517CB0018326C /* Interface+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FBD46320F517CB0018326C /* Interface+Hook.m */; };
 		00FBD46820F63E350018326C /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 00FBD46620F63DD50018326C /* user.json */; };
+		00FBD46C20F798440018326C /* HYMViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 00FBD46A20F798440018326C /* HYMViewController.h */; };
+		00FBD46D20F798440018326C /* HYMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FBD46B20F798440018326C /* HYMViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +109,8 @@
 		00FBD46220F517CB0018326C /* Interface+Hook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Interface+Hook.h"; sourceTree = "<group>"; };
 		00FBD46320F517CB0018326C /* Interface+Hook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "Interface+Hook.m"; sourceTree = "<group>"; };
 		00FBD46620F63DD50018326C /* user.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = user.json; sourceTree = "<group>"; };
+		00FBD46A20F798440018326C /* HYMViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYMViewController.h; sourceTree = "<group>"; };
+		00FBD46B20F798440018326C /* HYMViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYMViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +209,7 @@
 		0083079A20F35D9100AB4B7E /* qttDylib */ = {
 			isa = PBXGroup;
 			children = (
+				00FBD46920F7981F0018326C /* ViewController */,
 				00FBD46720F63DE10018326C /* Resource */,
 				0092783220F61F6B00FA1AAA /* Model */,
 				00D3D68C20F3660100EE8FB2 /* Manager */,
@@ -308,6 +313,15 @@
 			name = Resource;
 			sourceTree = "<group>";
 		};
+		00FBD46920F7981F0018326C /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				00FBD46A20F798440018326C /* HYMViewController.h */,
+				00FBD46B20F798440018326C /* HYMViewController.m */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -317,6 +331,7 @@
 			files = (
 				008307A520F35D9100AB4B7E /* MDCycriptManager.h in Headers */,
 				0092783520F61F8000FA1AAA /* UserModel.h in Headers */,
+				00FBD46C20F798440018326C /* HYMViewController.h in Headers */,
 				00FBD46420F517CB0018326C /* Interface+Hook.h in Headers */,
 				0092783920F6217400FA1AAA /* HYMBgTaskManager.h in Headers */,
 				008307A920F35D9100AB4B7E /* MDMethodTrace.h in Headers */,
@@ -483,6 +498,7 @@
 				008307AB20F35D9100AB4B7E /* MDMethodTrace.m in Sources */,
 				00D3D69020F3661700EE8FB2 /* HYMManager.m in Sources */,
 				008307BC20F35D9100AB4B7E /* fishhook.c in Sources */,
+				00FBD46D20F798440018326C /* HYMViewController.m in Sources */,
 				008307C220F35D9100AB4B7E /* qttDylib.m in Sources */,
 				008307B920F35D9100AB4B7E /* AntiAntiDebug.m in Sources */,
 			);
