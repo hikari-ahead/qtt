@@ -60,7 +60,7 @@
     _btnSwitch = [[UIButton alloc] init];
     _btnSwitch.frame = CGRectMake(self.view.frame.size.width / 2.0 - 40.f, [self isIphoneX] ? 44.f : 20.f, 80.f, 20.f);
     _btnSwitch.backgroundColor = UIColor.blackColor;
-    [_btnSwitch setTitle:@"->OFF-<" forState:UIControlStateNormal];
+    [_btnSwitch setTitle:@"->ON-<" forState:UIControlStateNormal];
     [_btnSwitch addTarget:self action:@selector(btnSwitchClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_btnSwitch];
     

@@ -10,5 +10,5 @@
 
 @interface HYMViewController : UIViewController
 @property (nonatomic, strong, readonly) UITableView *tableView;
-- (void)updateCellAtRow:(NSUInteger)row;
+- (void)updateCellAtRow:(NSUInteger)row withSuccess:(BOOL)success;
 @end

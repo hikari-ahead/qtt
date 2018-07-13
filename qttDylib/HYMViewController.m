@@ -78,7 +78,9 @@
 }
 
 - (void)btnBackClicked:(id) sender {
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self dismissViewControllerAnimated:YES completion:^{
+        HYMBgTaskManager.shared.btnSetting.hidden = NO;
+    }];
 }
 
 - (void)btnStopClicked:(id) sender {
@@ -137,12 +139,12 @@
     return 60.f;
 }
 
-- (void)updateCellAtRow:(NSUInteger)row {
+- (void)updateCellAtRow:(NSUInteger)row withSuccess:(BOOL)success {
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
     if (cell) {
         [UIView animateWithDuration:0.3 animations:^{
             cell.alpha = 0.5;
-            cell.backgroundColor = [UIColor greenColor];
+            cell.backgroundColor = success ? [UIColor greenColor] : [UIColor redColor];
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:0.4 animations:^{
                 cell.alpha = 1;

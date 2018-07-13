@@ -13,6 +13,7 @@
 @interface HYMBgTaskManager : NSObject
 @property(nonatomic, assign) BOOL isProcessing;
 @property(nonatomic, strong) UIViewController *targetVC;
+@property(nonatomic, strong, readonly) UIButton *btnSetting;
 @property(nonatomic, strong, readonly) NSMutableArray<UserModel *> *userModels;
 @property(nonatomic, strong) NSMutableArray<UserModel *> *registerdUserModels;
 @property(nonatomic, strong, readonly) NSString *currentRegisterDeviceUUID;

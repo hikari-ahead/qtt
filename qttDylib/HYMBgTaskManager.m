@@ -48,16 +48,17 @@ static HYMBgTaskManager *instance = nil;
         _userModels = [NSMutableArray new];
         _registerdUserModels = [NSMutableArray new];
         [self generateNewRegisterDeviceUUID];
+        self.shouldInterceptAllDeviceCode = YES;
     }
     return self;
 }
 
 - (void)addSettingButtonToWindow {
     _btnSetting = [UIButton new];
-    CGSize size = CGSizeMake(100, 100.f);
+    CGSize size = CGSizeMake(80.f, 80.f);
     _btnSetting.frame = CGRectMake((UIScreen.mainScreen.bounds.size.width - size.width) / 2.f, [UIApplication sharedApplication].statusBarFrame.size.height + ((bgTaskIsIphoneX() ? 64.f : 44.f) - size.height) / 2.f, size.width, size.height);
     _btnSetting.backgroundColor = [UIColor redColor];
-    [self.targetVC.view addSubview:_btnSetting];
+    [[UIApplication sharedApplication].keyWindow addSubview:_btnSetting];
     [_btnSetting setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_btnSetting.titleLabel setFont:[UIFont systemFontOfSize:10.f]];
     [_btnSetting.titleLabel setTextAlignment:NSTextAlignmentCenter];
@@ -66,20 +67,35 @@ static HYMBgTaskManager *instance = nil;
     [_btnSetting addTarget:self action:@selector(btnSettingClicked:) forControlEvents:UIControlEventTouchUpInside];
     _btnSetting.layer.masksToBounds = YES;
     _btnSetting.layer.cornerRadius = size.height / 2.f;
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panFired:)];
+    [_btnSetting addGestureRecognizer:panGesture];
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5 repeats:YES block:^(NSTimer * _Nonnull timer) {
         [self->_btnSetting.superview bringSubviewToFront:self->_btnSetting];
     }];
     [timer fire];
 }
 
+- (void)panFired:(UIPanGestureRecognizer *)gesture {
+    CGPoint p = [gesture locationInView:[UIApplication sharedApplication].keyWindow];
+    _btnSetting.frame = CGRectMake(p.x - (_btnSetting.frame.size.width / 2.0), p.y - (_btnSetting.frame.size.height / 2.0), _btnSetting.frame.size.width, _btnSetting.frame.size.height);
+}
+
 - (void)btnSettingClicked:(id)sender {
+    if (self.hymVC.presentingViewController) {
+        return;
+    }
     if (!self.hymVC) {
         self.hymVC = [HYMViewController new];
     }
     if (!self.hymRegisterVC) {
         self.hymRegisterVC = [HYMRegisterViewController new];
     }
-    [self.targetVC.navigationController presentViewController:self.hymVC animated:YES completion:NULL];
+    if (self.targetVC.navigationController.presentedViewController && [self.targetVC.navigationController.presentedViewController isKindOfClass:[UINavigationController class]]) {
+        [((UINavigationController *)self.targetVC.navigationController.presentedViewController).topViewController presentViewController:self.hymVC animated:YES completion:NULL];
+    }else {
+        [self.targetVC.navigationController presentViewController:self.hymVC animated:YES completion:NULL];
+    }
+    self.btnSetting.hidden = YES;
 }
 
 - (void)generateNewRegisterDeviceUUID {
@@ -147,7 +163,7 @@ static HYMBgTaskManager *instance = nil;
                     NSLog(@"%@", response);
                 }
 
-                [self.hymVC updateCellAtRow:idx];
+                [self.hymVC updateCellAtRow:idx withSuccess:error == nil];
             };
            
             self->_currentIndex = idx;
@@ -201,8 +217,8 @@ static HYMBgTaskManager *instance = nil;
                     NSDictionary *response = [data performSelector:@selector(data)];
                     obj.balance = response[@"balance"];
                     obj.coin = [response[@"coin"] stringValue];
-                    [self.hymVC updateCellAtRow:idx];
                 }
+                [self.hymVC updateCellAtRow:idx withSuccess:error == nil];
             };
             self->_currentIndex = idx;
             [cls performSelector:@selector(nextReadtimer:handler:) withObject:model withObject:goldBlock];
@@ -403,6 +419,7 @@ static HYMBgTaskManager *instance = nil;
     NSLog(@"开始获取远程登录数据");
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         // 开始
+        [[NSURLCache sharedURLCache] removeAllCachedResponses];
          NSURL *url = [[NSURL alloc] initWithString:kRemoteUserDataURL];
         NSData *data = [NSData dataWithContentsOfURL:url];
 //        NSURL *url = [[NSBundle mainBundle] URLForResource:@"user" withExtension:@"json"];

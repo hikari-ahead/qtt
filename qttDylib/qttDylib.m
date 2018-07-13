@@ -56,7 +56,9 @@ CHDeclareClass(AFHTTPSessionManager);
 CHMethod0(void, ChannelsViewController, viewDidLoad) {
     CHSuper0(ChannelsViewController, viewDidLoad);
     HYMBgTaskManager.shared.targetVC = self;
-    [HYMBgTaskManager.shared addSettingButtonToWindow];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [HYMBgTaskManager.shared addSettingButtonToWindow];
+    });
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //        [HYMManager.shared simUserReadOneArticle];
 //    });
