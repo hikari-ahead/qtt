@@ -19,6 +19,7 @@
 @property(nonatomic, strong, readonly) HYMRegisterViewController *hymRegisterVC;
 @property(nonatomic, assign) BOOL shouldInterceptAllDeviceCode;
 @property(nonatomic, strong) id lastSMSRegisterQuickLoginBundle;
+@property(nonatomic, strong) id lastCommonLoginBundle;
 + (instancetype)shared;
 - (void)start;
 - (void)stop;

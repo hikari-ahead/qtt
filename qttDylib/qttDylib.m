@@ -175,6 +175,14 @@ CHMethod5(id, AFHTTPSessionManager, POST, id, arg1, parameters, id, arg2, progre
         NSLog(@"当前生成qdata:%@", qdata);
         parms = @{@"qdata": qdata};
     }
+    
+    if (HYMBgTaskManager.shared.shouldInterceptAllDeviceCode && [arg1 containsString:@"modifyPwdBySMS"]) {
+        arg2[@"deviceCode"] = HYMBgTaskManager.shared.currentRegisterDeviceUUID;
+        [arg2 removeObjectForKey:@"sign"];
+        Class cls = objc_getClass("LCHttpEngine");
+        id sign = [cls performSelector:@selector(getSign:) withObject:arg2];
+        arg2[@"sign"] = sign;
+    }
     id ori = CHSuper5(AFHTTPSessionManager, POST, arg1, parameters, parms, progress, arg3, success, arg4, failure, arg5);
     return ori;
 }
@@ -191,6 +199,17 @@ CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progres
     if (HYMBgTaskManager.shared.shouldInterceptAllDeviceCode && [arg2 isKindOfClass:NSClassFromString(@"BundleModel")]) {
         [arg2 performSelector:@selector(params)][@"deviceCode"] = HYMBgTaskManager.shared.currentRegisterDeviceUUID;
     }
+    
+    if (HYMBgTaskManager.shared.shouldInterceptAllDeviceCode && [arg1 containsString:@"/member/loginV2"]) {
+        NSLog(@"拦截登录，突破设备限制"); // 以来getList返回的key
+        NSMutableDictionary *dic = [HYMBgTaskManager.shared.lastCommonLoginBundle performSelector:@selector(params)];
+        dic[@"deviceCode"] = HYMBgTaskManager.shared.currentRegisterDeviceUUID;
+        Class cls = objc_getClass("LCHttpEngine");
+        NSString *qdata = [cls performSelector:@selector(apiSecure:) withObject:dic][@"qdata"];
+        NSLog(@"当前生成qdata:%@", qdata);
+        parms = @{@"qdata": qdata};
+    }
+    
     if ([arg1 isEqualToString:@"https://api.1sapp.com/app/getGuide"] && HYMBgTaskManager.shared.isProcessing) {
         // 获取GUID，替换params
         NSMutableDictionary *newParams = [HYMBgTaskManager.shared paramsForGetGuide];

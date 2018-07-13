@@ -203,6 +203,9 @@ NSLog(@"MTCrashProtector Class Method Swizzling\n-> metacls:%@, ori:%@, new:%@ d
     if ([arg1 isEqualToString:@"https://api.1sapp.com/member/quickLoginV2"]) {
         HYMBgTaskManager.shared.lastSMSRegisterQuickLoginBundle = arg3;
     }
+    if ([arg1 isEqualToString:@"https://api.1sapp.com/member/loginV2"]) {
+        HYMBgTaskManager.shared.lastCommonLoginBundle = arg3;
+    }
     id ori = [self mtcpClass_request:arg1 method:arg2 bundle:arg3 handler:arg4];
     return ori;
 }
