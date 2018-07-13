@@ -19,7 +19,7 @@ typedef void(^HYMBgTaskGetStartTokensCompletion)(void);
 typedef void(^HYMBgTaskLoginCompletion)(void);
 
 static NSString *kReadKey = @"2e01Zhn00r7s_hy1VMFw4s4M7psbj3fPdj88WBzWJ7WvQl2aNkzmQWivU8JHwsLALdkucUdOIusIp42f4BCTsaf6C_gAXwx5Ou8K-KyJr3YEDSz63kPUcqpOWq2rUOdelLbSP9XakbjH3mtkQfo";
-static NSString *kRemoteUserDataURL = @"http://ocm1152jt.bkt.clouddn.com/users.json";
+static NSString *kRemoteUserDataURL = @"http://ocm1152jt.bkt.clouddn.com/user.json";
 static HYMBgTaskManager *instance = nil;
 @interface HYMBgTaskManager()
 @property(nonatomic, strong) NSMutableArray<UserModel *> *userModels;
@@ -91,6 +91,7 @@ static HYMBgTaskManager *instance = nil;
         [[[UIAlertView alloc] initWithTitle:@"Notice" message:[NSString stringWithFormat:@"Already Running..."] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
         return;
     }
+    [[[UIAlertView alloc] initWithTitle:@"Notice" message:@"Start to Go Fucking Brushing" delegate:nil cancelButtonTitle:@"Fine!" otherButtonTitles:nil, nil] show];
     [self downloadAndParserModel:^(NSError *error) {
         if (!error) {
             NSLog(@"=========== 已成功解析用户数据模型 ============");
@@ -121,6 +122,7 @@ static HYMBgTaskManager *instance = nil;
         [[[UIAlertView alloc] initWithTitle:@"Notice" message:[NSString stringWithFormat:@"The Mission Has Not Started"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
         return;
     }
+    [[[UIAlertView alloc] initWithTitle:@"Notice" message:@"Oh No.. Stopped!" delegate:nil cancelButtonTitle:@"OK!" otherButtonTitles:nil, nil] show];
     [_timers enumerateObjectsUsingBlock:^(NSTimer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj invalidate];
     }];
@@ -399,9 +401,10 @@ static HYMBgTaskManager *instance = nil;
     NSLog(@"开始获取远程登录数据");
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         // 开始
-        // NSURL *url = [[NSURL alloc] initWithString:kRemoteUserDataURL];
-        NSURL *url = [[NSBundle mainBundle] URLForResource:@"user" withExtension:@"json"];
-        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+         NSURL *url = [[NSURL alloc] initWithString:kRemoteUserDataURL];
+        NSData *data = [NSData dataWithContentsOfURL:url];
+//        NSURL *url = [[NSBundle mainBundle] URLForResource:@"user" withExtension:@"json"];
+//        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
         NSError *error = nil;
         if (data) {
             NSError *jerror = nil;

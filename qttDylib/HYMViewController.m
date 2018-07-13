@@ -88,12 +88,10 @@
 //        [idxs addObject:[NSIndexPath indexPathForRow:i inSection:0]];
 //    }
 ////    [self.tableView deleteRowsAtIndexPaths:idxs withRowAnimation:UITableViewRowAnimationAutomatic];
-    [[[UIAlertView alloc] initWithTitle:@"Notice" message:@"Oh No.. Stopped!" delegate:nil cancelButtonTitle:@"OK!" otherButtonTitles:nil, nil] show];
 }
 
 - (void)btnStartClicked:(id) sender {
     [HYMBgTaskManager.shared start];
-    [[[UIAlertView alloc] initWithTitle:@"Notice" message:@"Start to Go Fucking Brushing" delegate:nil cancelButtonTitle:@"Fine!" otherButtonTitles:nil, nil] show];
 }
 
 #pragma mark Table
