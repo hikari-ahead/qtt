@@ -159,6 +159,26 @@ CHMethod1(id, Schemes, initWithLink, id, arg1) {
     NSLog(@"1");
     return ori;
 }
+//AFHTTPSessionManager POST:parameters:progress:success:failure:
+CHMethod5(id, AFHTTPSessionManager, POST, id, arg1, parameters, id, arg2, progress, id, arg3, success, id, arg4, failure, id, arg5) {
+    NSLog(@"1");
+    id parms = arg2;
+    if (HYMBgTaskManager.shared.shouldInterceptAllDeviceCode && [arg2 isKindOfClass:NSClassFromString(@"BundleModel")]) {
+        [arg2 performSelector:@selector(params)][@"deviceCode"] = HYMBgTaskManager.shared.currentRegisterDeviceUUID;
+    }
+    if (HYMBgTaskManager.shared.shouldInterceptAllDeviceCode && [arg1 containsString:@"/member/quickLoginV2"]) {
+        NSLog(@"拦截注册快捷登录"); // 以来getList返回的key
+        NSMutableDictionary *dic = [HYMBgTaskManager.shared.lastSMSRegisterQuickLoginBundle performSelector:@selector(params)];
+        dic[@"deviceCode"] = HYMBgTaskManager.shared.currentRegisterDeviceUUID;
+        Class cls = objc_getClass("LCHttpEngine");
+        NSString *qdata = [cls performSelector:@selector(apiSecure:) withObject:dic][@"qdata"];
+        NSLog(@"当前生成qdata:%@", qdata);
+        parms = @{@"qdata": qdata};
+    }
+    id ori = CHSuper5(AFHTTPSessionManager, POST, arg1, parameters, parms, progress, arg3, success, arg4, failure, arg5);
+    return ori;
+}
+
 //AFHTTPSessionManager GET:parameters:progress:success:failure:
 CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progress, id, arg3, success, id, arg4, failure, id, arg5) {
     NSLog(@"1");
@@ -167,6 +187,9 @@ CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progres
     id headers = [rs performSelector:@selector(mutableHTTPRequestHeaders)];
     if (HYMBgTaskManager.shared.isProcessing) {
         headers[@"User-Agent"] = [HYMBgTaskManager.shared userAgentForCurrnetIndex];
+    }
+    if (HYMBgTaskManager.shared.shouldInterceptAllDeviceCode && [arg2 isKindOfClass:NSClassFromString(@"BundleModel")]) {
+        [arg2 performSelector:@selector(params)][@"deviceCode"] = HYMBgTaskManager.shared.currentRegisterDeviceUUID;
     }
     if ([arg1 isEqualToString:@"https://api.1sapp.com/app/getGuide"] && HYMBgTaskManager.shared.isProcessing) {
         // 获取GUID，替换params
@@ -200,6 +223,15 @@ CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progres
     
     if ([arg1 containsString:@"/member/getMemberInfo"] && HYMBgTaskManager.shared.isProcessing) {
         NSLog(@"拦截用户信息");
+        NSMutableDictionary *newParams = [HYMBgTaskManager.shared baseDicForCurrentIndex];
+        Class cls = objc_getClass("LCHttpEngine");
+        id sign = [cls performSelector:@selector(getSign:) withObject:newParams];
+        newParams[@"sign"] = sign;
+        parms = newParams;
+    }
+    
+    if ([arg1 containsString:@"/mission/intPointReward"] && HYMBgTaskManager.shared.isProcessing) {
+        // 拦截每小时金币奖励获取
         NSMutableDictionary *newParams = [HYMBgTaskManager.shared baseDicForCurrentIndex];
         Class cls = objc_getClass("LCHttpEngine");
         id sign = [cls performSelector:@selector(getSign:) withObject:newParams];
@@ -279,5 +311,7 @@ CHConstructor{
     //AFHTTPSessionManager GET:parameters:progress:success:failure:
     CHLoadLateClass(AFHTTPSessionManager);
     CHClassHook5(AFHTTPSessionManager, GET, parameters, progress, success, failure);
+    CHClassHook5(AFHTTPSessionManager, POST, parameters, progress, success, failure);
+
 }
 

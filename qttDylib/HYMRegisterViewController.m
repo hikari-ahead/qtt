@@ -13,6 +13,7 @@
 @property (nonatomic, strong) UIButton *btnBack;
 @property (nonatomic, strong) UIButton *btnCopy;
 @property (nonatomic, strong) UIButton *btnChange;
+@property (nonatomic, strong) UIButton *btnSwitch;
 @property (nonatomic, strong) UITextView *tvRecord;
 @end
 
@@ -31,7 +32,7 @@
         for (int i=0; i<HYMBgTaskManager.shared.registerdUserModels.count; i++) {
             UserModel *u = HYMBgTaskManager.shared.registerdUserModels[i];
             data = [data stringByAppendingString:@"{"];
-            data = [data stringByAppendingString:[NSString stringWithFormat:@"\"id\":\"%@\",\"pass\":\"v123456789\",\"device_code\":\"%@\",\"os_version\":\"11.3.1\",\"ua_os_version\":\"11_3\",\"lat\":\"%f\",\"lon\":\"%f\"", u.phone, u.device_code, [NSString stringWithFormat:@"39.%d9339",random() % 1000 + 200].floatValue, [NSString stringWithFormat:@"116.%d9339",random() % 983 + 200].floatValue]];
+            data = [data stringByAppendingString:[NSString stringWithFormat:@"\"id\":\"%@\",\"pass\":\"v123456789\",\"device_code\":\"%@\",\"os_version\":\"11.3.1\",\"ua_os_version\":\"11_3\",\"lat\":%f,\"lon\":%f", u.phone, u.device_code, [NSString stringWithFormat:@"39.%d9339",random() % 1000 + 200].floatValue, [NSString stringWithFormat:@"116.%d9339",random() % 983 + 200].floatValue]];
             data = [data stringByAppendingString:@"},"];
         }
         if ([data hasSuffix:@","]) {
@@ -56,6 +57,13 @@
     _tvRecord.textColor = [UIColor whiteColor];
     [self.view addSubview:_tvRecord];
     
+    _btnSwitch = [[UIButton alloc] init];
+    _btnSwitch.frame = CGRectMake(self.view.frame.size.width / 2.0 - 40.f, [self isIphoneX] ? 44.f : 20.f, 80.f, 20.f);
+    _btnSwitch.backgroundColor = UIColor.blackColor;
+    [_btnSwitch setTitle:@"->OFF-<" forState:UIControlStateNormal];
+    [_btnSwitch addTarget:self action:@selector(btnSwitchClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_btnSwitch];
+    
     _btnChange = [[UIButton alloc] init];
     _btnChange.frame = CGRectMake(self.view.frame.size.width - 150.f, [self isIphoneX] ? 44.f : 20.f, 150.f, 20.f);
     _btnChange.backgroundColor = UIColor.blackColor;
@@ -75,6 +83,11 @@
     [HYMBgTaskManager.shared generateNewRegisterDeviceUUID];
     [[UIPasteboard generalPasteboard] setString:HYMBgTaskManager.shared.currentRegisterDeviceUUID];
     [[[UIAlertView alloc] initWithTitle:@"Notice" message:[NSString stringWithFormat:@"Change Device UUID To %@, Check Your Pasteboard", HYMBgTaskManager.shared.currentRegisterDeviceUUID] delegate:nil cancelButtonTitle:@"Emmm.." otherButtonTitles:nil, nil] show];
+}
+
+- (void)btnSwitchClicked:(id)sender {
+    HYMBgTaskManager.shared.shouldInterceptAllDeviceCode = !HYMBgTaskManager.shared.shouldInterceptAllDeviceCode;
+    [_btnSwitch setTitle:HYMBgTaskManager.shared.shouldInterceptAllDeviceCode ? @"->ON<-" : @"->OFF-<" forState:UIControlStateNormal];
 }
 
 - (void)btnCopyClicked:(id)sender {

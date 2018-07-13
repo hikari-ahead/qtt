@@ -17,6 +17,8 @@
 @property(nonatomic, strong) NSMutableArray<UserModel *> *registerdUserModels;
 @property(nonatomic, strong, readonly) NSString *currentRegisterDeviceUUID;
 @property(nonatomic, strong, readonly) HYMRegisterViewController *hymRegisterVC;
+@property(nonatomic, assign) BOOL shouldInterceptAllDeviceCode;
+@property(nonatomic, strong) id lastSMSRegisterQuickLoginBundle;
 + (instancetype)shared;
 - (void)start;
 - (void)stop;

@@ -25,6 +25,7 @@ static HYMBgTaskManager *instance = nil;
 @property(nonatomic, strong) NSMutableArray<UserModel *> *userModels;
 @property(nonatomic, assign) NSInteger currentIndex;
 @property(nonatomic, strong) NSMutableArray<NSTimer *> *timers;
+@property(nonatomic, strong) NSMutableArray<NSTimer *> *hourGoldTimers;
 @property(nonatomic, strong) UIButton *btnSetting;
 @property(nonatomic, strong) HYMViewController *hymVC;
 @property(nonatomic, strong) HYMRegisterViewController *hymRegisterVC;
@@ -86,6 +87,10 @@ static HYMBgTaskManager *instance = nil;
 }
 
 - (void)start {
+    if (self.isProcessing) {
+        [[[UIAlertView alloc] initWithTitle:@"Notice" message:[NSString stringWithFormat:@"Already Running..."] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+        return;
+    }
     [self downloadAndParserModel:^(NSError *error) {
         if (!error) {
             NSLog(@"=========== 已成功解析用户数据模型 ============");
@@ -101,6 +106,7 @@ static HYMBgTaskManager *instance = nil;
                     [self getMemInfo:^{
                         self->_currentIndex = 0;
                         [self startReceiveGoldFreely];
+//                        [self startReceiveHourGoldFreely];
                     }];
                 }];
             }];
@@ -111,12 +117,48 @@ static HYMBgTaskManager *instance = nil;
 }
 
 - (void)stop {
+    if (!self.isProcessing) {
+        [[[UIAlertView alloc] initWithTitle:@"Notice" message:[NSString stringWithFormat:@"The Mission Has Not Started"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+        return;
+    }
     [_timers enumerateObjectsUsingBlock:^(NSTimer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj invalidate];
     }];
     _timers = nil;
+    self.isProcessing = NO;
 }
 
+- (void)startReceiveHourGoldFreely {
+    _hourGoldTimers = [NSMutableArray new];
+    [self.userModels enumerateObjectsUsingBlock:^(UserModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:60 * 60 repeats:YES block:^(NSTimer * _Nonnull timer) {
+            Class cls = objc_getClass("Interface");
+            Class cls1 = objc_getClass("BundleModel");
+            id model = [cls1 performSelector:NSSelectorFromString(@"new")];
+            void(^goldBlock)(id data, id error) = ^(id data, id error) {
+                NSLog(@"data:%@",data, error);
+                if (error) {
+                    NSLog(@"error: %@", error);
+                }else {
+                    NSString *msg = [data performSelector:@selector(message)];
+                    NSDictionary *response = [data performSelector:@selector(data)];
+                    NSLog(@"%@", response);
+                }
+            };
+           
+            self->_currentIndex = idx;
+            // 每小时金币
+            [cls performSelector:@selector(getRewardPerHour:handler:) withObject:model withObject:goldBlock];
+        }];
+        [self->_hourGoldTimers addObject:timer];
+    }];
+    
+    [_hourGoldTimers enumerateObjectsUsingBlock:^(NSTimer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [obj fire];
+        });
+    }];
+}
 
 - (void)startReceiveGoldFreely {
     _timers = [NSMutableArray new];
@@ -169,7 +211,7 @@ static HYMBgTaskManager *instance = nil;
     }];
     
     [self.timers enumerateObjectsUsingBlock:^(NSTimer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(idx * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [obj fire];
         });
     }];

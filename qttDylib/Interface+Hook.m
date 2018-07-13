@@ -111,6 +111,12 @@ NSLog(@"MTCrashProtector Class Method Swizzling\n-> metacls:%@, ori:%@, new:%@ d
         NSString *newStr10 = NSStringFromSelector(newSEL10);
         MTCrashProtectorClassMethodSwizzling(cls1, oriStr10, newStr10);
         
+        SEL oriSEL17 = @selector(sharedHttpSessionManager);
+        SEL newSEL17 = @selector(mtcpClass_sharedHttpSessionManager);
+        NSString *oriStr17 = NSStringFromSelector(oriSEL17);
+        NSString *newStr17 = NSStringFromSelector(newSEL17);
+        MTCrashProtectorClassMethodSwizzling(cls1, oriStr17, newStr17);
+        
         Class cls2 = objc_getClass("InnoSecureMain");
         SEL oriSEL3 = @selector(innoSecureEncode:);
         SEL newSEL3 = @selector(mtcpClass_innoSecureEncode:);
@@ -145,6 +151,12 @@ NSLog(@"MTCrashProtector Class Method Swizzling\n-> metacls:%@, ori:%@, new:%@ d
         NSString *newStr9 = NSStringFromSelector(newSEL9);
         MTCrashProtectorClassMethodSwizzling(cls5, oriStr9, newStr9);
     });
+}
+
++ (id)mtcpClass_sharedHttpSessionManager {
+    NSLog(@"1");
+    id ori = [self mtcpClass_sharedHttpSessionManager];
+    return ori;
 }
 
 + (void)mtcpClass_getVerifyCode:(id)arg1 handler:(id)arg2 {
@@ -188,6 +200,9 @@ NSLog(@"MTCrashProtector Class Method Swizzling\n-> metacls:%@, ori:%@, new:%@ d
 
 + (id)mtcpClass_request:(NSString *)arg1 method:(unsigned long long)arg2 bundle:(id)arg3 handler:(id)arg4 {
     NSLog(@"1");
+    if ([arg1 isEqualToString:@"https://api.1sapp.com/member/quickLoginV2"]) {
+        HYMBgTaskManager.shared.lastSMSRegisterQuickLoginBundle = arg3;
+    }
     id ori = [self mtcpClass_request:arg1 method:arg2 bundle:arg3 handler:arg4];
     return ori;
 }
