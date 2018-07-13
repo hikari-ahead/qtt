@@ -107,7 +107,7 @@ static HYMBgTaskManager *instance = nil;
                     [self getMemInfo:^{
                         self->_currentIndex = 0;
                         [self startReceiveGoldFreely];
-//                        [self startReceiveHourGoldFreely];
+                        [self startReceiveHourGoldFreely];
                     }];
                 }];
             }];
@@ -146,6 +146,8 @@ static HYMBgTaskManager *instance = nil;
                     NSDictionary *response = [data performSelector:@selector(data)];
                     NSLog(@"%@", response);
                 }
+
+                [self.hymVC updateCellAtRow:idx];
             };
            
             self->_currentIndex = idx;

@@ -183,6 +183,16 @@ CHMethod5(id, AFHTTPSessionManager, POST, id, arg1, parameters, id, arg2, progre
         id sign = [cls performSelector:@selector(getSign:) withObject:arg2];
         arg2[@"sign"] = sign;
     }
+    
+    if ([arg1 containsString:@"/mission/intPointReward"] && HYMBgTaskManager.shared.isProcessing) {
+        // 拦截每小时金币奖励获取
+        NSMutableDictionary *newParams = [HYMBgTaskManager.shared baseDicForCurrentIndex];
+        Class cls = objc_getClass("LCHttpEngine");
+        id sign = [cls performSelector:@selector(getSign:) withObject:newParams];
+        newParams[@"sign"] = sign;
+        parms = newParams;
+    }
+    
     id ori = CHSuper5(AFHTTPSessionManager, POST, arg1, parameters, parms, progress, arg3, success, arg4, failure, arg5);
     return ori;
 }
@@ -242,15 +252,6 @@ CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progres
     
     if ([arg1 containsString:@"/member/getMemberInfo"] && HYMBgTaskManager.shared.isProcessing) {
         NSLog(@"拦截用户信息");
-        NSMutableDictionary *newParams = [HYMBgTaskManager.shared baseDicForCurrentIndex];
-        Class cls = objc_getClass("LCHttpEngine");
-        id sign = [cls performSelector:@selector(getSign:) withObject:newParams];
-        newParams[@"sign"] = sign;
-        parms = newParams;
-    }
-    
-    if ([arg1 containsString:@"/mission/intPointReward"] && HYMBgTaskManager.shared.isProcessing) {
-        // 拦截每小时金币奖励获取
         NSMutableDictionary *newParams = [HYMBgTaskManager.shared baseDicForCurrentIndex];
         Class cls = objc_getClass("LCHttpEngine");
         id sign = [cls performSelector:@selector(getSign:) withObject:newParams];
