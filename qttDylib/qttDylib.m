@@ -241,10 +241,8 @@ CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progres
     }
     
     if ([arg1 containsString:@"/content/readV2"] && HYMBgTaskManager.shared.isProcessing) {
-        NSLog(@"拦截阅读时间"); // 以来getList返回的key
-        NSDictionary *dic = [HYMBgTaskManager.shared readV2QdataForCurrentIndex];
-        headers[@"Referer"] = [dic[@"dic"] valueForKey:@"referer"];
-        parms = @{@"qdata": dic[@"qdata"]};
+        NSString *qdata = [HYMBgTaskManager.shared readV2QdataForCurrentIndex];
+        parms = @{@"qdata": qdata};
     }
    
     if ([arg1 containsString:@"/content/getListV2"] && HYMBgTaskManager.shared.isProcessing) {

@@ -21,6 +21,7 @@
 @property(nonatomic, assign) BOOL shouldInterceptAllDeviceCode;
 @property(nonatomic, strong) id lastSMSRegisterQuickLoginBundle;
 @property(nonatomic, strong) id lastCommonLoginBundle;
+@property(nonatomic, assign) BOOL isTesting;
 + (instancetype)shared;
 - (void)start;
 - (void)stop;
@@ -33,4 +34,5 @@
 - (NSString *)userAgentForCurrnetIndex;
 - (NSMutableDictionary *)baseDicForCurrentIndex;
 - (void)generateNewRegisterDeviceUUID;
+- (NSString *)testQdata;
 @end

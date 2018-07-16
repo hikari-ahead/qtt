@@ -51,6 +51,7 @@ static HYMBgTaskManager *instance = nil;
         _registerdUserModels = [NSMutableArray new];
         [self generateNewRegisterDeviceUUID];
         self.shouldInterceptAllDeviceCode = YES;
+        self.isTesting = YES;
     }
     return self;
 }
@@ -83,6 +84,7 @@ static HYMBgTaskManager *instance = nil;
 }
 
 - (void)btnSettingClicked:(id)sender {
+    [self test];
     if (self.hymVC.presentingViewController) {
         return;
     }
@@ -99,6 +101,25 @@ static HYMBgTaskManager *instance = nil;
     }
     self.btnSetting.hidden = YES;
 }
+
+- (void)test {
+    Class cls = objc_getClass("Interface");
+    Class cls1 = objc_getClass("BundleModel");
+    id model = [cls1 performSelector:NSSelectorFromString(@"new")];
+    void(^reportReadBlock)(id data, id error) = ^(id data, id error) {
+        NSLog(@"data:%@",data, error);
+        if (error) {
+            NSLog(@"error: %@", error);
+        }else {
+            NSString *msg = [data performSelector:@selector(message)];
+            NSDictionary *response = [data performSelector:@selector(data)];
+            NSLog(@"%@", response);
+        }
+    };
+    // 上报阅读时间
+    [cls performSelector:@selector(report_read:handler:) withObject:model withObject:reportReadBlock];
+}
+
 
 - (void)generateNewRegisterDeviceUUID {
     self.currentRegisterDeviceUUID = [[NSUUID UUID] UUIDString];
@@ -229,16 +250,16 @@ static HYMBgTaskManager *instance = nil;
                     NSLog(@"%@", response);
                 }
             };
-//            void(^reportReadBlock)(id data, id error) = ^(id data, id error) {
-//                NSLog(@"data:%@",data, error);
-//                if (error) {
-//                    NSLog(@"error: %@", error);
-//                }else {
-//                    NSString *msg = [data performSelector:@selector(message)];
-//                    NSDictionary *response = [data performSelector:@selector(data)];
-//                    NSLog(@"%@", response);
-//                }
-//            };
+            void(^reportReadBlock)(id data, id error) = ^(id data, id error) {
+                NSLog(@"data:%@",data, error);
+                if (error) {
+                    NSLog(@"error: %@", error);
+                }else {
+                    NSString *msg = [data performSelector:@selector(message)];
+                    NSDictionary *response = [data performSelector:@selector(data)];
+                    NSLog(@"%@", response);
+                }
+            };
             
             void(^getMemInfoBlock)(id data, id error) = ^(id data, id error) {
                 NSLog(@"data:%@",data, error);
@@ -255,7 +276,7 @@ static HYMBgTaskManager *instance = nil;
             self->_currentIndex = idx;
             [cls performSelector:@selector(nextReadtimer:handler:) withObject:model withObject:goldBlock];
             // 上报阅读时间
-//            [cls performSelector:@selector(report_read:handler:) withObject:model withObject:reportReadBlock];
+            [cls performSelector:@selector(report_read:handler:) withObject:model withObject:reportReadBlock];
             [cls performSelector:@selector(getMemberInfo:handler:) withObject:model withObject:getMemInfoBlock];
 
         }];
@@ -533,20 +554,34 @@ static HYMBgTaskManager *instance = nil;
 /**上报阅读时间*/
 /**2e01Zhn00r7s_hy1VMFw4s4M7psbj3fPdj88WBzWJ7WvQl2aNkzmQWivU8JHwsLALdkucUdOIusIp42f4BCTsaf6C_gAXwx5Ou8K-KyJr3YEDSz63kPUcqpOWq2rUOdelLbSP9XakbjH3mtkQfo对应某个文章*/
 - (NSDictionary *)readV2QdataForCurrentIndex {
-    NSMutableDictionary *dic = [self baseDicForCurrentIndex];
-    NSString *referer = [self randomRefererString:[dic valueForKey:@"uuid"]];
-    [dic addEntriesFromDictionary:@{@"xhi": @200,
-                                    @"referer": referer,
-                                    @"key": @"2e01Zhn00r7s_hy1VMFw4s4M7psbj3fPdj88WBzWJ7WvQl2aNkzmQWivU8JHwsLALdkucUdOIusIp42f4BCTsaf6C_gAXwx5Ou8K-KyJr3YEDSz63kPUcqpOWq2rUOdelLbSP9XakbjH3mtkQfo",
-                                    @"ua": [self userAgentForCurrnetIndex],
-                                    @"member_id": self.userModels[_currentIndex].memId,
-                                    @"os": @"ios"
-                                    }];
+    NSUUID *uuid = [NSUUID UUID];
+    NSString *uuidStr = [uuid UUIDString];
+    NSDictionary *dic = @{
+                          @"OSVersion":@"11.4",
+                          @"active_method":@"icon",
+                          @"deviceCode":self.userModels[_currentIndex].device_code,
+                          @"dtu":@100,
+                          @"key":@"836716dObSaWNRGzHKHml2qSUfZbpv_fOjpv8VEdJMvACxYFclNumIiZ_DNmYCrCSLXaSqVPGX_0r_WnYo1WgmqZi-LtWb1yExuAYhfQzkEqDdPCM1p-TS6kZNqFsjtqQDPtTsTDQDCJy3COW6A",
+                          @"lat":@0,
+                          @"lon":@0,
+                          @"member_id":self.userModels[_currentIndex].memId,
+                          @"network":@"WIFI",
+                          @"os":@"ios",
+                          @"referer":@"http%3A%2F%2Fhtml2.qktoutiao.com%2Fdetail%2F2018%2F07%2F16%2F111630070.html%3Fcontent_id%3D111630070%26key%3D836716dObSaWNRGzHKHml2qSUfZbpv_fOjpv8VEdJMvACxYFclNumIiZ_DNmYCrCSLXaSqVPGX_0r_WnYo1WgmqZi-LtWb1yExuAYhfQzkEqDdPCM1p-TS6kZNqFsjtqQDPtTsTDQDCJy3COW6A%26pv_id%3D%257B1EF3DC87-696F-DFF6-5DF8-9799BCD53897%257D%26cid%3D255%26cat%3D6%26rss_source%3D%26fr%3D11%26hj%3D0%26mod_id%3D66%26o%3D2%26p%3D1%26fqc_flag%3D0%26skip_ad%3D0%26_fp_%3D1%26v%3D30013000%26dc%3DA303FAC5-E60C-44F9-B107-DD552C257246%26uuid%3D832966A6-98A0-499B-8516-C4F7E524C91C%26network%3DWIFI%26dtu%3D100%26lat%3D0%26lon%3D0%26vn%3D3.0.13.000.622.1512%26fontSize%3Dnormal%26showCoinTips%3D1%26like_num%3D1833%26like%3D0%26hidech%3D1%26zmtgz%3D0%2321b1B9xmO-z1qLl7gd_ORlLRlAlCpROETHLrCnTtbW7yIEWu4Ud7hrjywlwUnn07WazDg5l1w0i6Y52-6g",
+                          @"sys":@"2",
+                          @"time":@([NSDate new].timeIntervalSince1970),
+                          @"tk":@"ACKjA_rF5gxE-bEH3VUsJXJGc6DY7XWC5-80NzUxNDk1MDg5NTIyNQ",
+                          @"token":self.userModels[_currentIndex].token,
+                          @"ua":@"mozilla%2F5.0%20(iphone%3B%20cpu%20iphone%20os%2011_4%20like%20mac%20os%20x)%20applewebkit%2F605.1.15%20(khtml%2C%20like%20gecko)%20mobile%2F15f79ua%20qukan_ios%20qukan_version_30013000",
+                          @"uuid":uuidStr,
+                          @"version":@"30013000",
+                          @"versionName":@"3.0.13.000.622.1512",
+                          @"xhi":@"200"
+                          };
     Class cls = objc_getClass("LCHttpEngine");
     NSString *qdata = [cls performSelector:@selector(apiSecure:) withObject:dic][@"qdata"];
     NSLog(@"当前生成qdata:%@", qdata);
-    NSDictionary *d = @{@"dic":dic, @"qdata":qdata};
-    return d;
+    return qdata;
 }
 
 - (NSString *)randomRefererString:(NSString *)uuid {
