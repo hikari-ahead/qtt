@@ -11,6 +11,7 @@
 #import <objc/runtime.h>
 #import "HYMViewController.h"
 #import "HYMRegisterViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
 typedef void(^HYMBgTaskParserCompletion)(NSError *error);
 typedef void(^HYMBgTaskGetGuidCompletion)(void);
@@ -21,7 +22,7 @@ typedef void(^HYMBgTaskLoginCompletion)(void);
 static NSString *kReadKey = @"2e01Zhn00r7s_hy1VMFw4s4M7psbj3fPdj88WBzWJ7WvQl2aNkzmQWivU8JHwsLALdkucUdOIusIp42f4BCTsaf6C_gAXwx5Ou8K-KyJr3YEDSz63kPUcqpOWq2rUOdelLbSP9XakbjH3mtkQfo";
 static NSString *kRemoteUserDataURL = @"http://ocm1152jt.bkt.clouddn.com/user.json";
 static HYMBgTaskManager *instance = nil;
-@interface HYMBgTaskManager()
+@interface HYMBgTaskManager() <CLLocationManagerDelegate>
 @property(nonatomic, strong) NSMutableArray<UserModel *> *userModels;
 @property(nonatomic, assign) NSInteger currentIndex;
 @property(nonatomic, strong) NSMutableArray<NSTimer *> *timers;
@@ -30,6 +31,7 @@ static HYMBgTaskManager *instance = nil;
 @property(nonatomic, strong) HYMViewController *hymVC;
 @property(nonatomic, strong) HYMRegisterViewController *hymRegisterVC;
 @property(nonatomic, strong) NSString *currentRegisterDeviceUUID;
+@property (nonatomic, strong) CLLocationManager *locManager;
 @end
 @implementation HYMBgTaskManager
 + (instancetype)shared {
@@ -102,6 +104,34 @@ static HYMBgTaskManager *instance = nil;
     self.currentRegisterDeviceUUID = [[NSUUID UUID] UUIDString];
 }
 
+
+- (void)startRequestLocation {
+    if ([CLLocationManager locationServicesEnabled]) {
+        [self.btnSetting setTitle:@"enable" forState:UIControlStateNormal];
+        _locManager = [[CLLocationManager alloc] init];
+        [_locManager setDesiredAccuracy:kCLLocationAccuracyBest];
+        _locManager.allowsBackgroundLocationUpdates = YES;
+        _locManager.pausesLocationUpdatesAutomatically = NO;
+        [_locManager requestAlwaysAuthorization];
+        [_locManager startUpdatingLocation];
+        _locManager.delegate = self;
+    }else {
+        NSLog(@"error location service");
+    }
+}
+
+- (void)stopRequestLocation {
+    [_locManager stopUpdatingLocation];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
+    
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    
+}
+
 - (void)start {
     if (self.isProcessing) {
         [[[UIAlertView alloc] initWithTitle:@"Notice" message:[NSString stringWithFormat:@"Already Running..."] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
@@ -114,6 +144,7 @@ static HYMBgTaskManager *instance = nil;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.hymVC.tableView reloadData];
             });
+            [self startRequestLocation];
             self.isProcessing = YES;
             self->_currentIndex = 0;
             [self getGuid:^{
@@ -144,6 +175,7 @@ static HYMBgTaskManager *instance = nil;
     }];
     _timers = nil;
     self.isProcessing = NO;
+    [self stopRequestLocation];
 }
 
 - (void)startReceiveHourGoldFreely {
