@@ -452,7 +452,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = /opt/MonkeyDev/Tools/pack.sh;
+			shellScript = "/opt/MonkeyDev/Tools/pack.sh\n";
 		};
 		0083077B20F35D9100AB4B7E /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -465,7 +465,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/opt/MonkeyDev/Tools/pack.sh codesign";
+			shellScript = "/opt/MonkeyDev/Tools/pack.sh codesign\n";
 		};
 		0083078A20F35D9100AB4B7E /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -637,7 +637,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9SGZE8KEKC;
+				DEVELOPMENT_TEAM = WFCHHM4YW4;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				ENABLE_BITCODE = NO;
@@ -704,7 +704,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = 9SGZE8KEKC;
+				DEVELOPMENT_TEAM = WFCHHM4YW4;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				ENABLE_BITCODE = NO;
@@ -765,7 +765,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9SGZE8KEKC;
+				DEVELOPMENT_TEAM = WFCHHM4YW4;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -774,13 +774,14 @@
 				INFOPLIST_FILE = qtt/Info.plist;
 				MONKEYDEV_ADD_SUBSTRATE = YES;
 				MONKEYDEV_CLASS_DUMP = NO;
+				MONKEYDEV_DEFAULT_BUNDLEID = YES;
 				MONKEYDEV_INSERT_DYLIB = YES;
 				MONKEYDEV_RESTORE_SYMBOL = NO;
 				MONKEYDEV_TARGET_APP = Optional;
 				ONLY_ACTIVE_ARCH = NO;
 				PODS_CONFIGURATION_BUILD_DIR = "$BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				PODS_ROOT = "${SRCROOT}/Pods";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jifen.qukan;
+				PRODUCT_BUNDLE_IDENTIFIER = com.resober.qukan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s arm64";
@@ -791,7 +792,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9SGZE8KEKC;
+				DEVELOPMENT_TEAM = WFCHHM4YW4;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -800,13 +801,14 @@
 				INFOPLIST_FILE = qtt/Info.plist;
 				MONKEYDEV_ADD_SUBSTRATE = YES;
 				MONKEYDEV_CLASS_DUMP = NO;
+				MONKEYDEV_DEFAULT_BUNDLEID = YES;
 				MONKEYDEV_INSERT_DYLIB = YES;
 				MONKEYDEV_RESTORE_SYMBOL = NO;
 				MONKEYDEV_TARGET_APP = Optional;
 				ONLY_ACTIVE_ARCH = NO;
 				PODS_CONFIGURATION_BUILD_DIR = "$BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				PODS_ROOT = "${SRCROOT}/Pods";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jifen.qukan;
+				PRODUCT_BUNDLE_IDENTIFIER = com.resober.qukan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s arm64";

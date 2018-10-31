@@ -20,6 +20,7 @@ typedef void(^HYMBgTaskGetStartTokensCompletion)(void);
 typedef void(^HYMBgTaskLoginCompletion)(void);
 
 static NSString *kReadKey = @"2e01Zhn00r7s_hy1VMFw4s4M7psbj3fPdj88WBzWJ7WvQl2aNkzmQWivU8JHwsLALdkucUdOIusIp42f4BCTsaf6C_gAXwx5Ou8K-KyJr3YEDSz63kPUcqpOWq2rUOdelLbSP9XakbjH3mtkQfo";
+
 static NSString *kRemoteUserDataURL = @"http://ocm1152jt.bkt.clouddn.com/user.json";
 static HYMBgTaskManager *instance = nil;
 @interface HYMBgTaskManager() <CLLocationManagerDelegate>
@@ -132,8 +133,8 @@ static HYMBgTaskManager *instance = nil;
         _locManager = [[CLLocationManager alloc] init];
         [_locManager setDesiredAccuracy:kCLLocationAccuracyBest];
         _locManager.allowsBackgroundLocationUpdates = YES;
-        _locManager.pausesLocationUpdatesAutomatically = NO;
         [_locManager requestAlwaysAuthorization];
+        _locManager.pausesLocationUpdatesAutomatically = NO;
         [_locManager startUpdatingLocation];
         _locManager.delegate = self;
     }else {
@@ -473,10 +474,10 @@ static HYMBgTaskManager *instance = nil;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         // 开始
         [[NSURLCache sharedURLCache] removeAllCachedResponses];
-         NSURL *url = [[NSURL alloc] initWithString:kRemoteUserDataURL];
-        NSData *data = [NSData dataWithContentsOfURL:url];
-//        NSURL *url = [[NSBundle mainBundle] URLForResource:@"user" withExtension:@"json"];
-//        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+//         NSURL *url = [[NSURL alloc] initWithString:kRemoteUserDataURL];
+//        NSData *data = [NSData dataWithContentsOfURL:url];
+        NSURL *url = [[NSBundle mainBundle] URLForResource:@"user" withExtension:@"json"];
+        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
         NSError *error = nil;
         if (data) {
             NSError *jerror = nil;
@@ -489,13 +490,13 @@ static HYMBgTaskManager *instance = nil;
                     if ([obj isKindOfClass:[NSDictionary class]]) {
                         NSDictionary *dic = (NSDictionary *)obj;
                         UserModel *um = [UserModel new];
-                        um.phone = [[dic valueForKey:@"id"] stringValue];
+                        um.phone = [dic valueForKey:@"id"];
                         um.lon = [[dic valueForKey:@"lon"] longValue];
                         um.lat = [[dic valueForKey:@"lat"] longValue];
-                        um.pass = [[dic valueForKey:@"pass"] stringValue];
-                        um.device_code = [[dic valueForKey:@"device_code"] stringValue];
-                        um.os_version = [[dic valueForKey:@"os_version"] stringValue];
-                        um.ua_os_version = [[dic valueForKey:@"ua_os_version"] stringValue];
+                        um.pass = [dic valueForKey:@"pass"];
+                        um.device_code = [dic valueForKey:@"device_code"];
+                        um.os_version = [dic valueForKey:@"os_version"];
+                        um.ua_os_version = [dic valueForKey:@"ua_os_version"];
                         // 默认先写死WIFI
                         um.netWork = @"WIFI";
                         [self->_userModels addObject:um];
@@ -527,7 +528,7 @@ static HYMBgTaskManager *instance = nil;
     NSUUID *uuid = [NSUUID UUID];
     NSString *uuidStr = [uuid UUIDString];
     // time或称当前时间戳 OSVersion多样化 lat和lon虚拟位置 netWork随机 deviceCode替换
-    NSString *str = [NSString stringWithFormat:@"{\"telephone\":\"%@\",\"active_method\":\"icon\",\"uuid\":\"%@\",\"version\":\"30013000\",\"lon\":%f,\"time\":%f,\"versionName\":\"3.0.13.000.622.1512\",\"key\":\"\",\"dtu\":\"100\",\"OSVersion\":\"%@\",\"sys\":\"2\",\"network\":\"WIFI\",\"lat\":%f,\"deviceCode\":\"%@\",\"password\":\"%@\",\"push_channel\":{\"apple2_ios\":\"\",\"umeng_ios\":\"\"}}", self.userModels[_currentIndex].phone, uuidStr, self.userModels[_currentIndex].lon, [[NSDate new] timeIntervalSince1970],self.userModels[_currentIndex].os_version,self.userModels[_currentIndex].lat,self.userModels[_currentIndex].device_code,self.userModels[_currentIndex].pass];
+    NSString *str = [NSString stringWithFormat:@"{\"telephone\":\"%@\",\"active_method\":\"icon\",\"uuid\":\"%@\",\"version\":\"30017000\",\"lon\":%f,\"time\":%f,\"versionName\":\"3.0.17.000.718.1740\",\"key\":\"\",\"dtu\":\"100\",\"OSVersion\":\"%@\",\"sys\":\"2\",\"network\":\"WIFI\",\"lat\":%f,\"deviceCode\":\"%@\",\"password\":\"%@\",\"push_channel\":{\"apple2_ios\":\"\",\"umeng_ios\":\"\"}}", self.userModels[_currentIndex].phone, uuidStr, self.userModels[_currentIndex].lon, [[NSDate new] timeIntervalSince1970],self.userModels[_currentIndex].os_version,self.userModels[_currentIndex].lat,self.userModels[_currentIndex].device_code,self.userModels[_currentIndex].pass];
     NSError *error = nil;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:[str dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONWritingSortedKeys error:&error];
     Class cls = objc_getClass("LCHttpEngine");
@@ -630,7 +631,7 @@ static HYMBgTaskManager *instance = nil;
                           @"versionName": @"3.0.13.000.622.1512",
                           @"sys": @"2",
                           @"dtu": @"100",
-                          @"token": self.userModels[_currentIndex].token,
+                          @"token": self.userModels[_currentIndex].token ? : @"",
                           @"OSVersion": self.userModels[_currentIndex].os_version,
                           @"lat": @(self.userModels[_currentIndex].lat),
                           @"network": @"WIFI",

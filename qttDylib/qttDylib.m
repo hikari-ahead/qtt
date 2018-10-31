@@ -17,6 +17,8 @@
 #import "HYMBgTaskManager.h"
 #import "UserModel.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
 
 CHConstructor{
     NSLog(INSERT_SUCCESS_WELCOME);
@@ -164,6 +166,10 @@ CHMethod1(id, Schemes, initWithLink, id, arg1) {
 //AFHTTPSessionManager POST:parameters:progress:success:failure:
 CHMethod5(id, AFHTTPSessionManager, POST, id, arg1, parameters, id, arg2, progress, id, arg3, success, id, arg4, failure, id, arg5) {
     NSLog(@"1");
+////    if (!HYMBgTaskManager.shared.shouldInterceptAllDeviceCode) {
+//        id ori = CHSuper5(AFHTTPSessionManager, POST, arg1, parameters, arg2, progress, arg3, success, arg4, failure, arg5);
+//        return ori;
+////    }
     id parms = arg2;
     if (HYMBgTaskManager.shared.shouldInterceptAllDeviceCode && [arg2 isKindOfClass:NSClassFromString(@"BundleModel")]) {
         [arg2 performSelector:@selector(params)][@"deviceCode"] = HYMBgTaskManager.shared.currentRegisterDeviceUUID;
@@ -195,13 +201,18 @@ CHMethod5(id, AFHTTPSessionManager, POST, id, arg1, parameters, id, arg2, progre
         parms = newParams;
     }
     
-    id ori = CHSuper5(AFHTTPSessionManager, POST, arg1, parameters, parms, progress, arg3, success, arg4, failure, arg5);
-    return ori;
+    id ori1 = CHSuper5(AFHTTPSessionManager, POST, arg1, parameters, parms, progress, arg3, success, arg4, failure, arg5);
+    return ori1;
 }
 
 //AFHTTPSessionManager GET:parameters:progress:success:failure:
 CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progress, id, arg3, success, id, arg4, failure, id, arg5) {
     NSLog(@"1");
+////    if (!HYMBgTaskManager.shared.shouldInterceptAllDeviceCode) {
+//        id ori = CHSuper5(AFHTTPSessionManager, GET, arg1, parameters, arg2, progress, arg3, success, arg4, failure, arg5);
+//        return ori;
+////    }
+
     id parms = arg2;
     id rs = [((NSObject *)self) performSelector:@selector(requestSerializer)];
     id headers = [rs performSelector:@selector(mutableHTTPRequestHeaders)];
@@ -279,8 +290,8 @@ CHMethod5(id, AFHTTPSessionManager, GET, id, arg1, parameters, id, arg2, progres
             [HYMBgTaskManager.shared.registerdUserModels addObject:u];
         }
     }
-    id ori = CHSuper5(AFHTTPSessionManager, GET, arg1, parameters, parms, progress, arg3, success, arg4, failure, arg5);
-    return ori;
+    id ori1 = CHSuper5(AFHTTPSessionManager, GET, arg1, parameters, parms, progress, arg3, success, arg4, failure, arg5);
+    return ori1;
 }
 
 CHConstructor{
@@ -335,3 +346,4 @@ CHConstructor{
 
 }
 
+#pragma clang diagnostic pop

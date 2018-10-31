@@ -48,10 +48,10 @@ static NSString *kArticleIndexKey = @"hym_article_index";
     if ([CLLocationManager locationServicesEnabled]) {
         [self.btnSetting setTitle:@"enable" forState:UIControlStateNormal];
         _locManager = [[CLLocationManager alloc] init];
-        [_locManager setDesiredAccuracy:kCLLocationAccuracyBest];
-        _locManager.allowsBackgroundLocationUpdates = YES;
-        _locManager.pausesLocationUpdatesAutomatically = NO;
         [_locManager requestAlwaysAuthorization];
+        [_locManager setDesiredAccuracy:kCLLocationAccuracyBest];
+        _locManager.pausesLocationUpdatesAutomatically = NO;
+        _locManager.allowsBackgroundLocationUpdates = YES;
         [_locManager startUpdatingLocation];
         _locManager.delegate = self;
     }else {

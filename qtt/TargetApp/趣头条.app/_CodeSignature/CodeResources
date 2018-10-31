@@ -38,7 +38,7 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		hp9nH9gmJCb8yt4xyAYT1PVhSE4=
+		+QnNiW9/YazrLKw6yXQ9x1b5bao=
 		</data>
 		<key>IQKeyboardManager.bundle/IQButtonBarArrowLeft.png</key>
 		<data>
@@ -110,7 +110,103 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		7Fpu2W0ZEIADYLHXLV3fXKUJhrk=
+		+L6CXKB1Fyk1MjR1fsu0SjKxAXU=
+		</data>
+		<key>LCSource.bundle/share_collect@2x.png</key>
+		<data>
+		TU7wKQpCGHD+qgDEBy69bTlkWEw=
+		</data>
+		<key>LCSource.bundle/share_collect@3x.png</key>
+		<data>
+		zpjuTSVEGXRqy1+kXq8hct0kWTU=
+		</data>
+		<key>LCSource.bundle/share_collected@2x.png</key>
+		<data>
+		Mt9QiudiKo2d4s+UCp+Ik9WdOKM=
+		</data>
+		<key>LCSource.bundle/share_collected@3x.png</key>
+		<data>
+		20Mcf7gfvO4rQJIHYZLkYkpAYXI=
+		</data>
+		<key>LCSource.bundle/share_copy@2x.png</key>
+		<data>
+		52HCYV25i+PQj6BeaewZEmo7rxY=
+		</data>
+		<key>LCSource.bundle/share_copy@3x.png</key>
+		<data>
+		5IyDsYUinKf1DC0dZ5INeUGWRtM=
+		</data>
+		<key>LCSource.bundle/share_font@2x.png</key>
+		<data>
+		KB+rkI3Kp4N1hs0nasaQ+O3nUy0=
+		</data>
+		<key>LCSource.bundle/share_font@3x.png</key>
+		<data>
+		NUqotKvgjOgbIdTfIFBk9kBH+OY=
+		</data>
+		<key>LCSource.bundle/share_qq@2x.png</key>
+		<data>
+		BOvLyC0+VYmv+RfmAdQk7XrTODE=
+		</data>
+		<key>LCSource.bundle/share_qq@3x.png</key>
+		<data>
+		KVKPG9GioLCMvaBZszoQw8CONLk=
+		</data>
+		<key>LCSource.bundle/share_qzone@2x.png</key>
+		<data>
+		8Inrhvm24NKBfdcTobzb7CWBq5k=
+		</data>
+		<key>LCSource.bundle/share_qzone@3x.png</key>
+		<data>
+		o5kROuFUbF9cFhnsp/CxVZVHWo4=
+		</data>
+		<key>LCSource.bundle/share_report@2x.png</key>
+		<data>
+		a9vh7q2j4uSpiZ5/05sOGmE+DqM=
+		</data>
+		<key>LCSource.bundle/share_report@3x.png</key>
+		<data>
+		BGf0uIhb3vfkGCO1I5tw3ku2hA4=
+		</data>
+		<key>LCSource.bundle/share_system@2x.png</key>
+		<data>
+		EGGQA5eGzgu8vbh6l67eqilhmsM=
+		</data>
+		<key>LCSource.bundle/share_system@3x.png</key>
+		<data>
+		ezfnT3jhaLro1XxJwFS+QWHMNCc=
+		</data>
+		<key>LCSource.bundle/share_timeline@2x.png</key>
+		<data>
+		u/EikHWbtcwEErJlm6QshABci8o=
+		</data>
+		<key>LCSource.bundle/share_timeline@3x.png</key>
+		<data>
+		z1kUTdpn4oRvQZ8KBkZFPxTAtsE=
+		</data>
+		<key>LCSource.bundle/share_unlike@2x.png</key>
+		<data>
+		ZcKxSPnXjdzjRXEYFtmNgHJW9ks=
+		</data>
+		<key>LCSource.bundle/share_unlike@3x.png</key>
+		<data>
+		uinH3lCWp+HncufaidVcEmedPdY=
+		</data>
+		<key>LCSource.bundle/share_wechat@2x.png</key>
+		<data>
+		n+1uM/wIRfxyOCRf8MwGF1kE01c=
+		</data>
+		<key>LCSource.bundle/share_wechat@3x.png</key>
+		<data>
+		hX7hBZEu9eHLqGkxrouVqJOBQJc=
+		</data>
+		<key>LCSource.bundle/share_weibo@2x.png</key>
+		<data>
+		zg/+KgipHWOBIA3QnD028J8l+/c=
+		</data>
+		<key>LCSource.bundle/share_weibo@3x.png</key>
+		<data>
+		PprP8VJ94BK1P94BxDhjh8oaqvI=
 		</data>
 		<key>LaunchImage-1100-Portrait-2436h@3x.png</key>
 		<data>
@@ -605,15 +701,15 @@
 		</data>
 		<key>PlugIns/NotificationService.appex/Info.plist</key>
 		<data>
-		Av8vRSREyhanOBTzyXBIq6wzsTQ=
+		rz/lcrpmQon+pNDJ30jGU0wLZX0=
 		</data>
 		<key>PlugIns/NotificationService.appex/NotificationService</key>
 		<data>
-		z8Tv4NDI+x4i3CacF3v8NF/JzYI=
+		nlwawTq+nFAwz/6a+fDdN6vnxnM=
 		</data>
 		<key>PlugIns/NotificationService.appex/_CodeSignature/CodeResources</key>
 		<data>
-		zr5aqg9pRL7kiqdX2oCz6TyTW20=
+		/qBbse5AsKlBtmJn3E9/l9K478k=
 		</data>
 		<key>SC_Info/Manifest.plist</key>
 		<data>
@@ -1466,54 +1562,6 @@
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>img_coin_guide@1x.png</key>
-		<data>
-		NFElQDvHFUuusybMN4aG3MMc5Bk=
-		</data>
-		<key>img_coin_guide@2x.png</key>
-		<data>
-		rF9LIMiPvSDvA8nu0igKUZ2tC9w=
-		</data>
-		<key>img_coin_guide@3x.png</key>
-		<data>
-		YG2ufv9OQiXf41wfq0CGEd8I8u8=
-		</data>
-		<key>img_coin_guide_iphoneX@3x.png</key>
-		<data>
-		BL2ZkGNk375B5KGoVWLFIZ5Jo2M=
-		</data>
-		<key>img_task_guide@1x.png</key>
-		<data>
-		hySm1691qccjCna8Z1amfVwRxbI=
-		</data>
-		<key>img_task_guide@2x.png</key>
-		<data>
-		NGfbJW0Yms0no9Qvbt8QEQTKsgU=
-		</data>
-		<key>img_task_guide@3x.png</key>
-		<data>
-		JKbTG5fVsl7dSyf20Ul+hnoXYGg=
-		</data>
-		<key>img_task_guide_iphoneX@3x.png</key>
-		<data>
-		hXwv/+piX238VhyLl/mAVRB1Mrc=
-		</data>
-		<key>img_withdraw_guide@1x.png</key>
-		<data>
-		CaM/SzVNm+drXgn5ioVa4H1hhOA=
-		</data>
-		<key>img_withdraw_guide@2x.png</key>
-		<data>
-		Lq7xEVh+EzWlZQZKMmZ90am71eg=
-		</data>
-		<key>img_withdraw_guide@3x.png</key>
-		<data>
-		PDlBVQIyy2pgvGw7So0wZxLyfrU=
-		</data>
-		<key>img_withdraw_guide_iphoneX@3x.png</key>
-		<data>
-		RJrC1yPzWoh5QP4Ivf3vvzJuOTs=
-		</data>
 		<key>it.lproj/BFKit.strings</key>
 		<dict>
 			<key>hash</key>
@@ -1565,102 +1613,6 @@
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>share_collect@2x.png</key>
-		<data>
-		TU7wKQpCGHD+qgDEBy69bTlkWEw=
-		</data>
-		<key>share_collect@3x.png</key>
-		<data>
-		zpjuTSVEGXRqy1+kXq8hct0kWTU=
-		</data>
-		<key>share_collected@2x.png</key>
-		<data>
-		Mt9QiudiKo2d4s+UCp+Ik9WdOKM=
-		</data>
-		<key>share_collected@3x.png</key>
-		<data>
-		20Mcf7gfvO4rQJIHYZLkYkpAYXI=
-		</data>
-		<key>share_copy@2x.png</key>
-		<data>
-		52HCYV25i+PQj6BeaewZEmo7rxY=
-		</data>
-		<key>share_copy@3x.png</key>
-		<data>
-		5IyDsYUinKf1DC0dZ5INeUGWRtM=
-		</data>
-		<key>share_font@2x.png</key>
-		<data>
-		KB+rkI3Kp4N1hs0nasaQ+O3nUy0=
-		</data>
-		<key>share_font@3x.png</key>
-		<data>
-		NUqotKvgjOgbIdTfIFBk9kBH+OY=
-		</data>
-		<key>share_qq@2x.png</key>
-		<data>
-		BOvLyC0+VYmv+RfmAdQk7XrTODE=
-		</data>
-		<key>share_qq@3x.png</key>
-		<data>
-		KVKPG9GioLCMvaBZszoQw8CONLk=
-		</data>
-		<key>share_qzone@2x.png</key>
-		<data>
-		8Inrhvm24NKBfdcTobzb7CWBq5k=
-		</data>
-		<key>share_qzone@3x.png</key>
-		<data>
-		o5kROuFUbF9cFhnsp/CxVZVHWo4=
-		</data>
-		<key>share_report@2x.png</key>
-		<data>
-		a9vh7q2j4uSpiZ5/05sOGmE+DqM=
-		</data>
-		<key>share_report@3x.png</key>
-		<data>
-		BGf0uIhb3vfkGCO1I5tw3ku2hA4=
-		</data>
-		<key>share_system@2x.png</key>
-		<data>
-		EGGQA5eGzgu8vbh6l67eqilhmsM=
-		</data>
-		<key>share_system@3x.png</key>
-		<data>
-		ezfnT3jhaLro1XxJwFS+QWHMNCc=
-		</data>
-		<key>share_timeline@2x.png</key>
-		<data>
-		u/EikHWbtcwEErJlm6QshABci8o=
-		</data>
-		<key>share_timeline@3x.png</key>
-		<data>
-		z1kUTdpn4oRvQZ8KBkZFPxTAtsE=
-		</data>
-		<key>share_unlike@2x.png</key>
-		<data>
-		ZcKxSPnXjdzjRXEYFtmNgHJW9ks=
-		</data>
-		<key>share_unlike@3x.png</key>
-		<data>
-		uinH3lCWp+HncufaidVcEmedPdY=
-		</data>
-		<key>share_wechat@2x.png</key>
-		<data>
-		n+1uM/wIRfxyOCRf8MwGF1kE01c=
-		</data>
-		<key>share_wechat@3x.png</key>
-		<data>
-		hX7hBZEu9eHLqGkxrouVqJOBQJc=
-		</data>
-		<key>share_weibo@2x.png</key>
-		<data>
-		zg/+KgipHWOBIA3QnD028J8l+/c=
-		</data>
-		<key>share_weibo@3x.png</key>
-		<data>
-		PprP8VJ94BK1P94BxDhjh8oaqvI=
-		</data>
 		<key>sv.lproj/BFKit.strings</key>
 		<dict>
 			<key>hash</key>
@@ -2005,11 +1957,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			hp9nH9gmJCb8yt4xyAYT1PVhSE4=
+			+QnNiW9/YazrLKw6yXQ9x1b5bao=
 			</data>
 			<key>hash2</key>
 			<data>
-			HlOA2LaqBYAbpRt5bcIqooGCxSsmOmq0uedGiqAanaE=
+			G8y9ulED6nrWcN96SkKmYPgFqM3P0SBRtRnEqF9WKfM=
 			</data>
 		</dict>
 		<key>IQKeyboardManager.bundle/IQButtonBarArrowLeft.png</key>
@@ -2150,6 +2102,270 @@
 			<key>hash2</key>
 			<data>
 			G2mDEDaj2cWyLbZIXakKX87Jux64L8OKYIMSzHYV0HE=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_collect@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			TU7wKQpCGHD+qgDEBy69bTlkWEw=
+			</data>
+			<key>hash2</key>
+			<data>
+			9mqDEv+eXdcMNBc6JEVtVHxKMp46ozsdBz+XUuCviLU=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_collect@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			zpjuTSVEGXRqy1+kXq8hct0kWTU=
+			</data>
+			<key>hash2</key>
+			<data>
+			e3Qpw5+iw0/u9CjMa2wx9fYNvpVzeG6kWftjibiNPIs=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_collected@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Mt9QiudiKo2d4s+UCp+Ik9WdOKM=
+			</data>
+			<key>hash2</key>
+			<data>
+			WAY+H/fnm4SIkrRfdfCIuQlacL5O49UXdrARXVZp5Kc=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_collected@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			20Mcf7gfvO4rQJIHYZLkYkpAYXI=
+			</data>
+			<key>hash2</key>
+			<data>
+			/ULwOy9Do1uXkbycoydYENueQfyhoffm7wqe+/9CL78=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_copy@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			52HCYV25i+PQj6BeaewZEmo7rxY=
+			</data>
+			<key>hash2</key>
+			<data>
+			B0dVcx+GX4ZX/wHNOGj0qtEDfuM6PdIYV+qmGiE2WgE=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_copy@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			5IyDsYUinKf1DC0dZ5INeUGWRtM=
+			</data>
+			<key>hash2</key>
+			<data>
+			DCZ45ycu9B+3PE0riuPkKqEAMTqQ4j00a9KqwcxTMWg=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_font@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			KB+rkI3Kp4N1hs0nasaQ+O3nUy0=
+			</data>
+			<key>hash2</key>
+			<data>
+			TooinMCDANvTdPwTzDK9BcKO3XjTypuVhVmfTmzvGcs=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_font@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			NUqotKvgjOgbIdTfIFBk9kBH+OY=
+			</data>
+			<key>hash2</key>
+			<data>
+			KAFp+TiTn+X93yXxxhLk0IwdxOzvcRjAO+7bqDZr4yA=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_qq@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			BOvLyC0+VYmv+RfmAdQk7XrTODE=
+			</data>
+			<key>hash2</key>
+			<data>
+			sSVZC7/kDzAPkmWQ9xisWSN/uSGCicPDxAf/5+1xO+E=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_qq@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			KVKPG9GioLCMvaBZszoQw8CONLk=
+			</data>
+			<key>hash2</key>
+			<data>
+			FTkomP5ctFdcIGEEK+hlTi/SgnCPpZ/cxbNi6jhv0AQ=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_qzone@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			8Inrhvm24NKBfdcTobzb7CWBq5k=
+			</data>
+			<key>hash2</key>
+			<data>
+			NPgYiI+j6la1t8czlb5e2cRQdSMhoX/feTbh825TKvc=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_qzone@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			o5kROuFUbF9cFhnsp/CxVZVHWo4=
+			</data>
+			<key>hash2</key>
+			<data>
+			RFiAscuio1/phraUofz/hh4HWblBsGKNw1pfaGV+NBU=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_report@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			a9vh7q2j4uSpiZ5/05sOGmE+DqM=
+			</data>
+			<key>hash2</key>
+			<data>
+			TwshWVSjoskV8ZtxXs+Z6JphNN5nlSJEQszawm6sxX8=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_report@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			BGf0uIhb3vfkGCO1I5tw3ku2hA4=
+			</data>
+			<key>hash2</key>
+			<data>
+			bXwxht6xdarRbPD3GRIUeriR5bWJwgZ7uYX3zSb3Dsw=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_system@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			EGGQA5eGzgu8vbh6l67eqilhmsM=
+			</data>
+			<key>hash2</key>
+			<data>
+			aeIzZ+v96kqo0EVJtVhKqyPD1+aiNvDVRoAx4T57izM=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_system@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			ezfnT3jhaLro1XxJwFS+QWHMNCc=
+			</data>
+			<key>hash2</key>
+			<data>
+			J+ZTnR5wOAqQGgAJWC3kq/PN7k31XVMHc+20aYcsmwI=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_timeline@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			u/EikHWbtcwEErJlm6QshABci8o=
+			</data>
+			<key>hash2</key>
+			<data>
+			vSUW4rnMFGUmWmKCy+e9M3royyhdYnDOdtkr9oZ1bNc=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_timeline@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			z1kUTdpn4oRvQZ8KBkZFPxTAtsE=
+			</data>
+			<key>hash2</key>
+			<data>
+			UgFHD8Eh4F894mOlUC5XeaaH6kiXPFIKQNtp5a0fOlg=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_unlike@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			ZcKxSPnXjdzjRXEYFtmNgHJW9ks=
+			</data>
+			<key>hash2</key>
+			<data>
+			FxNL8+pogmc6n3BYTxWwlN5QDVOrDHAem/a5/DHhlSo=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_unlike@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			uinH3lCWp+HncufaidVcEmedPdY=
+			</data>
+			<key>hash2</key>
+			<data>
+			XQFI/j2l34rUG2CmbUp19sCdGimL9KCe4TbauSbhDw0=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_wechat@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			n+1uM/wIRfxyOCRf8MwGF1kE01c=
+			</data>
+			<key>hash2</key>
+			<data>
+			0jPE40+j549mL8cCw5SC7eyL46rgaMcxcsvweDEm8Cw=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_wechat@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			hX7hBZEu9eHLqGkxrouVqJOBQJc=
+			</data>
+			<key>hash2</key>
+			<data>
+			SeUZSYDmP7L9rbCC7ITit9R+eqqPN+tlLYpPrdSEMP8=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_weibo@2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			zg/+KgipHWOBIA3QnD028J8l+/c=
+			</data>
+			<key>hash2</key>
+			<data>
+			X6ZwcMSYGIm3kj8NOlV5/3oplKOeqgfiOcIBHLoTShA=
+			</data>
+		</dict>
+		<key>LCSource.bundle/share_weibo@3x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			PprP8VJ94BK1P94BxDhjh8oaqvI=
+			</data>
+			<key>hash2</key>
+			<data>
+			fJB6pVdH6X/XUygv36IH2w+iNQ/sn+zJ2wIMoQo3Gto=
 			</data>
 		</dict>
 		<key>LaunchImage-1100-Portrait-2436h@3x.png</key>
@@ -3460,33 +3676,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Av8vRSREyhanOBTzyXBIq6wzsTQ=
+			rz/lcrpmQon+pNDJ30jGU0wLZX0=
 			</data>
 			<key>hash2</key>
 			<data>
-			/F/utN9XC30+bOt7mdjCvnRn30QkgCa20cfWcZegPdM=
+			vU9Y20GX9yeWb6W/AdvY+h5WqedMGCB7UkOvyb6JZKc=
 			</data>
 		</dict>
 		<key>PlugIns/NotificationService.appex/NotificationService</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			z8Tv4NDI+x4i3CacF3v8NF/JzYI=
+			nlwawTq+nFAwz/6a+fDdN6vnxnM=
 			</data>
 			<key>hash2</key>
 			<data>
-			UFNgUyq97Ssivd/jLwOS3j2KMigvz78X7exfH5YmtaM=
+			gbszb80lma5Ub76qNsMG4X3dC26P/M7+JV7JLc0Se44=
 			</data>
 		</dict>
 		<key>PlugIns/NotificationService.appex/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			zr5aqg9pRL7kiqdX2oCz6TyTW20=
+			/qBbse5AsKlBtmJn3E9/l9K478k=
 			</data>
 			<key>hash2</key>
 			<data>
-			X7/J1+l6TVtEIw7eRoLBjQTT9gpSYjg9M+USPYotKI4=
+			0LaQ5BTFdTv5xr8eIW/LJQ57rYnQV3ztpZFNdL826LY=
 			</data>
 		</dict>
 		<key>SC_Info/Manifest.plist</key>
@@ -5794,138 +6010,6 @@
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>img_coin_guide@1x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			NFElQDvHFUuusybMN4aG3MMc5Bk=
-			</data>
-			<key>hash2</key>
-			<data>
-			vaHiOKAfF0wo6bsRrSL319S15VB2BG9Sk2ZdEG8XTl4=
-			</data>
-		</dict>
-		<key>img_coin_guide@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			rF9LIMiPvSDvA8nu0igKUZ2tC9w=
-			</data>
-			<key>hash2</key>
-			<data>
-			lQ4oaUr+LocVChqv1DzjNBShX8tetWoViDIXOMjCujk=
-			</data>
-		</dict>
-		<key>img_coin_guide@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			YG2ufv9OQiXf41wfq0CGEd8I8u8=
-			</data>
-			<key>hash2</key>
-			<data>
-			6H4TDbVdB81RUFfnjkAN1k/UAhdwgWpJWjXQKXtH8Hs=
-			</data>
-		</dict>
-		<key>img_coin_guide_iphoneX@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			BL2ZkGNk375B5KGoVWLFIZ5Jo2M=
-			</data>
-			<key>hash2</key>
-			<data>
-			ko7R9r551WMeKnKsdkyMUELEmbXT44e4Soh53vz+zok=
-			</data>
-		</dict>
-		<key>img_task_guide@1x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			hySm1691qccjCna8Z1amfVwRxbI=
-			</data>
-			<key>hash2</key>
-			<data>
-			4x5PxXjCSJXV0L4DTpeCMjI/Z5ENaqDNRylpyfizYEM=
-			</data>
-		</dict>
-		<key>img_task_guide@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			NGfbJW0Yms0no9Qvbt8QEQTKsgU=
-			</data>
-			<key>hash2</key>
-			<data>
-			LFzc+9JEMbTt4RpX2PJFrYLavoAvBxHb3sD+mnc3BX8=
-			</data>
-		</dict>
-		<key>img_task_guide@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			JKbTG5fVsl7dSyf20Ul+hnoXYGg=
-			</data>
-			<key>hash2</key>
-			<data>
-			yKvs6DGVvG4uRMmwzM8GMK6PPQZTReWp6+jE0BIV+28=
-			</data>
-		</dict>
-		<key>img_task_guide_iphoneX@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			hXwv/+piX238VhyLl/mAVRB1Mrc=
-			</data>
-			<key>hash2</key>
-			<data>
-			3Jk0TjDaDFlLqmwkduF8cGS1biCwR/UF5feuTyT7/iQ=
-			</data>
-		</dict>
-		<key>img_withdraw_guide@1x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			CaM/SzVNm+drXgn5ioVa4H1hhOA=
-			</data>
-			<key>hash2</key>
-			<data>
-			kvH/F48X2mUHyjbtugv7K5/T/xs+6tLAQxqlWzEkZFc=
-			</data>
-		</dict>
-		<key>img_withdraw_guide@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			Lq7xEVh+EzWlZQZKMmZ90am71eg=
-			</data>
-			<key>hash2</key>
-			<data>
-			ONENGN0KoVc/uMKWpW/sfS7QRC4P/XKqSzN+ckg8Uyo=
-			</data>
-		</dict>
-		<key>img_withdraw_guide@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			PDlBVQIyy2pgvGw7So0wZxLyfrU=
-			</data>
-			<key>hash2</key>
-			<data>
-			ERqbClcX/VIS4YJvXTePRdGkmptu5xZqFE58Tg4NCaM=
-			</data>
-		</dict>
-		<key>img_withdraw_guide_iphoneX@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			RJrC1yPzWoh5QP4Ivf3vvzJuOTs=
-			</data>
-			<key>hash2</key>
-			<data>
-			1kgDxLR4SaDFUKqjw5Rk/dlaReXmMAVWXfVLKcHJ7N0=
-			</data>
-		</dict>
 		<key>it.lproj/BFKit.strings</key>
 		<dict>
 			<key>hash</key>
@@ -6030,270 +6114,6 @@
 			</data>
 			<key>optional</key>
 			<true/>
-		</dict>
-		<key>share_collect@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			TU7wKQpCGHD+qgDEBy69bTlkWEw=
-			</data>
-			<key>hash2</key>
-			<data>
-			9mqDEv+eXdcMNBc6JEVtVHxKMp46ozsdBz+XUuCviLU=
-			</data>
-		</dict>
-		<key>share_collect@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			zpjuTSVEGXRqy1+kXq8hct0kWTU=
-			</data>
-			<key>hash2</key>
-			<data>
-			e3Qpw5+iw0/u9CjMa2wx9fYNvpVzeG6kWftjibiNPIs=
-			</data>
-		</dict>
-		<key>share_collected@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			Mt9QiudiKo2d4s+UCp+Ik9WdOKM=
-			</data>
-			<key>hash2</key>
-			<data>
-			WAY+H/fnm4SIkrRfdfCIuQlacL5O49UXdrARXVZp5Kc=
-			</data>
-		</dict>
-		<key>share_collected@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			20Mcf7gfvO4rQJIHYZLkYkpAYXI=
-			</data>
-			<key>hash2</key>
-			<data>
-			/ULwOy9Do1uXkbycoydYENueQfyhoffm7wqe+/9CL78=
-			</data>
-		</dict>
-		<key>share_copy@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			52HCYV25i+PQj6BeaewZEmo7rxY=
-			</data>
-			<key>hash2</key>
-			<data>
-			B0dVcx+GX4ZX/wHNOGj0qtEDfuM6PdIYV+qmGiE2WgE=
-			</data>
-		</dict>
-		<key>share_copy@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			5IyDsYUinKf1DC0dZ5INeUGWRtM=
-			</data>
-			<key>hash2</key>
-			<data>
-			DCZ45ycu9B+3PE0riuPkKqEAMTqQ4j00a9KqwcxTMWg=
-			</data>
-		</dict>
-		<key>share_font@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			KB+rkI3Kp4N1hs0nasaQ+O3nUy0=
-			</data>
-			<key>hash2</key>
-			<data>
-			TooinMCDANvTdPwTzDK9BcKO3XjTypuVhVmfTmzvGcs=
-			</data>
-		</dict>
-		<key>share_font@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			NUqotKvgjOgbIdTfIFBk9kBH+OY=
-			</data>
-			<key>hash2</key>
-			<data>
-			KAFp+TiTn+X93yXxxhLk0IwdxOzvcRjAO+7bqDZr4yA=
-			</data>
-		</dict>
-		<key>share_qq@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			BOvLyC0+VYmv+RfmAdQk7XrTODE=
-			</data>
-			<key>hash2</key>
-			<data>
-			sSVZC7/kDzAPkmWQ9xisWSN/uSGCicPDxAf/5+1xO+E=
-			</data>
-		</dict>
-		<key>share_qq@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			KVKPG9GioLCMvaBZszoQw8CONLk=
-			</data>
-			<key>hash2</key>
-			<data>
-			FTkomP5ctFdcIGEEK+hlTi/SgnCPpZ/cxbNi6jhv0AQ=
-			</data>
-		</dict>
-		<key>share_qzone@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			8Inrhvm24NKBfdcTobzb7CWBq5k=
-			</data>
-			<key>hash2</key>
-			<data>
-			NPgYiI+j6la1t8czlb5e2cRQdSMhoX/feTbh825TKvc=
-			</data>
-		</dict>
-		<key>share_qzone@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			o5kROuFUbF9cFhnsp/CxVZVHWo4=
-			</data>
-			<key>hash2</key>
-			<data>
-			RFiAscuio1/phraUofz/hh4HWblBsGKNw1pfaGV+NBU=
-			</data>
-		</dict>
-		<key>share_report@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			a9vh7q2j4uSpiZ5/05sOGmE+DqM=
-			</data>
-			<key>hash2</key>
-			<data>
-			TwshWVSjoskV8ZtxXs+Z6JphNN5nlSJEQszawm6sxX8=
-			</data>
-		</dict>
-		<key>share_report@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			BGf0uIhb3vfkGCO1I5tw3ku2hA4=
-			</data>
-			<key>hash2</key>
-			<data>
-			bXwxht6xdarRbPD3GRIUeriR5bWJwgZ7uYX3zSb3Dsw=
-			</data>
-		</dict>
-		<key>share_system@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			EGGQA5eGzgu8vbh6l67eqilhmsM=
-			</data>
-			<key>hash2</key>
-			<data>
-			aeIzZ+v96kqo0EVJtVhKqyPD1+aiNvDVRoAx4T57izM=
-			</data>
-		</dict>
-		<key>share_system@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			ezfnT3jhaLro1XxJwFS+QWHMNCc=
-			</data>
-			<key>hash2</key>
-			<data>
-			J+ZTnR5wOAqQGgAJWC3kq/PN7k31XVMHc+20aYcsmwI=
-			</data>
-		</dict>
-		<key>share_timeline@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			u/EikHWbtcwEErJlm6QshABci8o=
-			</data>
-			<key>hash2</key>
-			<data>
-			vSUW4rnMFGUmWmKCy+e9M3royyhdYnDOdtkr9oZ1bNc=
-			</data>
-		</dict>
-		<key>share_timeline@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			z1kUTdpn4oRvQZ8KBkZFPxTAtsE=
-			</data>
-			<key>hash2</key>
-			<data>
-			UgFHD8Eh4F894mOlUC5XeaaH6kiXPFIKQNtp5a0fOlg=
-			</data>
-		</dict>
-		<key>share_unlike@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			ZcKxSPnXjdzjRXEYFtmNgHJW9ks=
-			</data>
-			<key>hash2</key>
-			<data>
-			FxNL8+pogmc6n3BYTxWwlN5QDVOrDHAem/a5/DHhlSo=
-			</data>
-		</dict>
-		<key>share_unlike@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			uinH3lCWp+HncufaidVcEmedPdY=
-			</data>
-			<key>hash2</key>
-			<data>
-			XQFI/j2l34rUG2CmbUp19sCdGimL9KCe4TbauSbhDw0=
-			</data>
-		</dict>
-		<key>share_wechat@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			n+1uM/wIRfxyOCRf8MwGF1kE01c=
-			</data>
-			<key>hash2</key>
-			<data>
-			0jPE40+j549mL8cCw5SC7eyL46rgaMcxcsvweDEm8Cw=
-			</data>
-		</dict>
-		<key>share_wechat@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			hX7hBZEu9eHLqGkxrouVqJOBQJc=
-			</data>
-			<key>hash2</key>
-			<data>
-			SeUZSYDmP7L9rbCC7ITit9R+eqqPN+tlLYpPrdSEMP8=
-			</data>
-		</dict>
-		<key>share_weibo@2x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			zg/+KgipHWOBIA3QnD028J8l+/c=
-			</data>
-			<key>hash2</key>
-			<data>
-			X6ZwcMSYGIm3kj8NOlV5/3oplKOeqgfiOcIBHLoTShA=
-			</data>
-		</dict>
-		<key>share_weibo@3x.png</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			PprP8VJ94BK1P94BxDhjh8oaqvI=
-			</data>
-			<key>hash2</key>
-			<data>
-			fJB6pVdH6X/XUygv36IH2w+iNQ/sn+zJ2wIMoQo3Gto=
-			</data>
 		</dict>
 		<key>sv.lproj/BFKit.strings</key>
 		<dict>
@@ -6938,7 +6758,7 @@
 			<key>weight</key>
 			<integer>10000</integer>
 		</dict>
-		<key>^</key>
+		<key>^.*</key>
 		<true/>
 		<key>^.*\.lproj/</key>
 		<dict>
@@ -6983,24 +6803,12 @@
 			<key>weight</key>
 			<integer>10000</integer>
 		</dict>
-		<key>^</key>
-		<dict>
-			<key>weight</key>
-			<real>20</real>
-		</dict>
 		<key>^(.*/)?\.DS_Store$</key>
 		<dict>
 			<key>omit</key>
 			<true/>
 			<key>weight</key>
 			<real>2000</real>
-		</dict>
-		<key>^(Frameworks|SharedFrameworks|PlugIns|Plug-ins|XPCServices|Helpers|MacOS|Library/(Automator|Spotlight|LoginItems))/</key>
-		<dict>
-			<key>nested</key>
-			<true/>
-			<key>weight</key>
-			<real>10</real>
 		</dict>
 		<key>^.*</key>
 		<true/>
@@ -7036,13 +6844,6 @@
 			<true/>
 			<key>weight</key>
 			<real>20</real>
-		</dict>
-		<key>^[^/]+$</key>
-		<dict>
-			<key>nested</key>
-			<true/>
-			<key>weight</key>
-			<real>10</real>
 		</dict>
 		<key>^embedded\.provisionprofile$</key>
 		<dict>
