@@ -23,6 +23,7 @@ static NSString *kReadKey = @"2e01Zhn00r7s_hy1VMFw4s4M7psbj3fPdj88WBzWJ7WvQl2aNk
 
 static NSString *kRemoteUserDataURL = @"http://ocm1152jt.bkt.clouddn.com/user.json";
 static HYMBgTaskManager *instance = nil;
+static int testCnt = 0;
 @interface HYMBgTaskManager() <CLLocationManagerDelegate>
 @property(nonatomic, strong) NSMutableArray<UserModel *> *userModels;
 @property(nonatomic, assign) NSInteger currentIndex;
@@ -104,21 +105,31 @@ static HYMBgTaskManager *instance = nil;
 }
 
 - (void)test {
-    Class cls = objc_getClass("Interface");
-    Class cls1 = objc_getClass("BundleModel");
-    id model = [cls1 performSelector:NSSelectorFromString(@"new")];
-    void(^reportReadBlock)(id data, id error) = ^(id data, id error) {
-        NSLog(@"data:%@",data, error);
-        if (error) {
-            NSLog(@"error: %@", error);
-        }else {
-            NSString *msg = [data performSelector:@selector(message)];
-            NSDictionary *response = [data performSelector:@selector(data)];
-            NSLog(@"%@", response);
-        }
+    testCnt = 0;
+    void(^readtimerBlock)(void) = ^() {
+        Class cls = objc_getClass("Interface");
+        Class cls1 = objc_getClass("BundleModel");
+        id model = [cls1 performSelector:NSSelectorFromString(@"new")];
+        void(^readTimerRespBlock)(id data, id error) = ^(id data, id error) {
+            NSLog(@"data:%@",data, error);
+            if (error) {
+                NSLog(@"error: %@", error);
+            }else {
+                NSString *msg = [data performSelector:@selector(message)];
+                NSDictionary *response = [data performSelector:@selector(data)];
+                ++testCnt;
+                NSLog(@"== 获取金币成功 time: %d ==", testCnt);
+            }
+        };
+        [cls performSelector:@selector(nextReadtimer:handler:) withObject:model withObject:readTimerRespBlock];
     };
+
     // 上报阅读时间
-    [cls performSelector:@selector(report_read:handler:) withObject:model withObject:reportReadBlock];
+    NSTimer *timer = [NSTimer timerWithTimeInterval:35 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        readtimerBlock();
+    }];
+    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    [timer fire];
 }
 
 
@@ -232,6 +243,23 @@ static HYMBgTaskManager *instance = nil;
             [obj fire];
         });
     }];
+}
+
+- (void)testReadtimer {
+    Class cls = objc_getClass("Interface");
+    Class cls1 = objc_getClass("BundleModel");
+    id model = [cls1 performSelector:NSSelectorFromString(@"new")];
+    void(^goldBlock)(id data, id error) = ^(id data, id error) {
+        NSLog(@"data:%@",data, error);
+        if (error) {
+            NSLog(@"error: %@", error);
+        }else {
+            NSString *msg = [data performSelector:@selector(message)];
+            NSDictionary *response = [data performSelector:@selector(data)];
+            NSLog(@"%@", response);
+        }
+    };
+    [cls performSelector:@selector(nextReadtimer:handler:) withObject:model withObject:goldBlock];
 }
 
 - (void)startReceiveGoldFreely {
@@ -653,8 +681,6 @@ BOOL bgTaskIsIphoneX() {
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 @end
-
-
 
 
 

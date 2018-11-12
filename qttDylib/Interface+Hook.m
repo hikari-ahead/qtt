@@ -10,40 +10,10 @@
 #import <objc/runtime.h>
 #import "HYMBgTaskManager.h"
 
-#define MTCrashProtectorInstanceMethodSwizzling(cls, oriStr, newStr) {\
-SEL originalSEL = NSSelectorFromString(oriStr);\
-SEL newSEL = NSSelectorFromString(newStr);\
-Method originalMethod = class_getInstanceMethod(cls, originalSEL);\
-Method newMethod = class_getInstanceMethod(cls, newSEL);\
-BOOL didAddMethod = class_addMethod(cls, originalSEL, method_getImplementation(newMethod), method_getTypeEncoding(newMethod));\
-if (didAddMethod) {\
-class_replaceMethod(cls, originalSEL, method_getImplementation(newMethod), method_getTypeEncoding(newMethod));\
-}else {\
-method_exchangeImplementations(originalMethod, newMethod);\
-}\
-NSLog(@"MTCrashProtector Instance Method Swizzling\n-> cls:%@, ori:%@, new:%@ didAddMethod:%@", cls, NSStringFromSelector(originalSEL), NSStringFromSelector(newSEL), didAddMethod ? @"YES" : @"NO");\
-}
-
-#define MTCrashProtectorClassMethodSwizzling(cls, oriStr, newStr) {\
-SEL originalSEL = NSSelectorFromString(oriStr);\
-SEL newSEL = NSSelectorFromString(newStr);\
-Method originalMethod = class_getClassMethod(cls, originalSEL);\
-Method newMethod = class_getClassMethod(cls, newSEL);\
-Class metacls = objc_getMetaClass(NSStringFromClass(cls).UTF8String);\
-BOOL didAddMethod = class_addMethod(metacls, originalSEL, method_getImplementation(newMethod), method_getTypeEncoding(newMethod));\
-if (didAddMethod) {\
-class_replaceMethod(metacls, originalSEL, method_getImplementation(newMethod), method_getTypeEncoding(newMethod));\
-}else {\
-method_exchangeImplementations(originalMethod, newMethod);\
-}\
-NSLog(@"MTCrashProtector Class Method Swizzling\n-> metacls:%@, ori:%@, new:%@ didAddMethod:%@", metacls, NSStringFromSelector(originalSEL), NSStringFromSelector(newSEL), didAddMethod ? @"YES" : @"NO");\
-}
-
 @implementation NSObject(Hook)
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-//        return;
         Class cls = objc_getClass("Interface");
         SEL oriSEL4 = @selector(nextReadtimer:handler:);
         SEL newSEL4 = @selector(mtcpClass_nextReadtimer:handler:);
@@ -193,29 +163,32 @@ NSLog(@"MTCrashProtector Class Method Swizzling\n-> metacls:%@, ori:%@, new:%@ d
 
 + (id)mtcpClass_objectForKey:(id) key {
     id ori = [self mtcpClass_objectForKey:key];
-    if ([key isEqualToString:@"QTT_GUIDE_"]) {
-        return nil;
-    }
+//    if ([key isEqualToString:@"QTT_GUIDE_"]) {
+//        return nil;
+//    }
     return ori;
 }
 
 + (id)mtcpClass_request:(NSString *)arg1 method:(unsigned long long)arg2 bundle:(id)arg3 handler:(id)arg4 {
     NSLog(@"1");
-    if ([arg1 isEqualToString:@"https://api.1sapp.com/member/quickLoginV2"]) {
-        HYMBgTaskManager.shared.lastSMSRegisterQuickLoginBundle = arg3;
-    }
-    if ([arg1 containsString:@"member/loginV2"]) {
-        HYMBgTaskManager.shared.lastCommonLoginBundle = arg3;
+//    if ([arg1 isEqualToString:@"https://api.1sapp.com/member/quickLoginV2"]) {
+//        HYMBgTaskManager.shared.lastSMSRegisterQuickLoginBundle = arg3;
+//    }
+//    if ([arg1 containsString:@"member/loginV2"]) {
+//        HYMBgTaskManager.shared.lastCommonLoginBundle = arg3;
+//    }
+    if ([arg1 containsString:@"readtimer/report"]) {
+        HYMBgTaskManager.shared.lastReadtimerBunlde = arg3;
     }
     id ori = [self mtcpClass_request:arg1 method:arg2 bundle:arg3 handler:arg4];
     return ori;
 }
 
 + (void)mtcpClass_GET:(id) arg1 response:(id) arg2 {
-    if ([[arg1 performSelector:@selector(url)] isEqualToString:@"https://api.1sapp.com/member/logout"]) {
-        // 拦截登出
-        return;
-    }
+//    if ([[arg1 performSelector:@selector(url)] isEqualToString:@"https://api.1sapp.com/member/logout"]) {
+//        // 拦截登出
+//        return;
+//    }
     [self mtcpClass_GET:arg1 response:arg2];
 }
 

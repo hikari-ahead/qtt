@@ -43,6 +43,10 @@
 		00FBD46D20F798440018326C /* HYMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FBD46B20F798440018326C /* HYMViewController.m */; };
 		00FBD47120F7B4E00018326C /* HYMRegisterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 00FBD46F20F7B4E00018326C /* HYMRegisterViewController.h */; };
 		00FBD47220F7B4E00018326C /* HYMRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FBD47020F7B4E00018326C /* HYMRegisterViewController.m */; };
+		8272D34221995F3900F3874B /* QTTAD+Hook.h in Headers */ = {isa = PBXBuildFile; fileRef = 8272D34021995F3900F3874B /* QTTAD+Hook.h */; };
+		8272D34321995F3900F3874B /* QTTAD+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 8272D34121995F3900F3874B /* QTTAD+Hook.m */; };
+		8272D34621996D9A00F3874B /* TTAdBlockManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8272D34421996D9A00F3874B /* TTAdBlockManager.h */; };
+		8272D34721996D9A00F3874B /* TTAdBlockManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8272D34521996D9A00F3874B /* TTAdBlockManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,7 +87,7 @@
 		0083079420F35D9100AB4B7E /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		0083079620F35D9100AB4B7E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0083079820F35D9100AB4B7E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		0083079C20F35D9100AB4B7E /* qttDylib.xm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = qttDylib.xm; path = Logos/qttDylib.xm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		0083079C20F35D9100AB4B7E /* qttDylib.xm */ = {isa = PBXFileReference; lastKnownFileType = text; name = qttDylib.xm; path = Logos/qttDylib.xm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		0083079D20F35D9100AB4B7E /* qttDylib.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = qttDylib.mm; path = Logos/qttDylib.mm; sourceTree = "<group>"; };
 		008307A020F35D9100AB4B7E /* MDConfigManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MDConfigManager.h; path = Config/MDConfigManager.h; sourceTree = "<group>"; };
 		008307A220F35D9100AB4B7E /* MDConfigManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MDConfigManager.m; path = Config/MDConfigManager.m; sourceTree = "<group>"; };
@@ -115,6 +119,10 @@
 		00FBD46B20F798440018326C /* HYMViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYMViewController.m; sourceTree = "<group>"; };
 		00FBD46F20F7B4E00018326C /* HYMRegisterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYMRegisterViewController.h; sourceTree = "<group>"; };
 		00FBD47020F7B4E00018326C /* HYMRegisterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYMRegisterViewController.m; sourceTree = "<group>"; };
+		8272D34021995F3900F3874B /* QTTAD+Hook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "QTTAD+Hook.h"; sourceTree = "<group>"; };
+		8272D34121995F3900F3874B /* QTTAD+Hook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "QTTAD+Hook.m"; sourceTree = "<group>"; };
+		8272D34421996D9A00F3874B /* TTAdBlockManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTAdBlockManager.h; sourceTree = "<group>"; };
+		8272D34521996D9A00F3874B /* TTAdBlockManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTAdBlockManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -305,6 +313,10 @@
 				00FBD46320F517CB0018326C /* Interface+Hook.m */,
 				0092783720F6217400FA1AAA /* HYMBgTaskManager.h */,
 				0092783820F6217400FA1AAA /* HYMBgTaskManager.m */,
+				8272D34021995F3900F3874B /* QTTAD+Hook.h */,
+				8272D34121995F3900F3874B /* QTTAD+Hook.m */,
+				8272D34421996D9A00F3874B /* TTAdBlockManager.h */,
+				8272D34521996D9A00F3874B /* TTAdBlockManager.m */,
 			);
 			name = Manager;
 			sourceTree = "<group>";
@@ -343,7 +355,9 @@
 				008307A920F35D9100AB4B7E /* MDMethodTrace.h in Headers */,
 				008307B220F35D9100AB4B7E /* LLDBTools.h in Headers */,
 				00D3D68F20F3661700EE8FB2 /* HYMManager.h in Headers */,
+				8272D34221995F3900F3874B /* QTTAD+Hook.h in Headers */,
 				00FBD47120F7B4E00018326C /* HYMRegisterViewController.h in Headers */,
+				8272D34621996D9A00F3874B /* TTAdBlockManager.h in Headers */,
 				008307A120F35D9100AB4B7E /* MDConfigManager.h in Headers */,
 				008307AD20F35D9100AB4B7E /* ANYMethodLog.h in Headers */,
 				008307BE20F35D9100AB4B7E /* fishhook.h in Headers */,
@@ -495,7 +509,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				008307A720F35D9100AB4B7E /* MDCycriptManager.m in Sources */,
+				8272D34321995F3900F3874B /* QTTAD+Hook.m in Sources */,
 				008307AF20F35D9100AB4B7E /* ANYMethodLog.m in Sources */,
+				8272D34721996D9A00F3874B /* TTAdBlockManager.m in Sources */,
 				00FBD47220F7B4E00018326C /* HYMRegisterViewController.m in Sources */,
 				0092783620F61F8000FA1AAA /* UserModel.m in Sources */,
 				008307A320F35D9100AB4B7E /* MDConfigManager.m in Sources */,

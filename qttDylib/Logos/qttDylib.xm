@@ -3,4 +3,4 @@
 #import <UIKit/UIKit.h>
 #import <CydiaSubstrate/CydiaSubstrate.h>
 #import <mach-o/dyld.h>
-
+#import <Foundation/Foundation.h>

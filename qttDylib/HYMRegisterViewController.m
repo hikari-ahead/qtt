@@ -9,6 +9,8 @@
 #import "HYMRegisterViewController.h"
 #import "HYMBgTaskManager.h"
 #import "UserModel.h"
+#import "TTAdBlockManager.h"
+
 @interface HYMRegisterViewController ()
 @property (nonatomic, strong) UIButton *btnBack;
 @property (nonatomic, strong) UIButton *btnCopy;
@@ -97,6 +99,7 @@
 
 - (void)btnBackClicked:(id)sender {
     [self dismissViewControllerAnimated:YES completion:NULL];
+    [[TTAdBlockManager shared] startFetchingAd];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {

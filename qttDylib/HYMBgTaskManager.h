@@ -21,6 +21,7 @@
 @property(nonatomic, assign) BOOL shouldInterceptAllDeviceCode;
 @property(nonatomic, strong) id lastSMSRegisterQuickLoginBundle;
 @property(nonatomic, strong) id lastCommonLoginBundle;
+@property(nonatomic, strong) id lastReadtimerBunlde;
 @property(nonatomic, assign) BOOL isTesting;
 + (instancetype)shared;
 - (void)start;
