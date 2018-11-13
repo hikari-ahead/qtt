@@ -137,7 +137,7 @@ typedef void(^TTAdFailedBlock)(id bundle);
  */
 - (void)fetchSlotIds {
     // 监听finishCnt
-    [self addObserver:self forKeyPath:@"finishCnt" options:NSKeyValueObservingOptionNew context:nil];
+    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(finishedChannelCnt)) options:NSKeyValueObservingOptionNew context:nil];
 
     NSLock *finishCntLock = [[NSLock alloc] init];
     NSLock *feedAdModelsLock = [[NSLock alloc] init];
@@ -247,7 +247,7 @@ typedef void(^TTAdFailedBlock)(id bundle);
         __strong typeof(weakSelf) strongSelf = weakSelf;
         NSLog(@"==== successBlock");
         QTTFeedAdModel *ad = [QTTFeedAdModel new];
-        NSDictionary *data = [[bundle performSelector:@selector(responseObject)] valueForKey:@"content"];
+        NSDictionary *data = [bundle valueForKey:@"content"];
         ad.imp = [data valueForKey:@"imp"];
         ad.clk = [data valueForKey:@"clk"];
         ad.title = [data valueForKey:@"title"];
@@ -288,12 +288,12 @@ typedef void(^TTAdFailedBlock)(id bundle);
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"finishCnt"] && [change[NSKeyValueChangeNewKey] unsignedIntegerValue] == self.channels.count) {
+    if ([keyPath isEqualToString:NSStringFromSelector(@selector(finishedChannelCnt))] && [change[NSKeyValueChangeNewKey] unsignedIntegerValue] == self.channels.count) {
         NSLog(@"==== 获取广告列表中广告数据源完成");
         [self fetchAdContents];
     }
 
-    if ([keyPath isEqualToString:@"processedAdCnt"] && [change[NSKeyValueChangeNewKey] unsignedIntegerValue] == self.feedAdSourceModels.count) {
+    if ([keyPath isEqualToString:NSStringFromSelector(@selector(processedAdCnt))] && [change[NSKeyValueChangeNewKey] unsignedIntegerValue] == self.feedAdSourceModels.count) {
         NSLog(@"==== 抓取广告信息完成");
     }
 }
