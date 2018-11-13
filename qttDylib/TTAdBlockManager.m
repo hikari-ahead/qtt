@@ -13,11 +13,21 @@
 #pragma clang diagnostic ignored "-Wundeclared-selector"
 
 static const NSString *kQTTFeedAdModelRelatedChannelModelKey = @"kQTTFeedAdModelRelatedChannelModelKey";
+/** 最多重试三次 */
+#define kTTAdBlockManagerRetryMaxTimes 3
+
+typedef void(^TTAdListParseBlock)(id bundle, id error);
+typedef void(^TTAdretryBlock)(id bundle);
 
 @interface QTTChannelModel:NSObject
 @property (nonatomic, assign) NSInteger cid;
 @property (nonatomic, assign) NSInteger isLocalChannel;
 @property (nonatomic, strong) NSString *name;
+// 关联的数据
+/** 当前请求的页数 */
+@property (nonatomic, assign) NSInteger page;
+/** 重试的次数 */
+@property (nonatomic, assign) NSInteger retryTimes;
 @end
 @implementation QTTChannelModel
 @end
@@ -45,9 +55,16 @@ static const NSString *kQTTFeedAdModelRelatedChannelModelKey = @"kQTTFeedAdModel
 @interface TTAdBlockManager()
 @property (nonatomic, strong) NSMutableDictionary<NSString *, QTTChannelModel *> *channels;
 @property (nonatomic, strong) NSMutableArray <QTTFeedAdModel *> *feedAdModels;
+@property (nonatomic, copy) TTAdListParseBlock block;
+@property (nonatomic, copy) TTAdretryBlock retryBlock;
+@property (nonatomic, strong) NSNumber *finishCnt;
 @end
 
 @implementation TTAdBlockManager
+
+- (void)dealloc {
+    [self removeObserver:self forKeyPath:@"finishCnt"];
+}
 
 + (instancetype)shared {
     static TTAdBlockManager *instance;
@@ -71,6 +88,7 @@ static const NSString *kQTTFeedAdModelRelatedChannelModelKey = @"kQTTFeedAdModel
 - (void)commonSetup {
     _channels = [NSMutableDictionary new];
     _feedAdModels = [NSMutableArray new];
+    _finishCnt = [NSNumber numberWithInt:0];
 }
 
 #pragma mark - Ad
@@ -131,58 +149,101 @@ static const NSString *kQTTFeedAdModelRelatedChannelModelKey = @"kQTTFeedAdModel
  *      page = 1;
  */
 - (void)fetchSlotIds {
-    Class cls = objc_getClass("Interface");
-    Class bdcls = objc_getClass("BundleModel");
-    __block NSInteger finishCnt = 0;
+    // 监听finishCnt
+    [self addObserver:self forKeyPath:@"finishCnt" options:NSKeyValueObservingOptionNew context:nil];
+
     NSLock *finishCntLock = [[NSLock alloc] init];
-    void(^listParseBlock)(id bundle, id error) = ^(id bundle, id error) {
-        [finishCntLock lock];
-        ++finishCnt;
-        [finishCntLock unlock];
-        if (!error && bundle) {
-            NSArray *data = [[[bundle performSelector:@selector(responseObject)] valueForKey:@"data"] valueForKey:@"data"];
-            [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                NSInteger slotId = [[((NSDictionary *)obj) valueForKey:@"slotId"] integerValue];
-                if ([obj isKindOfClass:[NSDictionary class]] && slotId != 0) {
-                    QTTFeedAdModel *ad = [QTTFeedAdModel new];
-                    ad.index = [[((NSDictionary *)obj) valueForKey:@"slotId"] integerValue];
-                    ad.appId = [((NSDictionary *)obj) valueForKey:@"appId"];
-                    ad.type = [((NSDictionary *)obj) valueForKey:@"type"];
-                    ad.slotId = slotId;
-                    ad.cid = [[((NSDictionary *)obj) valueForKey:@"cid"] integerValue];
-                    ad.flag = [[((NSDictionary *)obj) valueForKey:@"flag"] integerValue];
-                    ad.tips = [((NSDictionary *)obj) valueForKey:@"tips"];
-                    ad.times = [[((NSDictionary *)obj) valueForKey:@"times"] integerValue];
-                    ad.page = [[((NSDictionary *)obj) valueForKey:@"page"] integerValue];
-                    ad.ad_source = [[((NSDictionary *)obj) valueForKey:@"ad_source"] integerValue];
-                    ad.op = [[((NSDictionary *)obj) valueForKey:@"op"] integerValue];
-                    ad.imageType = [[((NSDictionary *)obj) valueForKey:@"imageType"] integerValue];
-                    ad.channelModel = [bundle performSelector:@selector(paramTmpForKey:) withObject:kQTTFeedAdModelRelatedChannelModelKey];
-                    [finishCntLock lock];
-                    [self.feedAdModels addObject:ad];
-                    [finishCntLock unlock];
-                }
-            }];
-            NSLog(@"==== getList:handler:");
-        }else {
-            NSLog(@"==== fetchSlotIds error: %@", error);
+    NSLock *feedAdModelsLock = [[NSLock alloc] init];
+    __weak typeof(self) weakSelf = self;
+    // 重试block
+    self.retryBlock = ^(id bundle) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        QTTChannelModel *channelModel = [bundle performSelector:@selector(paramTmpForKey:) withObject:kQTTFeedAdModelRelatedChannelModelKey];
+        if (channelModel.retryTimes == kTTAdBlockManagerRetryMaxTimes) {
+            [finishCntLock lock];
+            strongSelf.finishCnt = [NSNumber numberWithUnsignedInteger:(strongSelf.finishCnt.unsignedIntegerValue + 1)];
+            [finishCntLock unlock];
+        } else {
+            ++channelModel.retryTimes;
+            [strongSelf fetchSlotIdsWithChannelModel:channelModel parseBlock:strongSelf.block];
         }
-        if (finishCnt == self.channels.count) {
-            NSLog(@"==== 获取广告列表中广告完成");
-            [self fetchAdContents];
+    };
+
+    // 解析block
+    self.block = ^(id bundle, id error) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        if (!error && bundle) {
+            NSDictionary *outerData = [[bundle performSelector:@selector(responseObject)] valueForKey:@"data"];
+            NSArray *data = [outerData valueForKey:@"data"];
+            if (outerData && [outerData valueForKey:@"count"] == 0) {
+                // 说明这个频道已经请求到了最后一页
+                [finishCntLock lock];
+                strongSelf.finishCnt = [NSNumber numberWithUnsignedInteger:(strongSelf.finishCnt.unsignedIntegerValue + 1)];
+                [finishCntLock unlock];
+            } else if (outerData && data) {
+                // 紧接着并发去请求下一个页面
+                QTTChannelModel *channelModel = [bundle performSelector:@selector(paramTmpForKey:) withObject:kQTTFeedAdModelRelatedChannelModelKey];
+                // 重置新的页面的重试次数
+                channelModel.retryTimes = 0;
+                ++channelModel.page;
+                [strongSelf fetchSlotIdsWithChannelModel:channelModel parseBlock:strongSelf.block];
+                // 并发解析数据
+                [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    NSInteger slotId = [[((NSDictionary *)obj) valueForKey:@"slotId"] integerValue];
+                    if ([obj isKindOfClass:[NSDictionary class]] && slotId != 0) {
+                        QTTFeedAdModel *ad = [QTTFeedAdModel new];
+                        ad.index = [[((NSDictionary *)obj) valueForKey:@"slotId"] integerValue];
+                        ad.appId = [((NSDictionary *)obj) valueForKey:@"appId"];
+                        ad.type = [((NSDictionary *)obj) valueForKey:@"type"];
+                        ad.slotId = slotId;
+                        ad.cid = [[((NSDictionary *)obj) valueForKey:@"cid"] integerValue];
+                        ad.flag = [[((NSDictionary *)obj) valueForKey:@"flag"] integerValue];
+                        ad.tips = [((NSDictionary *)obj) valueForKey:@"tips"];
+                        ad.times = [[((NSDictionary *)obj) valueForKey:@"times"] integerValue];
+                        ad.page = [[((NSDictionary *)obj) valueForKey:@"page"] integerValue];
+                        ad.ad_source = [[((NSDictionary *)obj) valueForKey:@"ad_source"] integerValue];
+                        ad.op = [[((NSDictionary *)obj) valueForKey:@"op"] integerValue];
+                        ad.imageType = [[((NSDictionary *)obj) valueForKey:@"imageType"] integerValue];
+                        ad.channelModel = channelModel;
+                        [feedAdModelsLock lock];
+                        [strongSelf.feedAdModels addObject:ad];
+                        [feedAdModelsLock unlock];
+                    }
+                }];
+            }else {
+                strongSelf.retryBlock(bundle);
+            }
+
+            NSLog(@"==== getList:handler:");
+        } else {
+            NSLog(@"==== fetchSlotIds error: %@", error);
+            strongSelf.retryBlock(bundle);
         }
     };
     [self.channels.allValues enumerateObjectsUsingBlock:^(QTTChannelModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        id model = [bdcls performSelector:NSSelectorFromString(@"new")];
-        [model performSelector:@selector(addParam:forKey:) withObject:@"1,2,4,3,12" withObject:@"content_type"];
-        [model performSelector:@selector(addParam:forKey:) withObject:@(1) withObject:@"page"];
-        [model performSelector:@selector(addParam:forKey:) withObject:@(2) withObject:@"op"];
-        [model performSelector:@selector(addParam:forKey:) withObject:@(0) withObject:@"max_time"];
-        [model performSelector:@selector(addParam:forKey:) withObject:@(obj.cid) withObject:@"cid"];
-        [model performSelector:@selector(addParamTmp:forKey:) withObject:obj withObject:kQTTFeedAdModelRelatedChannelModelKey];
-        [cls performSelector:@selector(getList:handler:) withObject:model withObject:listParseBlock];
+        // 所有频道并发的去请求，每个频道从页数1开始一直请求到最后一页（没有数据返回了）
+        obj.page = 1;
+        [self fetchSlotIdsWithChannelModel:obj parseBlock:self.block];
     }];
 }
+
+
+- (void)fetchSlotIdsWithChannelModel:(QTTChannelModel *)channelModel
+                          parseBlock:(id)parseBlock {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        Class cls = objc_getClass("Interface");
+        Class bdcls = objc_getClass("BundleModel");
+        id model = [bdcls performSelector:NSSelectorFromString(@"new")];
+        [model performSelector:@selector(addParam:forKey:) withObject:@"1,2,4,3,12" withObject:@"content_type"];
+        [model performSelector:@selector(addParam:forKey:) withObject:@(channelModel.page) withObject:@"page"];
+        [model performSelector:@selector(addParam:forKey:) withObject:@(2) withObject:@"op"];
+        [model performSelector:@selector(addParam:forKey:) withObject:@(0) withObject:@"max_time"];
+        [model performSelector:@selector(addParam:forKey:) withObject:@(channelModel.cid) withObject:@"cid"];
+        [model performSelector:@selector(addParamTmp:forKey:) withObject:channelModel withObject:kQTTFeedAdModelRelatedChannelModelKey];
+        [cls performSelector:@selector(getList:handler:) withObject:model withObject:parseBlock];
+    });
+}
+
 
 /**
  *  遍历slotId获取广告内容
@@ -215,6 +276,14 @@ static const NSString *kQTTFeedAdModelRelatedChannelModelKey = @"kQTTFeedAdModel
         [invocation invoke];
     }];
 }
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"finishCnt"] && [change[NSKeyValueChangeNewKey] unsignedIntegerValue] == self.channels.count) {
+        NSLog(@"==== 获取广告列表中广告完成");
+        [self fetchAdContents];
+    }
+}
+
 @end
 
 #pragma clang diagnostic pop
