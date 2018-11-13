@@ -43,10 +43,16 @@
 		00FBD46D20F798440018326C /* HYMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FBD46B20F798440018326C /* HYMViewController.m */; };
 		00FBD47120F7B4E00018326C /* HYMRegisterViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 00FBD46F20F7B4E00018326C /* HYMRegisterViewController.h */; };
 		00FBD47220F7B4E00018326C /* HYMRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FBD47020F7B4E00018326C /* HYMRegisterViewController.m */; };
+		822E177C219ACBF5000E45BA /* TTAdBlockManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 822E177A219ACBF5000E45BA /* TTAdBlockManager.m */; };
+		822E177D219ACBF5000E45BA /* TTAdBlockManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 822E177B219ACBF5000E45BA /* TTAdBlockManager.h */; };
 		8272D34221995F3900F3874B /* QTTAD+Hook.h in Headers */ = {isa = PBXBuildFile; fileRef = 8272D34021995F3900F3874B /* QTTAD+Hook.h */; };
 		8272D34321995F3900F3874B /* QTTAD+Hook.m in Sources */ = {isa = PBXBuildFile; fileRef = 8272D34121995F3900F3874B /* QTTAD+Hook.m */; };
-		8272D34621996D9A00F3874B /* TTAdBlockManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8272D34421996D9A00F3874B /* TTAdBlockManager.h */; };
-		8272D34721996D9A00F3874B /* TTAdBlockManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8272D34521996D9A00F3874B /* TTAdBlockManager.m */; };
+		8272D350219AC00B00F3874B /* TTAdBlockViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 8272D34E219AC00B00F3874B /* TTAdBlockViewController.h */; };
+		8272D351219AC00B00F3874B /* TTAdBlockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8272D34F219AC00B00F3874B /* TTAdBlockViewController.m */; };
+		8272D355219AC2C200F3874B /* TTAdBlockHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 8272D353219AC2C200F3874B /* TTAdBlockHeader.h */; };
+		8272D356219AC2C200F3874B /* TTAdBlockHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 8272D354219AC2C200F3874B /* TTAdBlockHeader.m */; };
+		8272D359219AC94100F3874B /* UIViewController+TTAdHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 8272D357219AC94100F3874B /* UIViewController+TTAdHook.h */; };
+		8272D35A219AC94100F3874B /* UIViewController+TTAdHook.m in Sources */ = {isa = PBXBuildFile; fileRef = 8272D358219AC94100F3874B /* UIViewController+TTAdHook.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,10 +125,16 @@
 		00FBD46B20F798440018326C /* HYMViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYMViewController.m; sourceTree = "<group>"; };
 		00FBD46F20F7B4E00018326C /* HYMRegisterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HYMRegisterViewController.h; sourceTree = "<group>"; };
 		00FBD47020F7B4E00018326C /* HYMRegisterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HYMRegisterViewController.m; sourceTree = "<group>"; };
+		822E177A219ACBF5000E45BA /* TTAdBlockManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTAdBlockManager.m; sourceTree = "<group>"; };
+		822E177B219ACBF5000E45BA /* TTAdBlockManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTAdBlockManager.h; sourceTree = "<group>"; };
 		8272D34021995F3900F3874B /* QTTAD+Hook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "QTTAD+Hook.h"; sourceTree = "<group>"; };
 		8272D34121995F3900F3874B /* QTTAD+Hook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "QTTAD+Hook.m"; sourceTree = "<group>"; };
-		8272D34421996D9A00F3874B /* TTAdBlockManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTAdBlockManager.h; sourceTree = "<group>"; };
-		8272D34521996D9A00F3874B /* TTAdBlockManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTAdBlockManager.m; sourceTree = "<group>"; };
+		8272D34E219AC00B00F3874B /* TTAdBlockViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTAdBlockViewController.h; sourceTree = "<group>"; };
+		8272D34F219AC00B00F3874B /* TTAdBlockViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTAdBlockViewController.m; sourceTree = "<group>"; };
+		8272D353219AC2C200F3874B /* TTAdBlockHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTAdBlockHeader.h; sourceTree = "<group>"; };
+		8272D354219AC2C200F3874B /* TTAdBlockHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTAdBlockHeader.m; sourceTree = "<group>"; };
+		8272D357219AC94100F3874B /* UIViewController+TTAdHook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+TTAdHook.h"; sourceTree = "<group>"; };
+		8272D358219AC94100F3874B /* UIViewController+TTAdHook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+TTAdHook.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,6 +233,10 @@
 		0083079A20F35D9100AB4B7E /* qttDylib */ = {
 			isa = PBXGroup;
 			children = (
+				8272D353219AC2C200F3874B /* TTAdBlockHeader.h */,
+				8272D354219AC2C200F3874B /* TTAdBlockHeader.m */,
+				8272D357219AC94100F3874B /* UIViewController+TTAdHook.h */,
+				8272D358219AC94100F3874B /* UIViewController+TTAdHook.m */,
 				00FBD46920F7981F0018326C /* ViewController */,
 				00FBD46720F63DE10018326C /* Resource */,
 				0092783220F61F6B00FA1AAA /* Model */,
@@ -307,6 +323,8 @@
 		00D3D68C20F3660100EE8FB2 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				822E177B219ACBF5000E45BA /* TTAdBlockManager.h */,
+				822E177A219ACBF5000E45BA /* TTAdBlockManager.m */,
 				00D3D68D20F3661700EE8FB2 /* HYMManager.h */,
 				00D3D68E20F3661700EE8FB2 /* HYMManager.m */,
 				00FBD46220F517CB0018326C /* Interface+Hook.h */,
@@ -315,8 +333,6 @@
 				0092783820F6217400FA1AAA /* HYMBgTaskManager.m */,
 				8272D34021995F3900F3874B /* QTTAD+Hook.h */,
 				8272D34121995F3900F3874B /* QTTAD+Hook.m */,
-				8272D34421996D9A00F3874B /* TTAdBlockManager.h */,
-				8272D34521996D9A00F3874B /* TTAdBlockManager.m */,
 			);
 			name = Manager;
 			sourceTree = "<group>";
@@ -336,6 +352,8 @@
 				00FBD46B20F798440018326C /* HYMViewController.m */,
 				00FBD46F20F7B4E00018326C /* HYMRegisterViewController.h */,
 				00FBD47020F7B4E00018326C /* HYMRegisterViewController.m */,
+				8272D34E219AC00B00F3874B /* TTAdBlockViewController.h */,
+				8272D34F219AC00B00F3874B /* TTAdBlockViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -353,12 +371,15 @@
 				00FBD46420F517CB0018326C /* Interface+Hook.h in Headers */,
 				0092783920F6217400FA1AAA /* HYMBgTaskManager.h in Headers */,
 				008307A920F35D9100AB4B7E /* MDMethodTrace.h in Headers */,
+				8272D350219AC00B00F3874B /* TTAdBlockViewController.h in Headers */,
+				822E177D219ACBF5000E45BA /* TTAdBlockManager.h in Headers */,
 				008307B220F35D9100AB4B7E /* LLDBTools.h in Headers */,
 				00D3D68F20F3661700EE8FB2 /* HYMManager.h in Headers */,
 				8272D34221995F3900F3874B /* QTTAD+Hook.h in Headers */,
 				00FBD47120F7B4E00018326C /* HYMRegisterViewController.h in Headers */,
-				8272D34621996D9A00F3874B /* TTAdBlockManager.h in Headers */,
+				8272D359219AC94100F3874B /* UIViewController+TTAdHook.h in Headers */,
 				008307A120F35D9100AB4B7E /* MDConfigManager.h in Headers */,
+				8272D355219AC2C200F3874B /* TTAdBlockHeader.h in Headers */,
 				008307AD20F35D9100AB4B7E /* ANYMethodLog.h in Headers */,
 				008307BE20F35D9100AB4B7E /* fishhook.h in Headers */,
 				008307C020F35D9100AB4B7E /* qttDylib.h in Headers */,
@@ -508,22 +529,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				822E177C219ACBF5000E45BA /* TTAdBlockManager.m in Sources */,
 				008307A720F35D9100AB4B7E /* MDCycriptManager.m in Sources */,
 				8272D34321995F3900F3874B /* QTTAD+Hook.m in Sources */,
 				008307AF20F35D9100AB4B7E /* ANYMethodLog.m in Sources */,
-				8272D34721996D9A00F3874B /* TTAdBlockManager.m in Sources */,
 				00FBD47220F7B4E00018326C /* HYMRegisterViewController.m in Sources */,
 				0092783620F61F8000FA1AAA /* UserModel.m in Sources */,
 				008307A320F35D9100AB4B7E /* MDConfigManager.m in Sources */,
 				008307B420F35D9100AB4B7E /* LLDBTools.mm in Sources */,
 				0083079E20F35D9100AB4B7E /* qttDylib.mm in Sources */,
+				8272D35A219AC94100F3874B /* UIViewController+TTAdHook.m in Sources */,
 				00FBD46520F517CB0018326C /* Interface+Hook.m in Sources */,
 				0092783A20F6217400FA1AAA /* HYMBgTaskManager.m in Sources */,
+				8272D351219AC00B00F3874B /* TTAdBlockViewController.m in Sources */,
 				008307AB20F35D9100AB4B7E /* MDMethodTrace.m in Sources */,
 				00D3D69020F3661700EE8FB2 /* HYMManager.m in Sources */,
 				008307BC20F35D9100AB4B7E /* fishhook.c in Sources */,
 				00FBD46D20F798440018326C /* HYMViewController.m in Sources */,
 				008307C220F35D9100AB4B7E /* qttDylib.m in Sources */,
+				8272D356219AC2C200F3874B /* TTAdBlockHeader.m in Sources */,
 				008307B920F35D9100AB4B7E /* AntiAntiDebug.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -800,7 +824,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.resober.qukan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv7 armv7s arm64";
+				VALID_ARCHS = arm64;
 			};
 			name = Debug;
 		};
@@ -827,7 +851,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.resober.qukan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv7 armv7s arm64";
+				VALID_ARCHS = arm64;
 			};
 			name = Release;
 		};

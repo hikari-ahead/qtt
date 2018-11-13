@@ -38,6 +38,7 @@ CHConstructor{
             NSLog(@"error: %@", error.localizedDescription);
         }
 #endif
+        [UIApplication sharedApplication].applicationSupportsShakeToEdit = YES;
         
     }];
 }

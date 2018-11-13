@@ -4,5 +4,6 @@
 
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
+    #import "TTAdBlockHeader.h"
     #import "/opt/theos/Prefix.pch"  //path/to/theos/Prefix.pch
 #endif
