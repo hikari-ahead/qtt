@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) QTTChannelModel *channelModel;
 @end
 
-@interface QTTFeedAdModel:NSObject
+@interface QTTFeedAdModel:NSObject<NSCoding>
 /** 显示 */
 @property (nonatomic, strong) NSArray *imp;
 /** 点击 */
@@ -54,14 +54,21 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *desc;
 @end
 
+@interface QTTUserProfile:NSObject
+@property (nonatomic, strong) NSString *account;
+@property (nonatomic, strong) NSString *city;
+@property (nonatomic, strong) NSString *systemPlatform;
+@end
 
+typedef void(^TTAdReportFinishBlock)(void);
 @interface TTAdBlockManager : NSObject
 @property (nonatomic, strong, readonly) NSMutableDictionary<NSString *, QTTChannelModel *> *channels;
-@property (nonatomic, strong, readonly) NSMutableArray <QTTFeedAdSourceModel *> *feedAdSourceModels;
+//@property (nonatomic, strong, readonly) NSMutableArray <QTTFeedAdSourceModel *> *feedAdSourceModels;
 @property (nonatomic, strong, readonly) NSMutableArray <QTTFeedAdModel *> *adModels;
 @property (nonatomic, strong, readonly) NSNumber *finishedChannelCnt;
 @property (nonatomic, strong, readonly) NSNumber *processedAdCnt;
 @property (nonatomic, strong, readonly) NSNumber *failedAdCnt;
+@property (nonatomic, copy) TTAdReportFinishBlock reportFinishBlock;
 + (instancetype)shared;
 - (void)startFetchingAd;
 @end

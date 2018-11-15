@@ -8,11 +8,15 @@
 
 #import "TTAdBlockManager.h"
 #import <objc/runtime.h>
+#import "HYMBgTaskManager.h"
+#import "TTAdBlockHTTPManager.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
 
 static const NSString *kQTTFeedAdModelRelatedChannelModelKey = @"kQTTFeedAdModelRelatedChannelModelKey";
+static const NSString *kQTTFeedAdModelRelatedAdSourceModelKey = @"kQTTFeedAdModelRelatedAdSourceModelKey";
+
 /** 最多重试三次 */
 #define kTTAdBlockManagerRetryMaxTimes 3
 
@@ -27,8 +31,34 @@ typedef void(^TTAdFailedBlock)(id bundle);
 @implementation QTTFeedAdSourceModel
 @end
 
+@implementation QTTUserProfile
+@end
 
 @implementation QTTFeedAdModel
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    QTTFeedAdModel *ad = [QTTFeedAdModel new];
+    ad.imp = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(imp))];
+    ad.clk = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(clk))];
+    ad.c_url = [[aDecoder decodeObjectForKey:NSStringFromSelector(@selector(c_url))] stringValue];
+    ad.title = [[aDecoder decodeObjectForKey:NSStringFromSelector(@selector(title))] stringValue];
+    ad.url = [[aDecoder decodeObjectForKey:NSStringFromSelector(@selector(url))] stringValue];
+    ad.ext_urls = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(ext_urls))];
+    ad.icon_url = [[aDecoder decodeObjectForKey:NSStringFromSelector(@selector(icon_url))] stringValue];
+    ad.desc = [[aDecoder decodeObjectForKey:NSStringFromSelector(@selector(desc))] stringValue];
+    return ad;
+
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.imp forKey:NSStringFromSelector(@selector(imp))];
+    [aCoder encodeObject:self.clk forKey:NSStringFromSelector(@selector(clk))];
+    [aCoder encodeObject:self.c_url forKey:NSStringFromSelector(@selector(c_url))];
+    [aCoder encodeObject:self.title forKey:NSStringFromSelector(@selector(title))];
+    [aCoder encodeObject:self.url forKey:NSStringFromSelector(@selector(url))];
+    [aCoder encodeObject:self.ext_urls forKey:NSStringFromSelector(@selector(ext_urls))];
+    [aCoder encodeObject:self.icon_url forKey:NSStringFromSelector(@selector(icon_url))];
+    [aCoder encodeObject:self.desc forKey:NSStringFromSelector(@selector(desc))];
+}
 @end
 
 @interface TTAdBlockManager()
@@ -42,13 +72,18 @@ typedef void(^TTAdFailedBlock)(id bundle);
 @property (nonatomic, strong) NSNumber *finishedChannelCnt;
 @property (nonatomic, strong) NSNumber *processedAdCnt;
 @property (nonatomic, strong) NSNumber *failedAdCnt;
+@property (nonatomic, strong) NSLock *adModelsLock;
+@property (nonatomic, strong) NSLock *finishCntLock;
+@property (nonatomic, strong) NSLock *feedAdSourceModelsLock;
+
 @end
 
 @implementation TTAdBlockManager
 
 - (void)dealloc {
-    [self removeObserver:self forKeyPath:@"finishCnt"];
-    [self removeObserver:self forKeyPath:@"processedAdCnt"];
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(finishedChannelCnt))];
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(processedAdCnt))];
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(feedAdSourceModels))];
 }
 
 + (instancetype)shared {
@@ -77,11 +112,16 @@ typedef void(^TTAdFailedBlock)(id bundle);
     _finishedChannelCnt = [NSNumber numberWithInt:0];
     _processedAdCnt = [NSNumber numberWithInt:0];
     _failedAdCnt = [NSNumber numberWithInt:0];
+    _adModelsLock = [NSLock new];
+    _finishCntLock = [[NSLock alloc] init];
+    _feedAdSourceModelsLock = [[NSLock alloc] init];
+
 }
 
 #pragma mark - Ad
 
 - (void)startFetchingAd {
+    [[HYMBgTaskManager shared] startRequestLocation];
     [self fetchAllChannels];
 }
 
@@ -139,17 +179,16 @@ typedef void(^TTAdFailedBlock)(id bundle);
     // 监听finishCnt
     [self addObserver:self forKeyPath:NSStringFromSelector(@selector(finishedChannelCnt)) options:NSKeyValueObservingOptionNew context:nil];
 
-    NSLock *finishCntLock = [[NSLock alloc] init];
-    NSLock *feedAdModelsLock = [[NSLock alloc] init];
+
     __weak typeof(self) weakSelf = self;
     // 重试block
     self.retryBlock = ^(id bundle) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         QTTChannelModel *channelModel = [bundle performSelector:@selector(paramTmpForKey:) withObject:kQTTFeedAdModelRelatedChannelModelKey];
         if (channelModel.retryTimes == kTTAdBlockManagerRetryMaxTimes) {
-            [finishCntLock lock];
+            [strongSelf.finishCntLock lock];
             strongSelf.finishedChannelCnt = [NSNumber numberWithUnsignedInteger:(strongSelf.finishedChannelCnt.unsignedIntegerValue + 1)];
-            [finishCntLock unlock];
+            [strongSelf.finishCntLock unlock];
         } else {
             ++channelModel.retryTimes;
             [strongSelf fetchSlotIdsWithChannelModel:channelModel parseBlock:strongSelf.block];
@@ -164,9 +203,9 @@ typedef void(^TTAdFailedBlock)(id bundle);
             NSArray *data = [outerData valueForKey:@"data"];
             if (outerData && [outerData valueForKey:@"count"] == 0) {
                 // 说明这个频道已经请求到了最后一页
-                [finishCntLock lock];
+                [strongSelf.finishCntLock lock];
                 strongSelf.finishedChannelCnt = [NSNumber numberWithUnsignedInteger:(strongSelf.finishedChannelCnt.unsignedIntegerValue + 1)];
-                [finishCntLock unlock];
+                [strongSelf.finishCntLock unlock];
             } else if (outerData && data) {
                 // 紧接着并发去请求下一个页面
                 QTTChannelModel *channelModel = [bundle performSelector:@selector(paramTmpForKey:) withObject:kQTTFeedAdModelRelatedChannelModelKey];
@@ -178,23 +217,25 @@ typedef void(^TTAdFailedBlock)(id bundle);
                 [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     NSInteger slotId = [[((NSDictionary *)obj) valueForKey:@"slotId"] integerValue];
                     if ([obj isKindOfClass:[NSDictionary class]] && slotId != 0) {
-                        QTTFeedAdSourceModel *ad = [QTTFeedAdSourceModel new];
-                        ad.index = [[((NSDictionary *)obj) valueForKey:@"slotId"] integerValue];
-                        ad.appId = [((NSDictionary *)obj) valueForKey:@"appId"];
-                        ad.type = [((NSDictionary *)obj) valueForKey:@"type"];
-                        ad.slotId = slotId;
-                        ad.cid = [[((NSDictionary *)obj) valueForKey:@"cid"] integerValue];
-                        ad.flag = [[((NSDictionary *)obj) valueForKey:@"flag"] integerValue];
-                        ad.tips = [((NSDictionary *)obj) valueForKey:@"tips"];
-                        ad.times = [[((NSDictionary *)obj) valueForKey:@"times"] integerValue];
-                        ad.page = [[((NSDictionary *)obj) valueForKey:@"page"] integerValue];
-                        ad.ad_source = [[((NSDictionary *)obj) valueForKey:@"ad_source"] integerValue];
-                        ad.op = [[((NSDictionary *)obj) valueForKey:@"op"] integerValue];
-                        ad.imageType = [[((NSDictionary *)obj) valueForKey:@"imageType"] integerValue];
-                        ad.channelModel = channelModel;
-                        [feedAdModelsLock lock];
-                        [strongSelf.feedAdSourceModels addObject:ad];
-                        [feedAdModelsLock unlock];
+                        QTTFeedAdSourceModel *adSource = [QTTFeedAdSourceModel new];
+                        adSource.index = [[((NSDictionary *)obj) valueForKey:@"slotId"] integerValue];
+                        adSource.appId = [((NSDictionary *)obj) valueForKey:@"appId"];
+                        adSource.type = [((NSDictionary *)obj) valueForKey:@"type"];
+                        adSource.slotId = slotId;
+                        adSource.cid = [[((NSDictionary *)obj) valueForKey:@"cid"] integerValue];
+                        adSource.flag = [[((NSDictionary *)obj) valueForKey:@"flag"] integerValue];
+                        adSource.tips = [((NSDictionary *)obj) valueForKey:@"tips"];
+                        adSource.times = [[((NSDictionary *)obj) valueForKey:@"times"] integerValue];
+                        adSource.page = [[((NSDictionary *)obj) valueForKey:@"page"] integerValue];
+                        adSource.ad_source = [[((NSDictionary *)obj) valueForKey:@"ad_source"] integerValue];
+                        adSource.op = [[((NSDictionary *)obj) valueForKey:@"op"] integerValue];
+                        adSource.imageType = [[((NSDictionary *)obj) valueForKey:@"imageType"] integerValue];
+                        adSource.channelModel = channelModel;
+                        [strongSelf.feedAdSourceModelsLock lock];
+                        [strongSelf.feedAdSourceModels addObject:adSource];
+                        [strongSelf.feedAdSourceModelsLock unlock];
+                        // 去请求广告数据并上报
+                        [strongSelf fetchAdContents:adSource];
                     }
                 }];
             }else {
@@ -212,6 +253,9 @@ typedef void(^TTAdFailedBlock)(id bundle);
         obj.page = 1;
         [self fetchSlotIdsWithChannelModel:obj parseBlock:self.block];
     }];
+
+    // 监听processedAdCnt
+    [self addObserver:self forKeyPath:@"processedAdCnt" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 
@@ -237,16 +281,14 @@ typedef void(^TTAdFailedBlock)(id bundle);
  *
  *  https://api.aiclk.com/ga?slotid=1026480&url=http://ad.qutoutiao.net/param?v={"network":"1","channel":"视频","age":"0","lon":"116.3233409035943","keyword":"","lat":"39.97071049170498","sex":"0","firstpage":"0","isp":"46001"}
  */
-- (void)fetchAdContents {
-    // 监听processedAdCnt
-    [self addObserver:self forKeyPath:@"processedAdCnt" options:NSKeyValueObservingOptionNew context:nil];
+- (void)fetchAdContents:(QTTFeedAdSourceModel *)adSourceModel {
     NSLock *finishedAdCntLock = [[NSLock alloc] init];
     Class cls = objc_getClass("AdeazLoader");
     __weak typeof(self) weakSelf = self;
     self.successBlock = ^(id bundle, id error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         NSLog(@"==== successBlock");
-        QTTFeedAdModel *ad = [QTTFeedAdModel new];
+        __block QTTFeedAdModel *ad = [QTTFeedAdModel new];
         NSDictionary *data = [bundle valueForKey:@"content"];
         ad.imp = [data valueForKey:@"imp"];
         ad.clk = [data valueForKey:@"clk"];
@@ -256,10 +298,37 @@ typedef void(^TTAdFailedBlock)(id bundle);
         ad.icon_url = [data valueForKey:@"icon_url"];
         ad.c_url = [data valueForKey:@"c_url"];
         ad.url = [data valueForKey:@"url"];
+        [self->_adModelsLock lock];
         [strongSelf.adModels addObject:ad];
+        [self->_adModelsLock unlock];
         [finishedAdCntLock lock];
         strongSelf.processedAdCnt = [NSNumber numberWithUnsignedInteger:(strongSelf.processedAdCnt.unsignedIntegerValue + 1)];
         [finishedAdCntLock unlock];
+        QTTUserProfile *profile = [QTTUserProfile new];
+        profile.account = [objc_getClass("LCUserManager") performSelector:@selector(userId)];
+        profile.city = @"北京";
+        profile.systemPlatform = @"iOS";
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [strongSelf.feedAdSourceModelsLock lock];
+            [strongSelf.feedAdSourceModels removeObject:adSourceModel];
+            [strongSelf.feedAdSourceModelsLock unlock];
+        });
+
+        [[TTAdBlockHTTPManager shared] reportAd:ad profile:profile handler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            if (!error) {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    [self->_adModelsLock lock];
+                    [strongSelf.adModels removeObject:ad];
+                    ad = nil;
+                    [self->_adModelsLock unlock];
+                });
+            } else {
+                // 错误发生的话0.5秒后重试
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    strongSelf.successBlock(bundle, error);
+                });
+            }
+        }];
     };
 
     self.failedBlock = ^(id error) {
@@ -270,31 +339,34 @@ typedef void(^TTAdFailedBlock)(id bundle);
         strongSelf.failedAdCnt = [NSNumber numberWithUnsignedInteger:(strongSelf.failedAdCnt.unsignedIntegerValue + 1)];
         [finishedAdCntLock unlock];
     };
-    [self.feedAdSourceModels enumerateObjectsUsingBlock:^(QTTFeedAdSourceModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *paramUrl = [NSString stringWithFormat:@"http://ad.qutoutiao.net/param?v={\"network\":\"1\",\"channel\":\"%@\",\"age\":\"0\",\"lon\":\"116.3233409035943\",\"keyword\":\"\",\"lat\":\"39.97071049170498\",\"sex\":\"0\",\"firstpage\":\"0\",\"isp\":\"46001\"}", obj.channelModel.name];
-        paramUrl = [objc_getClass("NSString") performSelector:@selector(encodeString:) withObject:paramUrl];
-        NSString *baseUrl = [NSString stringWithFormat:@"https://api.aiclk.com/ga?slotid=%@&url=%@", @(obj.slotId).stringValue, paramUrl];
-        SEL sel = @selector(adeaz_GETWithUrl:Success:Failed:);
-        NSMethodSignature *signature = [cls methodSignatureForSelector:sel];
-        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
-        //self,_cmd...
-        [invocation setTarget:cls];
-        [invocation setSelector:@selector(adeaz_GETWithUrl:Success:Failed:)];
-        [invocation setArgument:&baseUrl atIndex:2];
-        [invocation setArgument:&self->_successBlock atIndex:3];
-        [invocation setArgument:&self->_failedBlock atIndex:4];
-        [invocation invoke];
-    }];
+
+    QTTFeedAdSourceModel *obj = adSourceModel;
+    NSString *paramUrl = [NSString stringWithFormat:@"http://ad.qutoutiao.net/param?v={\"network\":\"1\",\"channel\":\"%@\",\"age\":\"0\",\"lon\":\"116.3233409035943\",\"keyword\":\"\",\"lat\":\"39.97071049170498\",\"sex\":\"0\",\"firstpage\":\"0\",\"isp\":\"46001\"}", obj.channelModel.name];
+    paramUrl = [objc_getClass("NSString") performSelector:@selector(encodeString:) withObject:paramUrl];
+    NSString *baseUrl = [NSString stringWithFormat:@"https://api.aiclk.com/ga?slotid=%@&url=%@", @(obj.slotId).stringValue, paramUrl];
+    SEL sel = @selector(adeaz_GETWithUrl:Success:Failed:);
+    NSMethodSignature *signature = [cls methodSignatureForSelector:sel];
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];
+    //self,_cmd...
+    [invocation setTarget:cls];
+    [invocation setSelector:@selector(adeaz_GETWithUrl:Success:Failed:)];
+    [invocation setArgument:&baseUrl atIndex:2];
+    [invocation setArgument:&self->_successBlock atIndex:3];
+    [invocation setArgument:&self->_failedBlock atIndex:4];
+    [invocation invoke];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if ([keyPath isEqualToString:NSStringFromSelector(@selector(finishedChannelCnt))] && [change[NSKeyValueChangeNewKey] unsignedIntegerValue] == self.channels.count) {
         NSLog(@"==== 获取广告列表中广告数据源完成");
-        [self fetchAdContents];
+        [self addObserver:self forKeyPath:NSStringFromSelector(@selector(feedAdSourceModels)) options:NSKeyValueObservingOptionNew context:nil];
     }
 
-    if ([keyPath isEqualToString:NSStringFromSelector(@selector(processedAdCnt))] && [change[NSKeyValueChangeNewKey] unsignedIntegerValue] == self.feedAdSourceModels.count) {
-        NSLog(@"==== 抓取广告信息完成");
+    if ([keyPath isEqualToString:NSStringFromSelector(@selector(feedAdSourceModels))] && [change[NSKeyValueChangeNewKey] unsignedIntegerValue] == 0) {
+        NSLog(@"==== 上报完成");
+        if (self.reportFinishBlock) {
+            self.reportFinishBlock();
+        }
     }
 }
 

@@ -53,6 +53,8 @@
 		8272D356219AC2C200F3874B /* TTAdBlockHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 8272D354219AC2C200F3874B /* TTAdBlockHeader.m */; };
 		8272D359219AC94100F3874B /* UIViewController+TTAdHook.h in Headers */ = {isa = PBXBuildFile; fileRef = 8272D357219AC94100F3874B /* UIViewController+TTAdHook.h */; };
 		8272D35A219AC94100F3874B /* UIViewController+TTAdHook.m in Sources */ = {isa = PBXBuildFile; fileRef = 8272D358219AC94100F3874B /* UIViewController+TTAdHook.m */; };
+		82759DD4219BF3F00036DA14 /* TTAdBlockHTTPManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 82759DD2219BF3F00036DA14 /* TTAdBlockHTTPManager.h */; };
+		82759DD5219BF3F00036DA14 /* TTAdBlockHTTPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 82759DD3219BF3F00036DA14 /* TTAdBlockHTTPManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +137,8 @@
 		8272D354219AC2C200F3874B /* TTAdBlockHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTAdBlockHeader.m; sourceTree = "<group>"; };
 		8272D357219AC94100F3874B /* UIViewController+TTAdHook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+TTAdHook.h"; sourceTree = "<group>"; };
 		8272D358219AC94100F3874B /* UIViewController+TTAdHook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+TTAdHook.m"; sourceTree = "<group>"; };
+		82759DD2219BF3F00036DA14 /* TTAdBlockHTTPManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTAdBlockHTTPManager.h; sourceTree = "<group>"; };
+		82759DD3219BF3F00036DA14 /* TTAdBlockHTTPManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTAdBlockHTTPManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -325,6 +329,8 @@
 			children = (
 				822E177B219ACBF5000E45BA /* TTAdBlockManager.h */,
 				822E177A219ACBF5000E45BA /* TTAdBlockManager.m */,
+				82759DD2219BF3F00036DA14 /* TTAdBlockHTTPManager.h */,
+				82759DD3219BF3F00036DA14 /* TTAdBlockHTTPManager.m */,
 				00D3D68D20F3661700EE8FB2 /* HYMManager.h */,
 				00D3D68E20F3661700EE8FB2 /* HYMManager.m */,
 				00FBD46220F517CB0018326C /* Interface+Hook.h */,
@@ -369,6 +375,7 @@
 				0092783520F61F8000FA1AAA /* UserModel.h in Headers */,
 				00FBD46C20F798440018326C /* HYMViewController.h in Headers */,
 				00FBD46420F517CB0018326C /* Interface+Hook.h in Headers */,
+				82759DD4219BF3F00036DA14 /* TTAdBlockHTTPManager.h in Headers */,
 				0092783920F6217400FA1AAA /* HYMBgTaskManager.h in Headers */,
 				008307A920F35D9100AB4B7E /* MDMethodTrace.h in Headers */,
 				8272D350219AC00B00F3874B /* TTAdBlockViewController.h in Headers */,
@@ -538,6 +545,7 @@
 				008307A320F35D9100AB4B7E /* MDConfigManager.m in Sources */,
 				008307B420F35D9100AB4B7E /* LLDBTools.mm in Sources */,
 				0083079E20F35D9100AB4B7E /* qttDylib.mm in Sources */,
+				82759DD5219BF3F00036DA14 /* TTAdBlockHTTPManager.m in Sources */,
 				8272D35A219AC94100F3874B /* UIViewController+TTAdHook.m in Sources */,
 				00FBD46520F517CB0018326C /* Interface+Hook.m in Sources */,
 				0092783A20F6217400FA1AAA /* HYMBgTaskManager.m in Sources */,

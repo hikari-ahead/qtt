@@ -27,6 +27,7 @@
 - (void)start;
 - (void)stop;
 - (void)addSettingButtonToWindow;
+- (void)startRequestLocation;
 - (NSMutableDictionary *)paramsForGetGuide;
 - (NSString *)loginQdataForCurrentIndex;
 - (NSString *)readTimerQdataForCurrentIndex;

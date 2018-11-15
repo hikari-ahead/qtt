@@ -102,12 +102,16 @@ typedef NS_ENUM(NSInteger, TTAdBlockState) {
 }
 
 
-
-
 - (void)startWorking {
     _dl = [CADisplayLink displayLinkWithTarget:self selector:@selector(wake:)];
     [[TTAdBlockManager shared] startFetchingAd];
     [_dl addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+
+    [[TTAdBlockManager shared] setReportFinishBlock:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[[UIAlertView alloc] initWithTitle:@"处理完成" message:[NSString stringWithFormat:@"共处理%@条广告", [TTAdBlockManager shared].processedAdCnt] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] show];
+        });
+    }];
 }
 
 - (void)wake:(CADisplayLink *)sender {
